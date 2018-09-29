@@ -35,7 +35,7 @@ test_requirements = [str(tr.req) for tr in parsed_test_requirements]
 setup(
     name='rev_ai',
     version=version,
-    description="Rev.ai makes speech recognition easy.",
+    description="Rev.ai makes speech applications easy to build!",
     long_description=readme + '\n\n' + history,
     author="Joshua Dong",
     author_email='jdong42@gmail.com',
@@ -49,11 +49,18 @@ setup(
     keywords='rev_ai',
     classifiers=[
         'License :: OSI Approved :: MIT License',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
     tests_require=test_requirements,
+    url='https://github.com/JDongian/rev_ai',
 )

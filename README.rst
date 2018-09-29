@@ -10,7 +10,10 @@ rev_ai
         :target: https://rev-ai.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-Rev.ai makes speech recognition easy.
+
+
+
+Rev.ai makes speech applications easy to build!
 
 
 * Free software: MIT license
