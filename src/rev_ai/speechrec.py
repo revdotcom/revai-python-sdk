@@ -16,13 +16,17 @@ class RevSpeechAPI:
     VERSION = "v1beta"
     BASE_URL = "https://api.rev.ai/revspeech/{v}/".format(v=VERSION)
 
-    def __init__(self, api_key):
+    def __init__(self, api_key, use_stage=False):
         if not api_key:
             raise ValueError("API Key cannot be empty.")
         self.s = requests.Session()
         self.s.headers.update({
             'Authorization': 'Bearer {api_key}'.format(api_key=api_key)
         })
+        if use_stage:
+            self.BASE_URL = ("https://api-stage.rev.ai/revspeech/{v}/"
+                             .format(v=VERSION))
+
 
     def submit_job_url(self, media_url, metadata=""):
         """Submit a web URL for transcription.
@@ -97,6 +101,8 @@ class RevSpeechAPI:
         return response.json() if response_type == ".json" else response.text
 
     def get_account(self):
+        """Get account information, such as remaining balance.
+        """
         url_account = urljoin(self.BASE_URL, "account")
 
         response = self.s.get(url_account)
