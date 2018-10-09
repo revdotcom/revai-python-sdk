@@ -84,16 +84,20 @@ class RevSpeechAPI:
 
         return response.json()
 
-    def get_transcript(self, id_, response_type=".json"):
+    def get_transcript(self, id_, use_json=True):
+        """Get account information, such as remaining balance.
+
+        :param id_: id that the server gave you
+        :param use_json: get result as structured JSON, instead of cleartext
+        :returns: transcript data (txt or JSON)
+        """
         url_jobs_transcript = urljoin(self.BASE_URL,
                                       "jobs/{id_}/transcript".format(id_=id_))
-        if response_type == ".json":
+        if use_json:
             content_type_accept = ('application/{version}+json'
                                    .format(version="vnd.rev.transcript.v1.0"))
-        elif response_type == ".txt":
-            content_type_accept = 'text/plain'
         else:
-            raise ValueError("response_type must be .json or .txt!")
+            content_type_accept = 'text/plain'
 
         response = self.s.get(url_jobs_transcript,
                               headers={'Accept': content_type_accept})
