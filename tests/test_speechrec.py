@@ -3,11 +3,11 @@
 import unittest
 
 
-class Testrev_ai(unittest.TestCase):
+class TestSpeechrecEndpoints(unittest.TestCase):
     """Basic tests.
     """
-    def test_basic(self):
-        """Check basic functionality.
+    def test_endpoints(self):
+        """Check that each call hits the right endpoint.
         """
         tests = ((), )
         targets = ((), )
