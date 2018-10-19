@@ -8,6 +8,7 @@ except ImportError:
 import os
 import requests
 import logging
+import json
 
 LOG = logging.getLogger(__name__)
 
@@ -28,12 +29,13 @@ class RevSpeechAPI:
                              .format(v=VERSION))
 
 
-    def submit_job_url(self, media_url, metadata=""):
+    def submit_job_url(self, media_url, metadata="", callback_url=None):
         """Submit a web URL for transcription.
         The audio data is downloaded from the URL.
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the transcription job
+        :param callback_url: callback url to invoke on job completion as a webhook
         :returns: raw response data
         """
         url_jobs = urljoin(self.BASE_URL, "jobs")
@@ -41,19 +43,22 @@ class RevSpeechAPI:
             'media_url': media_url,
             'metadata': metadata
         }
-
+        if callback_url:
+            payload['callback_url'] = callback_url
         response = self.s.post(url_jobs, json=payload)
 
         return response.json()
 
     def submit_job_local_file(self, filename,
-                              media_type="audio", content_type=None):
+                              media_type="audio", content_type=None, metadata="", callback_url=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
         :param filename: path to a local file on disk
         :param media_type: "audio" or "video"
         :param content_type: explicitly specify request content type
+        :param metadata: info to associate with the transcription job
+        :param callback_url: callback url to invoke on job completion as a webhook
         :returns: raw response data
         """
         url_jobs = urljoin(self.BASE_URL, "jobs")
@@ -62,10 +67,14 @@ class RevSpeechAPI:
         _base, extension = os.path.splitext(filename)
         content_type = content_type or media_type + '/' + extension
         LOG.debug('Using content type: "%s".', content_type)
+        payload = {'metadata': metadata}
+        if callback_url:
+            payload['callback_url'] = callback_url
 
         with open(filename, 'rb') as f:
             files = {
-                'media': (filename, f, content_type)
+                'media': (filename, f, content_type),
+                'options': (None, json.dumps(payload))
             }
             response = self.s.post(url_jobs, files=files)
 
