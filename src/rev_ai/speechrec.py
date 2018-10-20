@@ -102,7 +102,7 @@ class RevSpeechAPI:
         response = self.s.get(url_jobs_transcript,
                               headers={'Accept': content_type_accept})
 
-        return response.json() if response_type == ".json" else response.text
+        return response.json() if use_json else response.text
 
     def get_account(self):
         """Get account information, such as remaining balance.
