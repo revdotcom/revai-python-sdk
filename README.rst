@@ -3,8 +3,8 @@ rev_ai
 ======
 
 
-.. image:: https://img.shields.io/travis/JDongian/rev_ai.svg
-        :target: https://travis-ci.org/JDongian/rev_ai
+.. image:: https://img.shields.io/travis/revdotcom/rev_ai.svg
+        :target: https://travis-ci.org/revdotcom/rev_ai
 
 
 
