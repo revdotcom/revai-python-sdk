@@ -62,5 +62,5 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/JDongian/rev_ai',
+    url='https://github.com/revdotcom/rev_ai',
 )
