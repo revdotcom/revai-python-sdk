@@ -26,7 +26,7 @@ class RevSpeechAPI:
         })
         if use_stage:
             self.BASE_URL = ("https://api-stage.rev.ai/revspeech/{v}/"
-                             .format(v=VERSION))
+                             .format(v=self.VERSION))
 
 
     def submit_job_url(self, media_url, metadata="", callback_url=None):
