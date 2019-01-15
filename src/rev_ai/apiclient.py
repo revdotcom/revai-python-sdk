@@ -128,7 +128,3 @@ class RevAiAPIClient:
         response = self.s.get(url_account)
 
         return Account.from_json(response.json())
-
-client = RevAiAPIClient("02HdjcvBDSRr8-mBcClH9m1anR5R5H0fnJ0qEX-v2uXNg1WpILBNBFb2b_vLRtxbpD--O6V3Ih1Wm2g-DtfYg7HbxtayQ")
-options = JobSubmitOptions("some metadata")
-print(client.submit_job_url("http://www.voiptroubleshooter.com/open_speech/american/OSR_us_000_0010_8k.wav", options).id)
