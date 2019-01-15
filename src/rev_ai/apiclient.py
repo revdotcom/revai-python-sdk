@@ -91,18 +91,30 @@ class RevAiAPIClient:
 
         return Job.from_json(response.json())
 
-    def get_transcript(self, id_, format_):
+    def get_transcript_text(self, id_):
         """Get the transcript of a specific job as json.
 
         :param id_: id that the server gave you
-        :param format_: format of returned transcript, either "text" or "json"
-        :returns: transcript data in the requested form
+        :returns: transcript data as text
         """
-        accept_headers = {
-            "text": "text/plain",
-            "json": 'application/{version}+json'
-                .format(version="vnd.rev.transcript.v1.0")
-        }
+        url_jobs_transcript = urljoin(
+            self.base_url,
+            "jobs/{id_}/transcript".format(id_=id_)
+        )
+
+        response = self.s.get(
+            url_jobs_transcript,
+            headers={'Accept': "text/plain"}
+        )
+
+        return response.text
+
+    def get_transcript_object(self, id_, format_):
+        """Get the transcript of a specific job as json.
+
+        :param id_: id that the server gave you
+        :returns: transcript data as a python object
+        """
 
         url_jobs_transcript = urljoin(
             self.base_url,
@@ -111,13 +123,11 @@ class RevAiAPIClient:
 
         response = self.s.get(
             url_jobs_transcript,
-            headers={'Accept': accept_headers[format_]}
+            headers={'Accept': 'application/{version}+json'
+                .format(version="vnd.rev.transcript.v1.0")}
         )
 
-        if format_ == "text":
-            return response.text
-        else:
-            return Transcript.from_json(response.json())
+        return Transcript.from_json(response.json())
 
     def get_account(self):
         """Get account information, such as remaining balance.
