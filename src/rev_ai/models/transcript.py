@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+"""Transcript Model"""
+
+
 class Transcript:
     def __init__(self, monologues):
         """
@@ -9,8 +13,10 @@ class Transcript:
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
         return cls(
-            [Monologue.from_json(monologue) for monologue in json.get("monologues", [])]
+            [Monologue.from_json(monologue) 
+                for monologue in json.get("monologues", [])]
         )
+
 
 class Monologue:
     def __init__(self, speaker, elements):
@@ -28,6 +34,7 @@ class Monologue:
             json["speaker"],
             [Element.from_json(element) for element in json.get("elements", [])]
         )
+
 
 class Element:
     def __init__(self, type_, value, timestamp, end_timestamp, confidence):
@@ -54,4 +61,3 @@ class Element:
             json.get("end_ts"),
             json.get("confidence")
         )
-

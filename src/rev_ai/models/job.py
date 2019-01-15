@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Job Model"""
 
+
 class Job:
     def __init__(
         self,

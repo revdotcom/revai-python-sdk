@@ -5,33 +5,29 @@ try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
-import os
 import requests
-import logging
 import json
 from models import (
     Job,
-    JobSubmitOptions,
     Account,
     Transcript
 )
 
-LOG = logging.getLogger(__name__)
 
 class RevAiAPIClient:
     """Client which implements rev.ai API"""
 
-    version = "v1"
-    """Default version of rev.ai"""
+    version = "v1"  # Default version of rev.ai
 
-    base_url = "https://api.rev.ai/revspeech/{v}/".format(v=version)
-    """Default address of the API"""
+    base_url = "https://api.rev.ai/revspeech/{v}/"
+        .format(v=version)  # Default address of the API
 
     def __init__(self, api_key):
         """Constructor
 
-        :param api_key: api key which authorizes all requests and links them to your account.
-            Generated on the settings page of your account dashboard on rev.ai
+        :param api_key: api key which authorizes all requests and links them to
+            your account. Generated on the settings page of your account
+            dashboard on rev.ai
         """
         if not api_key:
             raise ValueError("API Key cannot be empty.")
@@ -39,7 +35,6 @@ class RevAiAPIClient:
         self.s.headers.update({
             'Authorization': 'Bearer {api_key}'.format(api_key=api_key)
         })
-
 
     def submit_job_url(self, media_url, options):
         """Submit media given a URL for transcription.
@@ -106,14 +101,18 @@ class RevAiAPIClient:
         accept_headers = {
             "text": "text/plain",
             "json": 'application/{version}+json'
-                 .format(version="vnd.rev.transcript.v1.0")
+                .format(version="vnd.rev.transcript.v1.0")
         }
 
-        url_jobs_transcript = urljoin(self.base_url,
-            "jobs/{id_}/transcript".format(id_=id_))
+        url_jobs_transcript = urljoin(
+            self.base_url,
+            "jobs/{id_}/transcript".format(id_=id_)
+        )
 
-        response = self.s.get(url_jobs_transcript,
-            headers={'Accept': accept_headers[format_]})
+        response = self.s.get(
+            url_jobs_transcript,
+            headers={'Accept': accept_headers[format_]}
+        )
 
         if format_ == "text":
             return response.text

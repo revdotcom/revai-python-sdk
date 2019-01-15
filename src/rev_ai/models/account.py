@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Account Model"""
 
+
 class Account:
     def __init__(self, email, balance_seconds):
         """

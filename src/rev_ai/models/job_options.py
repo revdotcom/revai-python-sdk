@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Job Submit Options Model"""
 
+
 class JobSubmitOptions:
     def __init__(self,  metadata=None, callback_url=None, skip_diarization=None):
         """
