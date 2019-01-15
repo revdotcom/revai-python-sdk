@@ -4,3 +4,4 @@
 from models.job import Job
 from models.job_options import JobSubmitOptions
 from models.account import Account
+from models.transcript import Transcript
