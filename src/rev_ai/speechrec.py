@@ -85,7 +85,6 @@ class RevSpeechAPIClient:
         :returns: raw response data
         """
         url_jobs = urljoin(self.BASE_URL, "jobs")
-        LOG.debug('Using content type: "%s".', content_type)
         payload = {'metadata': options.metadata}
         if options.callback_url:
             payload['callback_url'] = options.callback_url
