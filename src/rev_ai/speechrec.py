@@ -9,67 +9,86 @@ import os
 import requests
 import logging
 import json
+from models import *
 
 LOG = logging.getLogger(__name__)
 
+class RevSpeechAPIClient:
+    """Client which implements rev.ai API"""
 
-class RevSpeechAPI:
-    VERSION = "v1beta"
+    VERSION = "v1"
+    """Default version of rev.ai"""
+
     BASE_URL = "https://api.rev.ai/revspeech/{v}/".format(v=VERSION)
+    """Default address of the API"""
 
-    def __init__(self, api_key, use_stage=False):
+    def __init__(
+        self,
+        api_key
+    ):
+        """
+        Constructor
+
+        :param api_key: api key which authorizes all requests and links them to your account.
+            Generated on the settings page of your account dashboard on rev.ai
+        """
         if not api_key:
             raise ValueError("API Key cannot be empty.")
         self.s = requests.Session()
         self.s.headers.update({
             'Authorization': 'Bearer {api_key}'.format(api_key=api_key)
         })
-        if use_stage:
-            self.BASE_URL = ("https://api-stage.rev.ai/revspeech/{v}/"
-                             .format(v=self.VERSION))
 
 
-    def submit_job_url(self, media_url, metadata="", callback_url=None):
+    def submit_job_url(
+        self, 
+        media_url, 
+        options
+    ):
         """Submit a web URL for transcription.
         The audio data is downloaded from the URL.
 
         :param media_url: web location of the media file
-        :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
+        :param options: JobSubmitOptions object for the job
         :returns: raw response data
         """
         url_jobs = urljoin(self.BASE_URL, "jobs")
         payload = {
             'media_url': media_url,
-            'metadata': metadata
+            'metadata': options.metadata
         }
-        if callback_url:
-            payload['callback_url'] = callback_url
+        if options.callback_url:
+            payload['callback_url'] = options.callback_url
         response = self.s.post(url_jobs, json=payload)
 
-        return response.json()
+        if (response.status_code == 200):
+            return Job.from_json(response.json())
+        elif (response.status_code == 400):
+            return InvalidParametersError.from_json(response.json())
+        elif (response.status_code == 403):
+            return InsufficientBalanceError.from_json(response.json())
+        else:
+            return ApiError.from_json(response.json())
 
-    def submit_job_local_file(self, filename,
-                              media_type="audio", content_type=None, metadata="", callback_url=None):
+    def submit_job_local_file(
+        self, 
+        filename, 
+        options, 
+        content_type=None
+    ):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
         :param filename: path to a local file on disk
-        :param media_type: "audio" or "video"
-        :param content_type: explicitly specify request content type
-        :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
+        :param content_type: MIME content type of file being sent
+        :param options: JobSubmitOptions object for the job
         :returns: raw response data
         """
         url_jobs = urljoin(self.BASE_URL, "jobs")
-        if media_type not in {"audio", "video"}:
-            raise ValueError("media_type must be audio or video")
-        _base, extension = os.path.splitext(filename)
-        content_type = content_type or media_type + '/' + extension
         LOG.debug('Using content type: "%s".', content_type)
-        payload = {'metadata': metadata}
-        if callback_url:
-            payload['callback_url'] = callback_url
+        payload = {'metadata': options.metadata}
+        if options.callback_url:
+            payload['callback_url'] = options.callback_url
 
         with open(filename, 'rb') as f:
             files = {
@@ -78,9 +97,19 @@ class RevSpeechAPI:
             }
             response = self.s.post(url_jobs, files=files)
 
-        return response.json()
+        if (response.status_code == 200):
+            return Job.from_json(response.json())
+        elif (response.status_code == 400):
+            return InvalidParametersError.from_json(response.json())
+        elif (response.status_code == 403):
+            return InsufficientBalanceError.from_json(response.json())
+        else:
+            return ApiError.from_json(response.json())        
 
-    def view_job(self, id_):
+    def view_job(
+        self, 
+        id_
+    ):
         """View information about a specific job.
         The server will respond with the status and creation date.
 
@@ -91,29 +120,46 @@ class RevSpeechAPI:
 
         response = self.s.get(url_jobs_id)
 
-        return response.json()
+        return Job.from_json(response.json())
 
-    def get_transcript(self, id_, use_json=True):
-        """Get account information, such as remaining balance.
+    def get_transcript_as_text(
+        self, 
+        id_
+    ):
+        """Get the transcript of a specific job as json.
 
         :param id_: id that the server gave you
-        :param use_json: get result as structured JSON, instead of cleartext
-        :returns: transcript data (txt or JSON)
+        :returns: transcript data as text
         """
         url_jobs_transcript = urljoin(self.BASE_URL,
-                                      "jobs/{id_}/transcript".format(id_=id_))
-        if use_json:
-            content_type_accept = ('application/{version}+json'
-                                   .format(version="vnd.rev.transcript.v1.0"))
-        else:
-            content_type_accept = 'text/plain'
+            "jobs/{id_}/transcript".format(id_=id_))
 
         response = self.s.get(url_jobs_transcript,
-                              headers={'Accept': content_type_accept})
+                              headers={'Accept': "text/plain"})
 
-        return response.json() if use_json else response.text
+        return response.text
 
-    def get_account(self):
+    def get_transcript_as_json(
+        self, 
+        id_
+    ):
+        """Get the transcript of a specific job as json.
+
+        :param id_: id that the server gave you
+        :returns: transcript data as JSON
+        """
+        url_jobs_transcript = urljoin(self.BASE_URL,
+            "jobs/{id_}/transcript".format(id_=id_))
+
+        response = self.s.get(url_jobs_transcript,
+            headers={'Accept': 'application/{version}+json'
+                 .format(version="vnd.rev.transcript.v1.0")})
+
+        return response.json()
+
+    def get_account(
+        self
+    ):
         """Get account information, such as remaining balance.
         """
         url_account = urljoin(self.BASE_URL, "account")
@@ -121,3 +167,7 @@ class RevSpeechAPI:
         response = self.s.get(url_account)
 
         return response.json()
+
+client = RevSpeechAPIClient("02cD6t8ixL12YX8BFwHbNmuQa05GeD3GwAyjuiDStTC_FAEUCFiLvJkge4JSPRzcrh1siMmWv4RthnTZS1KfIvHCMSXP4")
+options = JobSubmitOptions()
+print(client.submit_job_url("", options))
