@@ -4,6 +4,7 @@
 from models.job import Job
 from models.job_options import JobSubmitOptions
 from models.error import ApiError, InsufficientBalanceError, InvalidParametersError, InvalidValueError
+from models.account import Account
 
 __all__ = (
 	"Job", 
@@ -11,5 +12,6 @@ __all__ = (
 	"ApiError", 
 	"InsufficientBalanceError", 
 	"InvalidParametersError", 
-	"InvalidValueError"
+	"InvalidValueError",
+	"Account"
 )

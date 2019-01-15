@@ -120,7 +120,10 @@ class RevSpeechAPIClient:
 
         response = self.s.get(url_jobs_id)
 
-        return Job.from_json(response.json())
+        if (response.status_code == 200):
+            return Job.from_json(response.json())
+        else:
+            return ApiError.from_json(response.json())
 
     def get_transcript_as_text(
         self, 
@@ -137,7 +140,12 @@ class RevSpeechAPIClient:
         response = self.s.get(url_jobs_transcript,
                               headers={'Accept': "text/plain"})
 
-        return response.text
+        if (response.status_code == 200):
+            return response.text
+        elif (response.status_code == 406 or response.status_code == 409):
+            return InvalidValueError.from_json(response.json())
+        else:
+            return ApiError.from_json(response.json())
 
     def get_transcript_as_json(
         self, 
@@ -155,7 +163,12 @@ class RevSpeechAPIClient:
             headers={'Accept': 'application/{version}+json'
                  .format(version="vnd.rev.transcript.v1.0")})
 
-        return response.json()
+        if (response.status_code == 200):
+            return response.json()
+        elif (response.status_code == 406 or response.status_code == 409):
+            return InvalidValueError.from_json(response.json())
+        else:
+            return ApiError.from_json(response.json())
 
     def get_account(
         self
@@ -166,8 +179,4 @@ class RevSpeechAPIClient:
 
         response = self.s.get(url_account)
 
-        return response.json()
-
-client = RevSpeechAPIClient("02cD6t8ixL12YX8BFwHbNmuQa05GeD3GwAyjuiDStTC_FAEUCFiLvJkge4JSPRzcrh1siMmWv4RthnTZS1KfIvHCMSXP4")
-options = JobSubmitOptions()
-print(client.submit_job_url("", options))
+        return Account.from_json(response.json())
