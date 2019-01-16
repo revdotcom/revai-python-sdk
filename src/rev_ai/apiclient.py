@@ -33,7 +33,8 @@ class RevAiAPIClient:
             raise ValueError("API Key cannot be empty.")
         self.s = requests.Session()
         self.s.headers.update({
-            'Authorization': 'Bearer {api_key}'.format(api_key=api_key)
+            'Authorization': 'Bearer {api_key}'.format(api_key=api_key),
+            'User-Agent': 'python_sdk'
         })
 
     def submit_job_url(self, media_url, options):
@@ -60,7 +61,6 @@ class RevAiAPIClient:
         Note that the content type is inferred if not provided.
 
         :param filename: path to a local file on disk
-        :param content_type: MIME content type of file being sent
         :param options: JobSubmitOptions object for the job
         :returns: raw response data
         """
@@ -82,7 +82,7 @@ class RevAiAPIClient:
         """View information about a specific job.
         The server will respond with the status and creation date.
 
-        :param id_: id that the server gave you
+        :param id_: id of the job to be requested
         :returns: raw response data
         """
         url_jobs_id = urljoin(self.base_url, "jobs/{id_}".format(id_=id_))
@@ -94,7 +94,7 @@ class RevAiAPIClient:
     def get_transcript_text(self, id_):
         """Get the transcript of a specific job as json.
 
-        :param id_: id that the server gave you
+        :param id_: id of job to be requested
         :returns: transcript data as text
         """
         url_jobs_transcript = urljoin(
@@ -109,10 +109,10 @@ class RevAiAPIClient:
 
         return response.text
 
-    def get_transcript_object(self, id_, format_):
+    def get_transcript_object(self, id_):
         """Get the transcript of a specific job as json.
 
-        :param id_: id that the server gave you
+        :param id_: id of job to be requested
         :returns: transcript data as a python object
         """
 
@@ -123,8 +123,8 @@ class RevAiAPIClient:
 
         response = self.s.get(
             url_jobs_transcript,
-            headers={'Accept': 'application/{version}+json'
-                .format(version="vnd.rev.transcript.v1.0")}
+            headers={'Accept': 'application/{transcript_version}+json'
+                .format(transcript_version="vnd.rev.transcript.v1.0")}
         )
 
         return Transcript.from_json(response.json())
