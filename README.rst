@@ -3,8 +3,8 @@ rev_ai
 ======
 
 
-.. image:: https://img.shields.io/travis/revdotcom/rev-python-sdk.svg
-        :target: https://travis-ci.org/revdotcom/rev-python-sdk
+.. image:: https://img.shields.io/travis/revdotcom/revai-python-sdk.svg
+        :target: https://travis-ci.org/revdotcom/revai-python-sdk
 
 
 
