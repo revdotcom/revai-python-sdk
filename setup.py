@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 try:  # for pip >= 10
     from pip._internal.req import parse_requirements
     from pip._internal.download import PipSession
-except ImportError: # for pip <= 9.0.3
+except ImportError:  # for pip <= 9.0.3
     from pip.req import parse_requirements
     from pip.download import PipSession
 import re
@@ -37,8 +37,8 @@ setup(
     version=version,
     description="Rev.ai makes speech applications easy to build!",
     long_description=readme + '\n\n' + history,
-    author="Joshua Dong",
-    author_email='jdong42@gmail.com',
+    author="Kyle Bridburg",
+    author_email='kyle@rev.com',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -62,5 +62,5 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/revdotcom/rev_ai',
+    url='https://github.com/revdotcom/revai-python-sdk',
 )
