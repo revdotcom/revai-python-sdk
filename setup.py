@@ -38,8 +38,7 @@ setup(
     version=version,
     description='Rev.ai makes speech applications easy to build!',
     long_description=readme + '\n\n' + history,
-    author='Kyle Bridburg',
-    author_email='kyle@rev.com',
+    author="Rev Ai",
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[os.path.splitext(os.path.basename(path))[0]
