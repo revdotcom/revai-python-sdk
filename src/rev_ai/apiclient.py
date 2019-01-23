@@ -7,7 +7,7 @@ except ImportError:
     from urlparse import urljoin
 import requests
 import json
-from models import (
+from .models import (
     Job,
     Account,
     Transcript
@@ -15,12 +15,13 @@ from models import (
 
 
 class RevAiAPIClient:
-    """Client which implements rev.ai API"""
+    """Client which implements Rev.ai API"""
 
-    version = "v1"  # Default version of rev.ai
+    # Default version of Rev.ai
+    version = "v1"
 
-    base_url = "https://api.rev.ai/revspeech/{v}/"
-        .format(v=version)  # Default address of the API
+    # Default address of the API
+    base_url = "https://api.rev.ai/revspeech/{v}/".format(v=version)
 
     def __init__(self, api_key):
         """Constructor
@@ -31,8 +32,8 @@ class RevAiAPIClient:
         """
         if not api_key:
             raise ValueError("API Key cannot be empty.")
-        self.s = requests.Session()
-        self.s.headers.update({
+        self.session = requests.Session()
+        self.session.headers.update({
             'Authorization': 'Bearer {api_key}'.format(api_key=api_key),
             'User-Agent': 'python_sdk'
         })
@@ -52,7 +53,7 @@ class RevAiAPIClient:
         }
         if options.callback_url:
             payload['callback_url'] = options.callback_url
-        response = self.s.post(url_jobs, json=payload)
+        response = self.session.post(url_jobs, json=payload)
 
         return Job.from_json(response.json())
 
@@ -74,7 +75,7 @@ class RevAiAPIClient:
                 'media': (filename, f),
                 'options': (None, json.dumps(payload))
             }
-            response = self.s.post(url_jobs, files=files)
+            response = self.session.post(url_jobs, files=files)
 
         return Job.from_json(response.json())
 
@@ -87,7 +88,7 @@ class RevAiAPIClient:
         """
         url_jobs_id = urljoin(self.base_url, "jobs/{id_}".format(id_=id_))
 
-        response = self.s.get(url_jobs_id)
+        response = self.session.get(url_jobs_id)
 
         return Job.from_json(response.json())
 
@@ -102,7 +103,7 @@ class RevAiAPIClient:
             "jobs/{id_}/transcript".format(id_=id_)
         )
 
-        response = self.s.get(
+        response = self.session.get(
             url_jobs_transcript,
             headers={'Accept': "text/plain"}
         )
@@ -121,10 +122,10 @@ class RevAiAPIClient:
             "jobs/{id_}/transcript".format(id_=id_)
         )
 
-        response = self.s.get(
+        response = self.session.get(
             url_jobs_transcript,
             headers={'Accept': 'application/{transcript_version}+json'
-                .format(transcript_version="vnd.rev.transcript.v1.0")}
+                     .format(transcript_version="vnd.rev.transcript.v1.0")}
         )
 
         return Transcript.from_json(response.json())
@@ -134,6 +135,6 @@ class RevAiAPIClient:
         """
         url_account = urljoin(self.base_url, "account")
 
-        response = self.s.get(url_account)
+        response = self.session.get(url_account)
 
         return Account.from_json(response.json())
