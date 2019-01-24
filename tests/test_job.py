@@ -77,8 +77,7 @@ class TestJobEndpoints():
             }
         )
 
-    @patch('src.rev_ai.apiclient.open')
-    def test_submit_job_local_file_success(self, mock_open, mockclient):
+    def test_submit_job_local_file_success(self, mockclient):
         filename = "test.mp3"
         options = JobSubmitOptions(metadata="test")
         data = {
@@ -87,22 +86,23 @@ class TestJobEndpoints():
             "created_on": "2018-05-05T23:23:22.29Z"
         }
         mockclient.session.post.return_value.json.return_value = data
-        mock_open.return_value.__enter__ = mock_open
-        mock_open.return_value.__iter__ = MagicMock(return_value='Hello')
+        with patch('src.rev_ai.apiclient.open') as mock_open:
+            mock_open.return_value.__enter__ = mock_open
+            mock_open.return_value.__iter__ = MagicMock(return_value='Hello')
 
-        res = mockclient.submit_job_local_file(filename, options)
+            res = mockclient.submit_job_local_file(filename, options)
 
-        assert isinstance(res, Job)
-        assert res.id == JOB_ID
-        assert res.status == data.get('status')
-        assert res.created_on == data.get('created_on')
-        mockclient.session.post.assert_called_once_with(
-            urljoin(RevAiAPIClient.base_url, "jobs"),
-            files={
-                'media': (filename, mock_open.return_value),
-                'options': (None, json.dumps({'metadata': options.metadata}))
-            }
-        )
+            assert isinstance(res, Job)
+            assert res.id == JOB_ID
+            assert res.status == data.get('status')
+            assert res.created_on == data.get('created_on')
+            mockclient.session.post.assert_called_once_with(
+                urljoin(RevAiAPIClient.base_url, "jobs"),
+                files={
+                    'media': (filename, mock_open.return_value),
+                    'options': (None, json.dumps({'metadata': options.metadata}))
+                }
+            )
 
     def test_submit_job_bad_request_error(self, mockclient):
         options = JobSubmitOptions(metadata="test")
