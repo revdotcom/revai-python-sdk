@@ -86,7 +86,7 @@ class TestJobEndpoints():
             "created_on": "2018-05-05T23:23:22.29Z"
         }
         mockclient.session.post.return_value.json.return_value = data
-        with patch('src.rev_ai.apiclient.open') as mock_open:
+        with patch('src.rev_ai.apiclient.open', create=True) as mock_open:
             mock_open.return_value.__enter__ = mock_open
             mock_open.return_value.__iter__ = MagicMock(return_value='Hello')
 
