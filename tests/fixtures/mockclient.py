@@ -1,5 +1,6 @@
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
+
 try:
     from unittest.mock import MagicMock
 except ImportError:

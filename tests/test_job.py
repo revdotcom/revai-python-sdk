@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
+"""Unit tests for job endpoints"""
+
+import json
+import pytest
+from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import Job, JobStatus, JobSubmitOptions
+
 try:
     from unittest.mock import patch, MagicMock
     from urllib.parse import urljoin
 except ImportError:
     from mock import patch, MagicMock
     from urlparse import urljoin
-import json
-import pytest
-from src.rev_ai.models import Job, JobSubmitOptions
-from src.rev_ai.apiclient import RevAiAPIClient
 
 JOB_ID = '1'
 MEDIA_URL = "https://example.com/test.mp3"
@@ -16,19 +20,14 @@ MEDIA_URL = "https://example.com/test.mp3"
 @pytest.mark.usefixtures("mockclient")
 class TestJobEndpoints():
     def test_get_job_details_success(self, mockclient):
-        data = {
-            'id': JOB_ID,
-            'status': 'transcribed',
-            'created_on': '2018-05-05T23:23:22.29Z'
-        }
+        status = 'transcribed'
+        created_on = '2018-05-05T23:23:22.29Z'
+        data = {'id': JOB_ID, 'status': status, 'created_on': created_on}
         mockclient.session.get.return_value.json.return_value = data
 
         res = mockclient.get_job_details(JOB_ID)
 
-        assert isinstance(res, Job)
-        assert res.id == JOB_ID
-        assert res.status == data.get('status')
-        assert res.created_on == data.get('created_on')
+        assert res == Job(JOB_ID, created_on, JobStatus[status.upper()])
         mockclient.session.get.assert_called_once_with(
             urljoin(RevAiAPIClient.base_url, "jobs/{id}".format(id=JOB_ID))
         )
@@ -55,57 +54,57 @@ class TestJobEndpoints():
             mockclient.get_job_details(JOB_ID)
 
     def test_submit_job_url_success(self, mockclient):
-        options = JobSubmitOptions(metadata="test")
+        status = 'in_progress'
+        created_on = '2018-05-05T23:23:22.29Z'
+        metadata = 'test'
         data = {
-            "id": JOB_ID,
-            "status": "in_progress",
-            "created_on": "2018-05-05T23:23:22.29Z"
+            'id': JOB_ID,
+            'status': status,
+            'created_on': created_on,
+            'metadata': metadata
         }
         mockclient.session.post.return_value.json.return_value = data
 
-        res = mockclient.submit_job_url(MEDIA_URL, options)
+        res = mockclient.submit_job_url(MEDIA_URL, JobSubmitOptions(metadata=metadata))
 
-        assert isinstance(res, Job)
-        assert res.id == JOB_ID
-        assert res.status == data.get('status')
-        assert res.created_on == data.get('created_on')
+        assert res == Job(JOB_ID, created_on, JobStatus[status.upper()], metadata=metadata)
         mockclient.session.post.assert_called_once_with(
             urljoin(RevAiAPIClient.base_url, "jobs"),
             json={
                 'media_url': MEDIA_URL,
-                'metadata': options.metadata
+                'metadata': metadata
             }
         )
 
     def test_submit_job_local_file_success(self, mockclient):
         filename = "test.mp3"
-        options = JobSubmitOptions(metadata="test")
+        status = 'in_progress'
+        created_on = '2018-05-05T23:23:22.29Z'
+        metadata = "test"
         data = {
             "id": JOB_ID,
-            "status": "in_progress",
-            "created_on": "2018-05-05T23:23:22.29Z"
+            "status": status,
+            "created_on": created_on,
+            "metadata": metadata
         }
         mockclient.session.post.return_value.json.return_value = data
+
         with patch('src.rev_ai.apiclient.open', create=True) as mock_open:
             mock_open.return_value.__enter__ = mock_open
             mock_open.return_value.__iter__ = MagicMock(return_value='Hello')
 
-            res = mockclient.submit_job_local_file(filename, options)
+            res = mockclient.submit_job_local_file(filename, JobSubmitOptions(metadata=metadata))
 
-            assert isinstance(res, Job)
-            assert res.id == JOB_ID
-            assert res.status == data.get('status')
-            assert res.created_on == data.get('created_on')
+            assert res == Job(JOB_ID, created_on, JobStatus[status.upper()], metadata=metadata)
             mockclient.session.post.assert_called_once_with(
                 urljoin(RevAiAPIClient.base_url, "jobs"),
                 files={
                     'media': (filename, mock_open.return_value),
-                    'options': (None, json.dumps({'metadata': options.metadata}))
+                    'options': (None, json.dumps({'metadata': metadata}))
                 }
             )
 
     def test_submit_job_bad_request_error(self, mockclient):
-        options = JobSubmitOptions(metadata="test")
         data = {
             "parameter": {
                 "media_url": [
@@ -119,10 +118,9 @@ class TestJobEndpoints():
         mockclient.session.post.return_value.json.return_value = data
 
         with pytest.raises(KeyError):
-            mockclient.submit_job_url(MEDIA_URL, options)
+            mockclient.submit_job_url(MEDIA_URL, JobSubmitOptions())
 
     def test_submit_job_not_authorized_error(self, mockclient):
-        options = JobSubmitOptions(metadata="test")
         data = {
             "title": "Authorization has been denied for this request",
             "status": 401
@@ -130,10 +128,9 @@ class TestJobEndpoints():
         mockclient.session.post.return_value.json.return_value = data
 
         with pytest.raises(KeyError):
-            mockclient.submit_job_url(MEDIA_URL, options)
+            mockclient.submit_job_url(MEDIA_URL, JobSubmitOptions())
 
     def test_submit_job_insufficient_credits_error(self, mockclient):
-        options = JobSubmitOptions(metadata="test")
         data = {
             "title": "You do not have enough credits",
             "type": "https://www.rev.ai/api/v1/errors/out-of-credit",
@@ -144,4 +141,4 @@ class TestJobEndpoints():
         mockclient.session.post.return_value.json.return_value = data
 
         with pytest.raises(KeyError):
-            mockclient.submit_job_url(MEDIA_URL, options)
+            mockclient.submit_job_url(MEDIA_URL, JobSubmitOptions())

@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+"""Unit tests for transcript endpoints"""
+
+import pytest
+from src.rev_ai.models import Transcript
+from src.rev_ai.apiclient import RevAiAPIClient
+
 try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
-import pytest
-from src.rev_ai.models import Transcript
-from src.rev_ai.apiclient import RevAiAPIClient
 
 JOB_ID = '1'
 

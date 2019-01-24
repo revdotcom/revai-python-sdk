@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using rev.ai
-"""
+"""Speech recognition tools for using rev.ai"""
+
+import requests
+import json
+from .models import Job, Account, Transcript
+
 try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
-import requests
-import json
-from .models import (
-    Job,
-    Account,
-    Transcript
-)
 
 
 class RevAiAPIClient:
@@ -116,7 +113,6 @@ class RevAiAPIClient:
         :param id_: id of job to be requested
         :returns: transcript data as a python object
         """
-
         url_jobs_transcript = urljoin(
             self.base_url,
             "jobs/{id_}/transcript".format(id_=id_)
