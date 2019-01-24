@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using rev.ai"""
+"""Speech recognition tools for using Rev.ai"""
 
 import requests
 import json

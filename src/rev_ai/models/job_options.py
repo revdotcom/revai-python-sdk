@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Job Submit Options Model"""
+"""Job submit options model"""
 
 
 class JobSubmitOptions:

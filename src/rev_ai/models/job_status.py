@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Enum for Job statuses"""
+
 from enum import Enum
 
 

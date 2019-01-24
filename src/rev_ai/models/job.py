@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Job Model"""
+"""Job model"""
 
 from .job_status import JobStatus
 

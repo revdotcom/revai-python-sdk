@@ -1,15 +1,13 @@
+# -*- coding: utf-8 -*-
+"""Mock RevAiAPIClient for testing purposes"""
+
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
 
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import MagicMock
-
 
 @pytest.fixture
-def mockclient():
+def mockclient(mocker):
     client = RevAiAPIClient('key')
-    client.session.get = MagicMock(name="mock_get")
-    client.session.post = MagicMock(name="mock_post")
+    client.session.get = mocker.Mock(name="mock_get")
+    client.session.post = mocker.Mock(name="mock_post")
     return client
