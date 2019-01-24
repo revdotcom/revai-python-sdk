@@ -27,7 +27,7 @@ class TestJobEndpoints():
 
         res = mockclient.get_job_details(JOB_ID)
 
-        assert res == Job(JOB_ID, created_on, JobStatus[status.upper()])
+        assert res == Job(JOB_ID, created_on, JobStatus.TRANSCRIBED)
         mockclient.session.get.assert_called_once_with(
             urljoin(RevAiAPIClient.base_url, "jobs/{id}".format(id=JOB_ID))
         )
@@ -65,9 +65,11 @@ class TestJobEndpoints():
         }
         mockclient.session.post.return_value.json.return_value = data
 
-        res = mockclient.submit_job_url(MEDIA_URL, JobSubmitOptions(metadata=metadata))
+        res = mockclient.submit_job_url(MEDIA_URL,
+                                        JobSubmitOptions(metadata=metadata))
 
-        assert res == Job(JOB_ID, created_on, JobStatus[status.upper()], metadata=metadata)
+        assert res == Job(JOB_ID, created_on,
+                          JobStatus.IN_PROGRESS, metadata=metadata)
         mockclient.session.post.assert_called_once_with(
             urljoin(RevAiAPIClient.base_url, "jobs"),
             json={
@@ -93,9 +95,13 @@ class TestJobEndpoints():
             mock_open.return_value.__enter__ = mock_open
             mock_open.return_value.__iter__ = MagicMock(return_value='Hello')
 
-            res = mockclient.submit_job_local_file(filename, JobSubmitOptions(metadata=metadata))
+            res = mockclient.submit_job_local_file(
+                filename,
+                JobSubmitOptions(metadata=metadata)
+            )
 
-            assert res == Job(JOB_ID, created_on, JobStatus[status.upper()], metadata=metadata)
+            assert res == Job(JOB_ID, created_on,
+                              JobStatus.IN_PROGRESS, metadata=metadata)
             mockclient.session.post.assert_called_once_with(
                 urljoin(RevAiAPIClient.base_url, "jobs"),
                 files={

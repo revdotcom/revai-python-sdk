@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Job Model"""
 
-from enum import Enum
+from .job_status import JobStatus
 
 
 class Job:
@@ -56,7 +56,7 @@ class Job:
         return cls(
             json["id"],
             json["created_on"],
-            JobStatus[json["status"].upper()],
+            JobStatus.from_string(json["status"]),
             json.get("completed_on"),
             json.get("name"),
             json.get("callback_url"),
@@ -66,9 +66,3 @@ class Job:
             json.get("failure_detail"),
             json.get("duration_seconds")
         )
-
-
-class JobStatus(Enum):
-    IN_PROGRESS = 1
-    TRANSCRIBED = 2
-    FAILED = 3
