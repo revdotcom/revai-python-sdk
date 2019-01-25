@@ -12,10 +12,10 @@ except ImportError:
     from urlparse import urljoin
 
 JOB_ID = '1'
+METADATA = 'test'
+CALLBACK_URL = 'https://callback.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 MEDIA_URL = "https://example.com/test.mp3"
-CALLBACK_URL = 'https://callback.com/'
-METADATA = 'test'
 
 
 @pytest.mark.usefixtures("mockclient")
