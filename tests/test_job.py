@@ -12,8 +12,10 @@ except ImportError:
     from urlparse import urljoin
 
 JOB_ID = '1'
+CREATED_ON = '2018-05-05T23:23:22.29Z'
 MEDIA_URL = "https://example.com/test.mp3"
 CALLBACK_URL = 'https://callback.com/'
+METADATA = 'test'
 
 
 @pytest.mark.usefixtures("mockclient")
@@ -54,33 +56,31 @@ class TestJobEndpoints():
 
     def test_submit_job_url_success(self, mockclient):
         status = 'in_progress'
-        created_on = '2018-05-05T23:23:22.29Z'
-        metadata = 'test'
         data = {
             'id': JOB_ID,
             'status': status,
-            'created_on': created_on,
-            'metadata': metadata,
+            'created_on': CREATED_ON,
+            'metadata': METADATA,
             'callback_url': CALLBACK_URL
         }
         mockclient.session.post.return_value.json.return_value = data
 
         res = mockclient.submit_job_url(
             MEDIA_URL,
-            JobSubmitOptions(metadata=metadata, callback_url=CALLBACK_URL)
+            JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL)
         )
 
         assert res == Job(JOB_ID,
-                          created_on,
+                          CREATED_ON,
                           JobStatus.IN_PROGRESS,
-                          metadata=metadata,
+                          metadata=METADATA,
                           callback_url=CALLBACK_URL)
         mockclient.session.post.assert_called_once_with(
             urljoin(RevAiAPIClient.base_url, "jobs"),
             json={
                 'media_url': MEDIA_URL,
                 'callback_url': CALLBACK_URL,
-                'metadata': metadata
+                'metadata': METADATA
             }
         )
 
@@ -88,12 +88,11 @@ class TestJobEndpoints():
         filename = "test.mp3"
         status = 'in_progress'
         created_on = '2018-05-05T23:23:22.29Z'
-        metadata = "test"
         data = {
             "id": JOB_ID,
             "status": status,
             "created_on": created_on,
-            "metadata": metadata,
+            "metadata": METADATA,
             "callback_url": CALLBACK_URL
         }
         mockclient.session.post.return_value.json.return_value = data
@@ -101,20 +100,20 @@ class TestJobEndpoints():
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as mock_open:
             res = mockclient.submit_job_local_file(
                 filename,
-                JobSubmitOptions(metadata=metadata, callback_url=CALLBACK_URL)
+                JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL)
             )
 
             assert res == Job(JOB_ID,
-                              created_on,
+                              CREATED_ON,
                               JobStatus.IN_PROGRESS,
-                              metadata=metadata,
+                              metadata=METADATA,
                               callback_url=CALLBACK_URL)
             mockclient.session.post.assert_called_once_with(
                 urljoin(RevAiAPIClient.base_url, "jobs"),
                 files={
                     'media': (filename, mock_open),
                     'options': (None,
-                                json.dumps({'metadata': metadata,
+                                json.dumps({'metadata': METADATA,
                                             'callback_url': CALLBACK_URL}))
                 }
             )
