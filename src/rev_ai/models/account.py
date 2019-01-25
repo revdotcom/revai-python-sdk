@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Account Model"""
+"""Account model"""
 
 
 class Account:
@@ -10,6 +10,12 @@ class Account:
         """
         self.email = email
         self.balance_seconds = balance_seconds
+
+    def __eq__(self, other):
+        """Override default equality operator"""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
 
     @classmethod
     def from_json(cls, json):

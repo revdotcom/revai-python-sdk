@@ -10,6 +10,7 @@ except ImportError:  # for pip <= 9.0.3
     from pip.download import PipSession
 import re
 import ast
+import os
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
@@ -41,7 +42,7 @@ setup(
     author_email='kyle@rev.com',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
@@ -60,6 +61,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
+    setup_requires=["pytest-runner==4.2"],
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/revdotcom/revai-python-sdk',

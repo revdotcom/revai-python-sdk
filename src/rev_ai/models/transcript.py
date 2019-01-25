@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Transcript Model"""
+"""Transcript model"""
 
 
 class Transcript:
@@ -9,11 +9,17 @@ class Transcript:
         """
         self.monologues = monologues
 
+    def __eq__(self, other):
+        """Override default equality operator"""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
+
     @classmethod
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
         return cls(
-            [Monologue.from_json(monologue) 
+            [Monologue.from_json(monologue)
                 for monologue in json.get("monologues", [])]
         )
 
@@ -26,6 +32,12 @@ class Monologue:
         """
         self.speaker = speaker
         self.elements = elements
+
+    def __eq__(self, other):
+        """Override default equality operator"""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
 
     @classmethod
     def from_json(cls, json):
@@ -50,6 +62,12 @@ class Element:
         self.timestamp = timestamp
         self.end_timestamp = end_timestamp
         self.confidence = confidence
+
+    def __eq__(self, other):
+        """Override default equality operator"""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
 
     @classmethod
     def from_json(cls, json):
