@@ -94,6 +94,7 @@ def notifyComplete(String buildStatus) {
     String SUCCESS = 'SUCCESS'
     String FAILURE = 'FAILURE'
 
+    return
     if (env.NOSLACK_NOTIFICATIONS == 'true')
     {
         echo "Slack notifications are disabled"
