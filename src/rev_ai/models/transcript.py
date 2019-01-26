@@ -12,7 +12,9 @@ class Transcript:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
+            return all(a == b
+                       for a, b
+                       in zip(self.monologues, other.monologues))
         return False
 
     @classmethod
@@ -36,7 +38,10 @@ class Monologue:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
+            return all(a == b
+                       for a, b
+                       in zip(self.elements, other.elements)) \
+                   and self.speaker == other.speaker
         return False
 
     @classmethod

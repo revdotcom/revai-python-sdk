@@ -2,4 +2,4 @@
 """Test configuration for pytest"""
 
 import pytest
-from tests.fixtures.mockclient import mockclient
+from tests.fixtures.mock_client import mock_client, make_mock_response
