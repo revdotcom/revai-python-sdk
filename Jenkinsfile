@@ -24,8 +24,11 @@ pipeline {
                 echo 'Testing..'
                 sh '''
                     . ./sdk-deploy/bin/activate
-                    python -m pip install tox
-                    tox
+                    python2.7 -m setup.py test
+                    python3.4 -m setup.py test
+                    python3.5 -m setup.py test
+                    python3.6 -m setup.py test
+                    python3.7 -m setup.py test
                 '''
             }
         }
