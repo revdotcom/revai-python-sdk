@@ -6,19 +6,15 @@ from .job_status import JobStatus
 
 class Job:
     def __init__(
-        self,
-        id_,
-        created_on,
-        status,
-        completed_on=None,
-        name=None,
-        callback_url=None,
-        metadata=None,
-        media_url=None,
-        failure=None,
-        failure_detail=None,
-        duration_seconds=None
-    ):
+            self, id_, created_on, status,
+            completed_on=None,
+            name=None,
+            callback_url=None,
+            metadata=None,
+            media_url=None,
+            failure=None,
+            failure_detail=None,
+            duration_seconds=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
