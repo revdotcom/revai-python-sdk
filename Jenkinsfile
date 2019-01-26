@@ -22,14 +22,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh '''
-                    . ./sdk-deploy/bin/activate
-                    python2.7 -m setup.py test
-                    python3.4 -m setup.py test
-                    python3.5 -m setup.py test
-                    python3.6 -m setup.py test
-                    python3.7 -m setup.py test
-                '''
+                sh "tox"
             }
         }
         stage('Deploy') {
