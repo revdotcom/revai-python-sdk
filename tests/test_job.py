@@ -17,13 +17,13 @@ JOB_ID = '1'
 METADATA = 'test'
 CALLBACK_URL = 'https://callback.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-MEDIA_URL = "https://example.com/test.mp3"
-FILENAME = "test.mp3"
-JOB_ID_URL = urljoin(RevAiAPIClient.base_url, "jobs/{id}".format(id=JOB_ID))
-JOBS_URL = urljoin(RevAiAPIClient.base_url, "jobs")
+MEDIA_URL = 'https://example.com/test.mp3'
+FILENAME = 'test.mp3'
+JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
+JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 
 
-@pytest.mark.usefixtures("mock_client", "make_mock_response")
+@pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestJobEndpoints():
     def test_get_job_details_with_success(
             self, mock_client, make_mock_response):
@@ -42,16 +42,16 @@ class TestJobEndpoints():
         assert res == Job(JOB_ID, created_on, JobStatus.TRANSCRIBED)
         mock_client.session.get.assert_called_once_with(JOB_ID_URL)
 
-    @pytest.mark.parametrize("id", [None, ""])
+    @pytest.mark.parametrize('id', [None, ''])
     def test_get_job_details_with_no_job_id(self, id, mock_client):
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_job_details(id)
 
-    @pytest.mark.parametrize("error", get_error_test_cases(
+    @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found']))
     def test_get_job_details_with_error_response(
             self, error, mock_client, make_mock_response):
-        status = error.get("status")
+        status = error.get('status')
         response = make_mock_response(
             url=JOB_ID_URL, status=status, json_data=error)
         mock_client.session.get.return_value = response
@@ -87,16 +87,16 @@ class TestJobEndpoints():
                 'metadata': METADATA
             })
 
-    @pytest.mark.parametrize("url", [None, ""])
+    @pytest.mark.parametrize('url', [None, ''])
     def test_submit_job_url_with_no_media_url(self, url, mock_client):
         with pytest.raises(ValueError, match='media_url must be provided'):
             mock_client.submit_job_url(url)
 
-    @pytest.mark.parametrize("error", get_error_test_cases(
+    @pytest.mark.parametrize('error', get_error_test_cases(
         ['invalid-parameters', 'unauthorized', 'out-of-credit']))
     def test_submit_job_url_with_error_response(
             self, error, mock_client, make_mock_response):
-        status = error.get("status")
+        status = error.get('status')
         response = make_mock_response(
             url=JOBS_URL, status=status, json_data=error)
         mock_client.session.post.return_value = response
@@ -110,11 +110,11 @@ class TestJobEndpoints():
             self, mocker, mock_client, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
-            "id": JOB_ID,
-            "status": 'in_progress',
-            "created_on": created_on,
-            "metadata": METADATA,
-            "callback_url": CALLBACK_URL
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': created_on,
+            'metadata': METADATA,
+            'callback_url': CALLBACK_URL
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
@@ -141,16 +141,16 @@ class TestJobEndpoints():
                     )
                 })
 
-    @pytest.mark.parametrize("filename", [None, ""])
+    @pytest.mark.parametrize('filename', [None, ''])
     def test_submit_job_url_with_no_filename(self, filename, mock_client):
         with pytest.raises(ValueError, match='filename must be provided'):
             mock_client.submit_job_local_file(filename, None)
 
-    @pytest.mark.parametrize("error", get_error_test_cases(
+    @pytest.mark.parametrize('error', get_error_test_cases(
         ['invalid-parameters', 'unauthorized', 'out-of-credit']))
     def test_submit_job_local_file_with_error_response(
             self, error, mocker, mock_client, make_mock_response):
-        status = error.get("status")
+        status = error.get('status')
         response = make_mock_response(
             url=JOBS_URL, status=status, json_data=error
         )
@@ -161,5 +161,4 @@ class TestJobEndpoints():
                 mock_client.submit_job_local_file(FILENAME)
             mock_client.session.post.assert_called_once_with(
                 JOBS_URL,
-                files={'media': (FILENAME, file), 'options': (None, '{}')}
-            )
+                files={'media': (FILENAME, file), 'options': (None, '{}')})

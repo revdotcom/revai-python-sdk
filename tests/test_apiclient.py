@@ -15,7 +15,7 @@ class TestRevAiAPIClient:
         assert headers.get('User-Agent') == 'python_sdk'
         assert headers.get('Authorization') == 'Bearer {}'.format(token)
 
-    @pytest.mark.parametrize("token", [None, ""])
+    @pytest.mark.parametrize('token', [None, ''])
     def test_constructor_with_no_token(self, token):
         with pytest.raises(ValueError, match='api_key must be provided'):
             RevAiAPIClient(token)

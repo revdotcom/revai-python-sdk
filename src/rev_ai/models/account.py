@@ -22,5 +22,5 @@ class Account:
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
         return cls(
-            json["email"],
-            json["balance_seconds"])
+            json['email'],
+            json['balance_seconds'])

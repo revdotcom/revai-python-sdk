@@ -15,10 +15,10 @@ class RevAiAPIClient:
     """Client which implements Rev.ai API"""
 
     # Default version of Rev.ai
-    version = "v1"
+    version = 'v1'
 
     # Default address of the API
-    base_url = "https://api.rev.ai/revspeech/{}/".format(version)
+    base_url = 'https://api.rev.ai/revspeech/{}/'.format(version)
 
     def __init__(self, api_key):
         """Constructor
@@ -28,7 +28,7 @@ class RevAiAPIClient:
             dashboard on rev.ai
         """
         if not api_key:
-            raise ValueError("api_key must be provided")
+            raise ValueError('api_key must be provided')
 
         self.session = requests.Session()
         self.session.headers.update({
@@ -55,7 +55,7 @@ class RevAiAPIClient:
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        url_jobs = urljoin(self.base_url, "jobs")
+        url_jobs = urljoin(self.base_url, 'jobs')
         payload = {'media_url': media_url}
         if metadata:
             payload['metadata'] = metadata
@@ -86,7 +86,7 @@ class RevAiAPIClient:
         if not filename:
             raise ValueError('filename must be provided')
 
-        url_jobs = urljoin(self.base_url, "jobs")
+        url = urljoin(self.base_url, 'jobs')
         payload = {}
         if metadata:
             payload['metadata'] = metadata
@@ -99,7 +99,7 @@ class RevAiAPIClient:
                 'options': (None, json.dumps(payload))
             }
 
-            response = self.session.post(url_jobs, files=files)
+            response = self.session.post(url, files=files)
             response.raise_for_status()
 
         return Job.from_json(response.json())
@@ -114,7 +114,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url_jobs_id = urljoin(self.base_url, "jobs/{}".format(id_))
+        url_jobs_id = urljoin(self.base_url, 'jobs/{}'.format(id_))
         response = self.session.get(url_jobs_id)
         response.raise_for_status()
 
@@ -130,9 +130,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         url_jobs_transcript = urljoin(
-            self.base_url, "jobs/{}/transcript".format(id_))
+            self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url_jobs_transcript, headers={'Accept': "text/plain"})
+            url_jobs_transcript, headers={'Accept': 'text/plain'})
         response.raise_for_status()
 
         return response.text
@@ -146,12 +146,10 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url_jobs_transcript = urljoin(
-            self.base_url, "jobs/{}/transcript".format(id_))
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url_jobs_transcript,
-            headers={'Accept': 'application/{}+json'
-                     .format("vnd.rev.transcript.v1.0")})
+            url, headers={'Accept': 'application/{}+json'
+                          .format('vnd.rev.transcript.v1.0')})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
@@ -159,8 +157,8 @@ class RevAiAPIClient:
     def get_account(self):
         """Get account information, such as remaining balance.
         """
-        url_account = urljoin(self.base_url, "account")
-        response = self.session.get(url_account)
+        url = urljoin(self.base_url, 'account')
+        response = self.session.get(url)
         response.raise_for_status()
 
         return Account.from_json(response.json())
