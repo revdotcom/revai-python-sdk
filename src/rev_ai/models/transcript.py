@@ -22,8 +22,7 @@ class Transcript:
         """Alternate constructor used for parsing json"""
         return cls(
             [Monologue.from_json(monologue)
-                for monologue in json.get("monologues", [])]
-        )
+             for monologue in json.get("monologues", [])])
 
 
 class Monologue:
@@ -49,8 +48,8 @@ class Monologue:
         """Alternate constructor used for parsing json"""
         return cls(
             json["speaker"],
-            [Element.from_json(element) for element in json.get("elements", [])]
-        )
+            [Element.from_json(element)
+             for element in json.get("elements", [])])
 
 
 class Element:
@@ -82,5 +81,4 @@ class Element:
             json["value"],
             json.get("ts"),
             json.get("end_ts"),
-            json.get("confidence")
-        )
+            json.get("confidence"))

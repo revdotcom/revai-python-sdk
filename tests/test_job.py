@@ -34,9 +34,7 @@ class TestJobEndpoints():
             'status': status,
             'created_on': created_on
         }
-        response = make_mock_response(
-            url=JOB_ID_URL, json_data=data
-        )
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.get.return_value = response
 
         res = mock_client.get_job_details(JOB_ID)
@@ -71,15 +69,12 @@ class TestJobEndpoints():
             'metadata': METADATA,
             'callback_url': CALLBACK_URL
         }
-        response = make_mock_response(
-            url=JOB_ID_URL, json_data=data
-        )
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
 
         res = mock_client.submit_job_url(
             MEDIA_URL,
-            JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL)
-        )
+            JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL))
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -92,8 +87,7 @@ class TestJobEndpoints():
                 'media_url': MEDIA_URL,
                 'callback_url': CALLBACK_URL,
                 'metadata': METADATA
-            }
-        )
+            })
 
     @pytest.mark.parametrize("url", [None, ""])
     def test_submit_job_url_with_no_media_url(self, url, mock_client):
@@ -106,8 +100,7 @@ class TestJobEndpoints():
             self, error, mock_client, make_mock_response):
         status = error.get("status")
         response = make_mock_response(
-            url=JOBS_URL, status=status, json_data=error
-        )
+            url=JOBS_URL, status=status, json_data=error)
         mock_client.session.post.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -127,15 +120,13 @@ class TestJobEndpoints():
             "metadata": METADATA,
             "callback_url": CALLBACK_URL
         }
-        response = make_mock_response(
-            url=JOB_ID_URL, json_data=data)
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = mock_client.submit_job_local_file(
                 filename,
-                JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL)
-            )
+                JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL))
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -146,11 +137,14 @@ class TestJobEndpoints():
                 JOBS_URL,
                 files={
                     'media': (filename, file),
-                    'options': (None,
-                                json.dumps({'metadata': METADATA,
-                                            'callback_url': CALLBACK_URL}))
-                }
-            )
+                    'options': (
+                        None,
+                        json.dumps({
+                            'metadata': METADATA,
+                            'callback_url': CALLBACK_URL
+                        })
+                    )
+                })
 
     @pytest.mark.parametrize("filename", [None, ""])
     def test_submit_job_url_with_no_filename(self, filename, mock_client):

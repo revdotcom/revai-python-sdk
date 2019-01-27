@@ -113,13 +113,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         url_jobs_transcript = urljoin(
-            self.base_url,
-            "jobs/{}/transcript".format(id_)
-        )
+            self.base_url, "jobs/{}/transcript".format(id_))
         response = self.session.get(
-            url_jobs_transcript,
-            headers={'Accept': "text/plain"}
-        )
+            url_jobs_transcript, headers={'Accept': "text/plain"})
         response.raise_for_status()
 
         return response.text
@@ -134,14 +130,11 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         url_jobs_transcript = urljoin(
-            self.base_url,
-            "jobs/{}/transcript".format(id_)
-        )
+            self.base_url, "jobs/{}/transcript".format(id_))
         response = self.session.get(
             url_jobs_transcript,
             headers={'Accept': 'application/{}+json'
-                     .format("vnd.rev.transcript.v1.0")}
-        )
+                     .format("vnd.rev.transcript.v1.0")})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
@@ -150,7 +143,6 @@ class RevAiAPIClient:
         """Get account information, such as remaining balance.
         """
         url_account = urljoin(self.base_url, "account")
-
         response = self.session.get(url_account)
         response.raise_for_status()
 

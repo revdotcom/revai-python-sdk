@@ -41,15 +41,13 @@ class TestTranscriptEndpoints():
     def test_get_transcript_text_with_error_response(
             self, error, mock_client, make_mock_response):
         status = error.get("status")
-        response = make_mock_response(
-            url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_transcript_text(JOB_ID)
         mock_client.session.get.assert_called_once_with(
-            URL, headers={'Accept': 'text/plain'}
-        )
+            URL, headers={'Accept': 'text/plain'})
 
     def test_get_transcript_object_with_success(
             self, mock_client, make_mock_response):
@@ -75,8 +73,8 @@ class TestTranscriptEndpoints():
 
         assert res == expected
         mock_client.session.get.assert_called_once_with(
-            URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}
-        )
+            URL,
+            headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
     @pytest.mark.parametrize("id", [None, ""])
     def test_get_transcript_object_with_no_job_id(self, id, mock_client):
@@ -95,5 +93,5 @@ class TestTranscriptEndpoints():
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_transcript_object(JOB_ID)
         mock_client.session.get.assert_called_once_with(
-            URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}
-        )
+            URL,
+            headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})

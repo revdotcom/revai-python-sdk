@@ -23,5 +23,4 @@ class Account:
         """Alternate constructor used for parsing json"""
         return cls(
             json["email"],
-            json["balance_seconds"]
-        )
+            json["balance_seconds"])
