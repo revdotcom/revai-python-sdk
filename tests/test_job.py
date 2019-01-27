@@ -5,7 +5,7 @@ import json
 import pytest
 from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models import Job, JobStatus, JobSubmitOptions
+from src.rev_ai.models import Job, JobStatus
 from tests.helpers.errors import get_error_test_cases
 
 try:
@@ -72,9 +72,7 @@ class TestJobEndpoints():
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
 
-        res = mock_client.submit_job_url(
-            MEDIA_URL,
-            JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL))
+        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -92,7 +90,7 @@ class TestJobEndpoints():
     @pytest.mark.parametrize("url", [None, ""])
     def test_submit_job_url_with_no_media_url(self, url, mock_client):
         with pytest.raises(ValueError, match='media_url must be provided'):
-            mock_client.submit_job_url(url, None)
+            mock_client.submit_job_url(url)
 
     @pytest.mark.parametrize("error", get_error_test_cases(
         ['invalid-parameters', 'unauthorized', 'out-of-credit']))
@@ -104,14 +102,12 @@ class TestJobEndpoints():
         mock_client.session.post.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
-            mock_client.submit_job_url(MEDIA_URL, JobSubmitOptions())
+            mock_client.submit_job_url(MEDIA_URL)
         mock_client.session.post.assert_called_once_with(
-            JOBS_URL, json={'media_url': MEDIA_URL, 'metadata': ''}
-        )
+            JOBS_URL, json={'media_url': MEDIA_URL})
 
     def test_submit_job_local_file_with_success(
             self, mocker, mock_client, make_mock_response):
-        filename = "test.mp3"
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
             "id": JOB_ID,
@@ -125,8 +121,7 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = mock_client.submit_job_local_file(
-                filename,
-                JobSubmitOptions(metadata=METADATA, callback_url=CALLBACK_URL))
+                FILENAME, METADATA, CALLBACK_URL)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -136,7 +131,7 @@ class TestJobEndpoints():
             mock_client.session.post.assert_called_once_with(
                 JOBS_URL,
                 files={
-                    'media': (filename, file),
+                    'media': (FILENAME, file),
                     'options': (
                         None,
                         json.dumps({
@@ -163,11 +158,8 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             with pytest.raises(HTTPError, match=str(status)):
-                mock_client.submit_job_local_file(FILENAME, JobSubmitOptions())
+                mock_client.submit_job_local_file(FILENAME)
             mock_client.session.post.assert_called_once_with(
                 JOBS_URL,
-                files={
-                    'media': (FILENAME, file),
-                    'options': (None, json.dumps({'metadata': ''}))
-                }
+                files={'media': (FILENAME, file), 'options': (None, '{}')}
             )

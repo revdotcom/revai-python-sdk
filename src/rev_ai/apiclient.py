@@ -36,45 +36,62 @@ class RevAiAPIClient:
             'User-Agent': 'python_sdk'
         })
 
-    def submit_job_url(self, media_url, options):
+    def submit_job_url(
+            self, media_url,
+            metadata=None,
+            callback_url=None,
+            skip_diarization=False):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
         :param media_url: web location of the media file
-        :param options: JobSubmitOptions object for the job
+        :param metadata: info to associate with the transcription job
+        :param callback_url: callback url to invoke on job completion as a
+                             webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
         :returns: raw response data
         """
         if not media_url:
             raise ValueError('media_url must be provided')
 
         url_jobs = urljoin(self.base_url, "jobs")
-        payload = {
-            'media_url': media_url,
-            'metadata': options.metadata
-        }
-        if options.callback_url:
-            payload['callback_url'] = options.callback_url
+        payload = {'media_url': media_url}
+        if metadata:
+            payload['metadata'] = metadata
+        if callback_url:
+            payload['callback_url'] = callback_url
 
         response = self.session.post(url_jobs, json=payload)
         response.raise_for_status()
 
         return Job.from_json(response.json())
 
-    def submit_job_local_file(self, filename, options):
+    def submit_job_local_file(
+            self, filename,
+            metadata=None,
+            callback_url=None,
+            skip_diarization=False):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
         :param filename: path to a local file on disk
-        :param options: JobSubmitOptions object for the job
+        :param metadata: info to associate with the transcription job
+        :param callback_url: callback url to invoke on job completion as a
+                             webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
         :returns: raw response data
         """
         if not filename:
             raise ValueError('filename must be provided')
 
         url_jobs = urljoin(self.base_url, "jobs")
-        payload = {'metadata': options.metadata}
-        if options.callback_url:
-            payload['callback_url'] = options.callback_url
+        payload = {}
+        if metadata:
+            payload['metadata'] = metadata
+        if callback_url:
+            payload['callback_url'] = callback_url
 
         with open(filename, 'rb') as f:
             files = {
