@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'linux && python'
+        dockerfile true
     }
     stages {
         stage("Version Check") {
@@ -22,7 +22,11 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh "tox"
+                sh '''
+                    . ./sdk-deploy/bin/activate
+                    python -m pip install tox
+                    tox
+                '''
             }
         }
         stage('Deploy') {
