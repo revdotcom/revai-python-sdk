@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        dockerfile true
+        label 'linux && python'
     }
     stages {
         stage("Version Check") {
@@ -20,6 +20,7 @@ pipeline {
             }
         }
         stage('Test') {
+            agent { dockerfile true }
             steps {
                 echo 'Testing..'
                 sh '''
