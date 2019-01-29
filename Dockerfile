@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
 RUN set -x \
     && pythonVersions='python2.7 python3.4 python3.5 python3.6 python3.7' \

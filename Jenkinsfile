@@ -20,7 +20,11 @@ pipeline {
             }
         }
         stage('Test') {
-            agent { dockerfile true }
+            agent { 
+                dockerfile {
+                    filename 'Dockerfile'
+                }
+            }
             steps {
                 echo 'Testing..'
                 sh '''
