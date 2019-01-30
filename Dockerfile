@@ -10,4 +10,6 @@ RUN set -x \
     && apt-get purge -y --auto-remove software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+RUN sudo apt install git
+
 CMD bash

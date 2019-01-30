@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'ubuntu:18.04'
-            label 'linux'
+            label 'linux-ci'
             args "-u root"
         }
     }
