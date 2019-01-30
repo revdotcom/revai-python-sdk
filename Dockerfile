@@ -12,7 +12,7 @@ RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends $pythonVersions \
     && apt-get purge -y --auto-remove software-properties-common \
-    && rm -rf ../../var/lib/apt/lists/*
+    && rm -rf ../var/lib/apt/lists/*
 
 RUN apt-get update
 RUN apt-get -y install python3-pip
