@@ -11,7 +11,7 @@ RUN set -x \
 
 RUN apt-get update
 RUN apt-get -y install python3-pip
-RUN pip install virtualenv
-RUN pip install tox
+RUN pip3 install virtualenv
+RUN pip3 install tox
 
 CMD bash
