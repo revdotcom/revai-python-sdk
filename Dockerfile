@@ -1,5 +1,9 @@
 FROM ubuntu:18.04
 
+RUN useradd -ms /bin/bash dockeruser
+USER dockeruser
+WORKDIR /home/dockeruser
+
 RUN set -x \
     && pythonVersions='python2.7 python3.4 python3.5 python3.6 python3.7' \
     && apt-get update \

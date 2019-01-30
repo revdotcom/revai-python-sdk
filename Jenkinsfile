@@ -30,7 +30,6 @@ pipeline {
                 sh '''
                     virtualenv ./sdk-test
                     . ./sdk-test/bin/activate
-                    python -m pip install tox
                     tox
                 '''
             }
