@@ -1,8 +1,10 @@
 pipeline {
-    docker {
-        image 'ubuntu:18.04'
-        label 'linux'
-        args "-u root"
+    agent {
+        docker {
+            image 'ubuntu:18.04'
+            label 'linux'
+            args "-u root"
+        }
     }
     stages {
         stage("Version Check") {
