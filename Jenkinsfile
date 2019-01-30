@@ -1,6 +1,8 @@
 pipeline {
-    agent {
-        label 'linux && python'
+    docker {
+        image 'ubuntu:18.04'
+        label 'linux'
+        args "-u root"
     }
     stages {
         stage("Version Check") {
@@ -20,11 +22,6 @@ pipeline {
             }
         }
         stage('Test') {
-            agent { 
-                dockerfile {
-                    filename 'Dockerfile'
-                }
-            }
             steps {
                 echo 'Testing..'
                 sh '''
