@@ -11,6 +11,6 @@ RUN set -x \
     && apt-get purge -y --auto-remove software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt install pip
+RUN apt install python-pip
 
 CMD bash
