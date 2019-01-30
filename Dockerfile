@@ -9,7 +9,3 @@ RUN set -x \
     && apt-get install -y --no-install-recommends $pythonVersions \
     && apt-get purge -y --auto-remove software-properties-common \
     && rm -rf /var/lib/apt/lists/*
-
-RUN sudo apt install git
-
-CMD bash
