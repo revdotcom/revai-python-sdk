@@ -8,7 +8,7 @@ from src.rev_ai.apiclient import RevAiAPIClient
 
 @pytest.fixture
 def mock_client(mocker):
-    client = RevAiAPIClient('key')
+    client = RevAiAPIClient('token')
     client.session.get = mocker.Mock(name='mock_get')
     client.session.post = mocker.Mock(name='mock_post')
     return client

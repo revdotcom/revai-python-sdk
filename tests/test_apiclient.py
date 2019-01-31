@@ -7,7 +7,7 @@ from src.rev_ai.apiclient import RevAiAPIClient
 
 class TestRevAiAPIClient:
     def test_constructor_with_success(self):
-        token = 'key'
+        token = 'token'
 
         client = RevAiAPIClient(token)
 
@@ -17,5 +17,5 @@ class TestRevAiAPIClient:
 
     @pytest.mark.parametrize('token', [None, ''])
     def test_constructor_with_no_token(self, token):
-        with pytest.raises(ValueError, match='api_key must be provided'):
+        with pytest.raises(ValueError, match='access_token must be provided'):
             RevAiAPIClient(token)

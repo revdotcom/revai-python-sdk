@@ -18,8 +18,7 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/transcript'.format(JOB_ID))
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestTranscriptEndpoints():
-    def test_get_transcript_text_with_success(
-            self, mock_client, make_mock_response):
+    def test_get_transcript_text_with_success(self, mock_client, make_mock_response):
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
@@ -27,9 +26,7 @@ class TestTranscriptEndpoints():
         res = mock_client.get_transcript_text(JOB_ID)
 
         assert res == data
-        mock_client.session.get.assert_called_once_with(
-            URL, headers={'Accept': 'text/plain'}
-        )
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_transcript_text_with_no_job_id(self, id, mock_client):
@@ -38,19 +35,16 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_text_with_error_response(
-            self, error, mock_client, make_mock_response):
+    def test_get_transcript_text_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
         response = make_mock_response(url=URL, status=status, json_data=error)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_transcript_text(JOB_ID)
-        mock_client.session.get.assert_called_once_with(
-            URL, headers={'Accept': 'text/plain'})
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
 
-    def test_get_transcript_object_with_success(
-            self, mock_client, make_mock_response):
+    def test_get_transcript_object_with_success(self, mock_client, make_mock_response):
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -63,9 +57,7 @@ class TestTranscriptEndpoints():
                 }]
             }]
         }
-        expected = Transcript([
-            Monologue(1, [Element('text', 'Hello', 0.75, 1.25, 0.85)])
-        ])
+        expected = Transcript([Monologue(1, [Element('text', 'Hello', 0.75, 1.25, 0.85)])])
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
@@ -73,8 +65,7 @@ class TestTranscriptEndpoints():
 
         assert res == expected
         mock_client.session.get.assert_called_once_with(
-            URL,
-            headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
+            URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_transcript_object_with_no_job_id(self, id, mock_client):
@@ -83,15 +74,12 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_object_with_error_response(
-            self, error, mock_client, make_mock_response):
+    def test_get_transcript_object_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(
-            url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_transcript_object(JOB_ID)
         mock_client.session.get.assert_called_once_with(
-            URL,
-            headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
+            URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})

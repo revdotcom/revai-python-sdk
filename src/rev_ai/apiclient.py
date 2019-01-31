@@ -12,7 +12,14 @@ except ImportError:
 
 
 class RevAiAPIClient:
-    """Client which implements Rev.ai API"""
+    """Client which implements Rev.ai API
+
+    Note that HTTPErrors can be thrown by methods of the API client. The HTTP response payload
+    attached to these error is a problem details. The problem details information is represented
+    as a JSON object with error specific properties that help to troubleshoot the problem.
+
+    Problem details are defined at https://tools.ietf.org/html/rfc7807.
+    """
 
     # Default version of Rev.ai
     version = 'v1'
@@ -20,19 +27,19 @@ class RevAiAPIClient:
     # Default address of the API
     base_url = 'https://api.rev.ai/revspeech/{}/'.format(version)
 
-    def __init__(self, api_key):
+    def __init__(self, access_token):
         """Constructor
 
-        :param api_key: api key which authorizes all requests and links them to
-            your account. Generated on the settings page of your account
-            dashboard on rev.ai
+        :param access_token: access token which authorizes all requests and links them to your
+                             account. Generated on the settings page of your account dashboard
+                             on Rev.ai.
         """
-        if not api_key:
-            raise ValueError('api_key must be provided')
+        if not access_token:
+            raise ValueError('access_token must be provided')
 
         self.session = requests.Session()
         self.session.headers.update({
-            'Authorization': 'Bearer {}'.format(api_key),
+            'Authorization': 'Bearer {}'.format(access_token),
             'User-Agent': 'python_sdk'
         })
 
@@ -46,11 +53,10 @@ class RevAiAPIClient:
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
-        :param skip_diarization: should rev.ai skip diaization when
-                                 transcribing this file
+        :param callback_url: callback url to invoke on job completion as a webhook
+        :param skip_diarization: should rev.ai skip diaization when transcribing this file
         :returns: raw response data
+        :raises: HTTPError
         """
         if not media_url:
             raise ValueError('media_url must be provided')
@@ -77,11 +83,10 @@ class RevAiAPIClient:
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
-        :param skip_diarization: should rev.ai skip diaization when
-                                 transcribing this file
+        :param callback_url: callback url to invoke on job completion as a webhook
+        :param skip_diarization: should rev.ai skip diaization when transcribing this file
         :returns: raw response data
+        :raises: HTTPError
         """
         if not filename:
             raise ValueError('filename must be provided')
@@ -110,6 +115,7 @@ class RevAiAPIClient:
 
         :param id_: id of the job to be requested
         :returns: raw response data
+        :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
@@ -125,14 +131,13 @@ class RevAiAPIClient:
 
         :param id_: id of job to be requested
         :returns: transcript data as text
+        :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url_jobs_transcript = urljoin(
-            self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(
-            url_jobs_transcript, headers={'Accept': 'text/plain'})
+        url_jobs_transcript = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(url_jobs_transcript, headers={'Accept': 'text/plain'})
         response.raise_for_status()
 
         return response.text
@@ -142,20 +147,22 @@ class RevAiAPIClient:
 
         :param id_: id of job to be requested
         :returns: transcript data as a python object
+        :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': 'application/{}+json'
-                          .format('vnd.rev.transcript.v1.0')})
+            url, headers={'Accept': 'application/{}+json'.format('vnd.rev.transcript.v1.0')})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
 
     def get_account(self):
         """Get account information, such as remaining balance.
+
+        :raises: HTTPError
         """
         url = urljoin(self.base_url, 'account')
         response = self.session.get(url)

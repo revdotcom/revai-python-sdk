@@ -25,8 +25,7 @@ JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestJobEndpoints():
-    def test_get_job_details_with_success(
-            self, mock_client, make_mock_response):
+    def test_get_job_details_with_success(self, mock_client, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
@@ -49,19 +48,16 @@ class TestJobEndpoints():
 
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found']))
-    def test_get_job_details_with_error_response(
-            self, error, mock_client, make_mock_response):
+    def test_get_job_details_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(
-            url=JOB_ID_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_job_details(JOB_ID)
         mock_client.session.get.assert_called_once_with(JOB_ID_URL)
 
-    def test_submit_job_url_with_success(
-            self, mock_client, make_mock_response):
+    def test_submit_job_url_with_success(self, mock_client, make_mock_response):
         data = {
             'id': JOB_ID,
             'status': 'in_progress',
@@ -94,20 +90,16 @@ class TestJobEndpoints():
 
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['invalid-parameters', 'unauthorized', 'out-of-credit']))
-    def test_submit_job_url_with_error_response(
-            self, error, mock_client, make_mock_response):
+    def test_submit_job_url_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(
-            url=JOBS_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
         mock_client.session.post.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.submit_job_url(MEDIA_URL)
-        mock_client.session.post.assert_called_once_with(
-            JOBS_URL, json={'media_url': MEDIA_URL})
+        mock_client.session.post.assert_called_once_with(JOBS_URL, json={'media_url': MEDIA_URL})
 
-    def test_submit_job_local_file_with_success(
-            self, mocker, mock_client, make_mock_response):
+    def test_submit_job_local_file_with_success(self, mocker, mock_client, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
             'id': JOB_ID,
@@ -120,8 +112,7 @@ class TestJobEndpoints():
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
-            res = mock_client.submit_job_local_file(
-                FILENAME, METADATA, CALLBACK_URL)
+            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -151,14 +142,11 @@ class TestJobEndpoints():
     def test_submit_job_local_file_with_error_response(
             self, error, mocker, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(
-            url=JOBS_URL, status=status, json_data=error
-        )
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             with pytest.raises(HTTPError, match=str(status)):
                 mock_client.submit_job_local_file(FILENAME)
             mock_client.session.post.assert_called_once_with(
-                JOBS_URL,
-                files={'media': (FILENAME, file), 'options': (None, '{}')})
+                JOBS_URL, files={'media': (FILENAME, file), 'options': (None, '{}')})
