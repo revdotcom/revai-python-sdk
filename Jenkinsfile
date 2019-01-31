@@ -42,6 +42,7 @@ pipeline {
                     . ./sdk-deploy/bin/activate
                     python -m pip install twine
                     twine upload dist/* -u ${PYPI_USER_ID} -p ${PYPI_PASSWORD}
+                    rm -r dist
                 '''
                 tagRepo(discoverVersion())
             }
