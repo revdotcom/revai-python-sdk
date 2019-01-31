@@ -12,16 +12,13 @@ class Transcript:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return all(a == b for a, b
-                       in zip(self.monologues, other.monologues))
+            return all(a == b for a, b in zip(self.monologues, other.monologues))
         return False
 
     @classmethod
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
-        return cls(
-            [Monologue.from_json(monologue)
-             for monologue in json.get('monologues', [])])
+        return cls([Monologue.from_json(monologue) for monologue in json.get('monologues', [])])
 
 
 class Monologue:
@@ -36,8 +33,7 @@ class Monologue:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return all(a == b for a, b
-                       in zip(self.elements, other.elements)) \
+            return all(a == b for a, b in zip(self.elements, other.elements)) \
                    and self.speaker == other.speaker
         return False
 
@@ -46,8 +42,7 @@ class Monologue:
         """Alternate constructor used for parsing json"""
         return cls(
             json['speaker'],
-            [Element.from_json(element)
-             for element in json.get('elements', [])])
+            [Element.from_json(element) for element in json.get('elements', [])])
 
 
 class Element:
