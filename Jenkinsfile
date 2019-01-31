@@ -22,7 +22,8 @@ pipeline {
         stage('Test') {
             agent {
                 dockerfile {
-                    label 'linux'
+                    label 'linux && python'
+                    dir 'test'
                 }
             }
             steps {
@@ -99,7 +100,6 @@ def notifyComplete(String buildStatus) {
     String SUCCESS = 'SUCCESS'
     String FAILURE = 'FAILURE'
 
-    return
     if (env.NOSLACK_NOTIFICATIONS == 'true')
     {
         echo "Slack notifications are disabled"
