@@ -23,7 +23,7 @@ pipeline {
             agent {
                 dockerfile {
                     label 'linux && python'
-                    dir 'test'
+                    dir 'tests'
                 }
             }
             steps {
