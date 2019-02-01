@@ -12,7 +12,7 @@ matrix:
       sudo: true
 #before_install: pip install -U pytest
 # install: pip install tox-travis
-install: pip install -r requirements.txt requirements_dev.txt
+install: pip install -r requirements.txt -r requirements_dev.txt
 script: make test
 
 #  - env: TOXENV=flake8
