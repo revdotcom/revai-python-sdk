@@ -61,14 +61,14 @@ class RevAiAPIClient:
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        url_jobs = urljoin(self.base_url, 'jobs')
+        url = urljoin(self.base_url, 'jobs')
         payload = {'media_url': media_url}
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
 
-        response = self.session.post(url_jobs, json=payload)
+        response = self.session.post(url, json=payload)
         response.raise_for_status()
 
         return Job.from_json(response.json())
@@ -120,8 +120,8 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url_jobs_id = urljoin(self.base_url, 'jobs/{}'.format(id_))
-        response = self.session.get(url_jobs_id)
+        url = urljoin(self.base_url, 'jobs/{}'.format(id_))
+        response = self.session.get(url)
         response.raise_for_status()
 
         return Job.from_json(response.json())
@@ -136,8 +136,8 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url_jobs_transcript = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(url_jobs_transcript, headers={'Accept': 'text/plain'})
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(url, headers={'Accept': 'text/plain'})
         response.raise_for_status()
 
         return response.text
@@ -158,6 +158,24 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
+
+    def delete_job(self, id_):
+        """Delete a specific transcription job
+        All data related to the job, such as input media and transcript, will be permanently
+        deleted. A job can only by deleted once it's completed.
+
+        :param id_: id of job to be deleted
+        :returns: None if job was successfully deleted
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}'.format(id_))
+        response = self.session.delete(url)
+        response.raise_for_status()
+
+        return
 
     def get_account(self):
         """Get account information, such as remaining balance.
