@@ -150,3 +150,29 @@ class TestJobEndpoints():
                 mock_client.submit_job_local_file(FILENAME)
             mock_client.session.post.assert_called_once_with(
                 JOBS_URL, files={'media': (FILENAME, file), 'options': (None, '{}')})
+
+    def test_delete_job_success(self, mock_client, make_mock_response):
+        response = make_mock_response(url=JOB_ID_URL, status=204)
+        mock_client.session.delete.return_value = response
+
+        res = mock_client.delete_job(JOB_ID)
+
+        assert res is True
+        mock_client.session.delete.assert_called_once_with(JOB_ID_URL)
+
+    @pytest.mark.parametrize('error', get_error_test_cases(
+        ['unauthorized', 'job-not-found', 'invalid-job-state']))
+    def test_delete_job_with_error_response(
+            self, error, mocker, mock_client, make_mock_response):
+        status = error.get('status')
+        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error)
+        mock_client.session.delete.return_value = response
+
+        with pytest.raises(HTTPError, match=str(status)):
+            mock_client.delete_job(JOB_ID)
+        mock_client.session.delete.assert_called_once_with(JOB_ID_URL)
+
+    @pytest.mark.parametrize('id', [None, ''])
+    def test_delete_job_with_no_id(self, id, mock_client):
+        with pytest.raises(ValueError, match='id_ must be provided'):
+            mock_client.delete_job(id)

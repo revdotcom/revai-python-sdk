@@ -11,6 +11,7 @@ def mock_client(mocker):
     client = RevAiAPIClient('token')
     client.session.get = mocker.Mock(name='mock_get')
     client.session.post = mocker.Mock(name='mock_post')
+    client.session.delete = mocker.Mock(name='mock_delete')
     return client
 
 
