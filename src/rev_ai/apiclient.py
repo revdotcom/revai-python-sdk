@@ -165,7 +165,7 @@ class RevAiAPIClient:
         deleted. A job can only by deleted once it's completed.
 
         :param id_: id of job to be deleted
-        :returns: True if job was successfully deleted
+        :returns: None if job was successfully deleted
         :raises: HTTPError
         """
         if not id_:
@@ -175,7 +175,7 @@ class RevAiAPIClient:
         response = self.session.delete(url)
         response.raise_for_status()
 
-        return True
+        return
 
     def get_account(self):
         """Get account information, such as remaining balance.

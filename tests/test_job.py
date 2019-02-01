@@ -157,7 +157,7 @@ class TestJobEndpoints():
 
         res = mock_client.delete_job(JOB_ID)
 
-        assert res is True
+        assert res is None
         mock_client.session.delete.assert_called_once_with(JOB_ID_URL)
 
     @pytest.mark.parametrize('error', get_error_test_cases(
