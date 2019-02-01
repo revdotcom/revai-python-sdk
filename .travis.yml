@@ -3,8 +3,8 @@ language: python
 python:
   - "2.7"
   - "3.4"
-  - "3.5"
-  - "3.6"
+#  - "3.5"
+#  - "3.6"
 matrix:
   include:
     - python: 3.7
@@ -12,7 +12,7 @@ matrix:
       sudo: true
 #before_install: pip install -U pytest
 # install: pip install tox-travis
-install: pip install -r requirements.txt
+install: pip install -r requirements.txt requirements_dev.txt
 script: make test
 
 #  - env: TOXENV=flake8
