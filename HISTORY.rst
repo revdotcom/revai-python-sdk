@@ -6,3 +6,13 @@ History
 ------------------
 
 * Initial alpha release
+
+2.1.0
+------------------
+
+* Revamped official release
+
+2.1.1
+------------------
+
+* File upload bug fixes

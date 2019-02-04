@@ -40,7 +40,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk'
+            'User-Agent': 'python_sdk-2.1.1'
         })
 
     def submit_job_url(
@@ -98,9 +98,14 @@ class RevAiAPIClient:
         if callback_url:
             payload['callback_url'] = callback_url
 
+        illegal_chars = ['\\','~','/']
+        safe_filename = filename
+        for char in illegal_chars:
+            safe_filename = safe_filename.replace(char,'')
+            
         with open(filename, 'rb') as f:
             files = {
-                'media': (filename, f),
+                'media': (safe_filename, f),
                 'options': (None, json.dumps(payload))
             }
 

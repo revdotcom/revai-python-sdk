@@ -12,4 +12,4 @@ Rev.ai makes speech applications easy to build!
 
 
 * Free software: MIT license
-* Documentation: https://docs.rev.ai/en/latest/.
+* Documentation: https://www.rev.ai/docs
