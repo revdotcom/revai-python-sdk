@@ -3,6 +3,7 @@
 
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai import __version__
 
 
 class TestRevAiAPIClient:
@@ -12,7 +13,7 @@ class TestRevAiAPIClient:
         client = RevAiAPIClient(token)
 
         headers = client.session.headers
-        assert headers.get('User-Agent') == 'python_sdk'
+        assert headers.get('User-Agent') == 'python_sdk {}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer {}'.format(token)
 
     @pytest.mark.parametrize('token', [None, ''])

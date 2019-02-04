@@ -40,7 +40,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk-2.1.1'
+            'User-Agent': 'python_sdk-{}'.format(__version__)
         })
 
     def submit_job_url(
