@@ -57,8 +57,7 @@ class TestTranscriptEndpoints():
                 }]
             }]
         }
-        expected = "{\"monologues\":[{\"speaker\":1,\"elements\":[{\"type\":\"text\"," + 
-            "\"value\":\"Hello\",\"ts\":0.75,\"end_ts\":1.25,\"confidence\":0.85}]}"
+        expected = "{\"monologues\":[{\"speaker\":1,\"elements\":[{\"type\":\"text\",\"value\":\"Hello\",\"ts\":0.75,\"end_ts\":1.25,\"confidence\":0.85}]}"
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
