@@ -58,13 +58,13 @@ class TestTranscriptEndpoints():
                 }]
             }]
         }
-        expected = "{\"monologues\": [{\"elements\": [{\"confidence\": 0.85, \"end_ts\": 1.25, \"type\": \"text\", \"ts\": 0.75, \"value\": \"Hello\"}], \"speaker\": 1}]}"
+        expected = json.loads(json.dumps(data))
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
         res = mock_client.get_transcript_json(JOB_ID)
 
-        assert json.dumps(res) == expected
+        assert res == expected
         mock_client.session.get.assert_called_once_with(
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
