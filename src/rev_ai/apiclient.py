@@ -4,7 +4,7 @@
 import requests
 import json
 from .models import Job, Account, Transcript
-from .rev_ai import __version__
+from . import __version__
 
 try:
     from urllib.parse import urljoin
