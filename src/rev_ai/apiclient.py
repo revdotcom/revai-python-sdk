@@ -4,6 +4,7 @@
 import requests
 import json
 from .models import Job, Account, Transcript
+from . import __version__
 
 try:
     from urllib.parse import urljoin
@@ -43,7 +44,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk'
+            'User-Agent': 'python_sdk-{}'.format(__version__)
         })
 
     def submit_job_url(
@@ -100,7 +101,7 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
-
+            
         with open(filename, 'rb') as f:
             files = {
                 'media': (filename, f),
