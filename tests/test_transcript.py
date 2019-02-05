@@ -2,7 +2,6 @@
 """Unit tests for transcript endpoints"""
 
 import pytest
-import json
 from requests.exceptions import HTTPError
 from src.rev_ai.models import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
@@ -58,13 +57,13 @@ class TestTranscriptEndpoints():
                 }]
             }]
         }
-        expected_dict = json.loads(json.dumps(data))
+        expected = "{\'monologues\': [{\'elements\': [{\'confidence\': 0.85, \'end_ts\': 1.25, \'ts\': 0.75, \'type\': \'text\', \'value\': \'Hello\'}], \'speaker\': 1}]}"
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
         res = mock_client.get_transcript_json(JOB_ID)
 
-        assert json.loads(res) == expected
+        assert res == json.loads(expected)
         mock_client.session.get.assert_called_once_with(
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
