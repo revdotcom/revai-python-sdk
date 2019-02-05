@@ -127,7 +127,7 @@ class RevAiAPIClient:
         return Job.from_json(response.json())
 
     def get_transcript_text(self, id_):
-        """Get the transcript of a specific job as json.
+        """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
         :returns: transcript data as text
@@ -141,6 +141,23 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return response.text
+
+    def get_transcript_json(self, id_):
+        """Get the transcript of a specific job as json
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': 'application/{}+json'.format('vnd.rev.transcript.v1.0')})
+        response.raise_for_status()
+
+        return response.json()
 
     def get_transcript_object(self, id_):
         """Get the transcript of a specific job as json.
