@@ -9,11 +9,13 @@ from src.rev_ai import __version__
 class TestRevAiAPIClient:
     def test_constructor_with_success(self):
         token = 'token'
+        __version__ = 'test-version'
 
         client = RevAiAPIClient(token)
 
         headers = client.session.headers
-        assert headers.get('User-Agent') == 'python_sdk-{}'.format(__version__)
+
+        assert headers.get('User-Agent') == 'python_sdk-test-version'
         assert headers.get('Authorization') == 'Bearer {}'.format(token)
 
     @pytest.mark.parametrize('token', [None, ''])
