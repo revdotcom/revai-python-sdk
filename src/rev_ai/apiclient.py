@@ -160,7 +160,7 @@ class RevAiAPIClient:
         return response.json()
 
     def get_transcript_object(self, id_):
-        """Get the transcript of a specific job as json.
+        """Get the transcript of a specific job as a python object.
 
         :param id_: id of job to be requested
         :returns: transcript data as a python object
