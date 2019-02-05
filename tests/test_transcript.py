@@ -58,7 +58,7 @@ class TestTranscriptEndpoints():
                 }]
             }]
         }
-        expected_dict = json.loads(data)
+        expected_dict = json.loads(str(data))
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
