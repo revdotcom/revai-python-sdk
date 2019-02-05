@@ -4,6 +4,7 @@
 import requests
 import json
 from .models import Job, Account, Transcript
+from . import __version__
 
 try:
     from urllib.parse import urljoin
@@ -27,6 +28,9 @@ class RevAiAPIClient:
     # Default address of the API
     base_url = 'https://api.rev.ai/revspeech/{}/'.format(version)
 
+    #rev.ai transcript format
+    rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
+
     def __init__(self, access_token):
         """Constructor
 
@@ -40,7 +44,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk'
+            'User-Agent': 'python_sdk-{}'.format(__version__)
         })
 
     def submit_job_url(
@@ -97,7 +101,7 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
-
+            
         with open(filename, 'rb') as f:
             files = {
                 'media': (filename, f),
@@ -127,7 +131,7 @@ class RevAiAPIClient:
         return Job.from_json(response.json())
 
     def get_transcript_text(self, id_):
-        """Get the transcript of a specific job as json.
+        """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
         :returns: transcript data as text
@@ -142,8 +146,25 @@ class RevAiAPIClient:
 
         return response.text
 
+    def get_transcript_json(self, id_):
+        """Get the transcript of a specific job as json
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': self.rev_json_content_type})
+        response.raise_for_status()
+
+        return response.json()
+
     def get_transcript_object(self, id_):
-        """Get the transcript of a specific job as json.
+        """Get the transcript of a specific job as a python object`.
 
         :param id_: id of job to be requested
         :returns: transcript data as a python object
@@ -154,7 +175,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': 'application/{}+json'.format('vnd.rev.transcript.v1.0')})
+            url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
