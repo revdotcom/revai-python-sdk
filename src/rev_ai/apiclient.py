@@ -27,6 +27,9 @@ class RevAiAPIClient:
     # Default address of the API
     base_url = 'https://api.rev.ai/revspeech/{}/'.format(version)
 
+    #rev.ai transcript format
+    rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
+
     def __init__(self, access_token):
         """Constructor
 
@@ -154,13 +157,13 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': 'application/{}+json'.format('vnd.rev.transcript.v1.0')})
+            url, headers={'Accept': rev_json_content_type})
         response.raise_for_status()
 
         return response.json()
 
     def get_transcript_object(self, id_):
-        """Get the transcript of a specific job as a python object.
+        """Get the transcript of a specific job as a python object`.
 
         :param id_: id of job to be requested
         :returns: transcript data as a python object
@@ -171,7 +174,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': 'application/{}+json'.format('vnd.rev.transcript.v1.0')})
+            url, headers={'Accept': rev_json_content_type})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
