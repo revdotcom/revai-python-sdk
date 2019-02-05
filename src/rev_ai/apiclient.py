@@ -98,15 +98,10 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
-
-        illegal_chars = ['\\','~','/']
-        safe_filename = filename
-        for char in illegal_chars:
-            safe_filename = safe_filename.replace(char,'')
             
         with open(filename, 'rb') as f:
             files = {
-                'media': (safe_filename, f),
+                'media': (filename, f),
                 'options': (None, json.dumps(payload))
             }
 
