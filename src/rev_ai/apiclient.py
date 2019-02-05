@@ -157,7 +157,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': rev_json_content_type})
+            url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
 
         return response.json()
@@ -174,7 +174,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
-            url, headers={'Accept': rev_json_content_type})
+            url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
