@@ -9,7 +9,6 @@ from src.rev_ai import __version__
 class TestRevAiAPIClient:
     def test_constructor_with_success(self):
         token = 'token'
-        __version__ = 'test-version'
 
         client = RevAiAPIClient(token)
 
