@@ -3,6 +3,8 @@
 
 import requests
 import json
+import re
+import ast
 from .models import Job, Account, Transcript
 
 try:
@@ -37,10 +39,16 @@ class RevAiAPIClient:
         if not access_token:
             raise ValueError('access_token must be provided')
 
+        _version_re = re.compile(r'__version__\s+=\s+(.*)')
+
+        with open('./__init__.py', 'rb') as f:
+            sdk_version = str(ast.literal_eval(_version_re.search(
+                f.read().decode('utf-8')).group(1)))
+
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk-{}'.format(__version__)
+            'User-Agent': 'python_sdk-{}'.format(sdk_version)
         })
 
     def submit_job_url(
