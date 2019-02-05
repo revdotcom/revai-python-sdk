@@ -64,7 +64,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_json(JOB_ID)
 
-        assert res == json.loads(expected)
+        assert json.dumps(res) == expected
         mock_client.session.get.assert_called_once_with(
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
