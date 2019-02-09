@@ -1,8 +1,7 @@
 # Rev.ai Python SDK
 
-.. image:: https://img.shields.io/travis/revdotcom/revai-python-sdk.svg
-        :target: https://travis-ci.org/revdotcom/revai-python-sdk
-
+[![Build Status](https://img.shields.io/travis/revdotcom/revai-python-sdk.svg?branch=master)]
+(https://travis-ci.org/revdotcom/revai-python-sdk)
 
 ## Documentation
 
