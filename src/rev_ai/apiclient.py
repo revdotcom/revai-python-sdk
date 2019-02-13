@@ -26,7 +26,7 @@ class RevAiAPIClient:
     version = 'v1'
 
     # Default address of the API
-    base_url = 'https://api.rev.ai/revspeech/{}/'.format(version)
+    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
 
     #rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
