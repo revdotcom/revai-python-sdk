@@ -18,7 +18,7 @@ with open('src/rev_ai/__init__.py', 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
 
-with open('README.rst') as readme_file:
+with open('README.md') as readme_file:
     readme = readme_file.read()
 
 with open('HISTORY.rst') as history_file:
@@ -38,8 +38,7 @@ setup(
     version=version,
     description='Rev.ai makes speech applications easy to build!',
     long_description=readme + '\n\n' + history,
-    author='Kyle Bridburg',
-    author_email='kyle@rev.com',
+    author="Rev Ai",
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[os.path.splitext(os.path.basename(path))[0]
