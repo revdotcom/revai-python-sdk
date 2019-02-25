@@ -16,3 +16,13 @@ History
 ------------------
 
 * File upload bug fixes
+
+2.2.1
+------------------
+
+* Better Documentation
+
+2.2.2
+------------------
+
+* Fix pypi readme formatting
