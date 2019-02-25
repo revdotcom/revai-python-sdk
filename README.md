@@ -41,10 +41,10 @@ Once you've set up your client with your Access Token sending a file is easy!
 
 ```python
 # you can send a local file
-job = client.send_job_local_file("FILE PATH")
+job = client.submit_job_local_file("FILE PATH")
 
 # or send a link to the file you want transcribed
-job = client.send_job_url("https://url-of-my-file")
+job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 ```
 
 `job` will contain all the information normally found in a successful response from our
