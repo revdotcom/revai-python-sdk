@@ -38,6 +38,7 @@ setup(
     version=version,
     description='Rev.ai makes speech applications easy to build!',
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/markdown',
     author="Rev Ai",
     packages=find_packages('src'),
     package_dir={'': 'src'},
