@@ -2,12 +2,10 @@ pipeline {
     agent {
         label 'linux && python'
     }
+    environment {
+        GIT_CREDENTIALS = credentials("${GITHUB_CREDENTIALS}")
+    }
     stages {
-        stage("Version Check") {
-            steps {
-                checkVersion(discoverVersion())
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Building..'
@@ -33,6 +31,11 @@ pipeline {
                     . ./sdk-test/bin/activate
                     tox
                 '''
+            }
+        }
+        stage("Version Check") {
+            steps {
+                checkVersion(discoverVersion())
             }
         }
         stage('Deploy') {
@@ -68,7 +71,7 @@ def discoverVersion() {
 
 // Ensure that the version number has been incremented since last release
 def checkVersion(version) {
-    def tags = sh (script: "git ls-remote https://${env.GIT_CREDENTIALS}@${getRepoUrl()} --tags origin ${version}", returnStdout: true)
+    def tags = sh (script: "git ls-remote https://${GIT_CREDENTIALS}@${getRepoUrl()} --tags origin ${version}", returnStdout: true)
     if (tags.trim() != "") {
         error "${version} is already released, please increase the version number for build to publish"
     }
@@ -81,10 +84,10 @@ def tagRepo(tag) {
     // deletes current tag locally, this will make sure if the tag is deleted from remote it would be set again
     sh "git tag -d ${tag} || (exit 0)"
     // see if it's still on remote - needed to avoid overwriting the tag
-    sh "git fetch https://${env.GIT_CREDENTIALS}@${getRepoUrl()} --tags"
+    sh "git fetch https://${GIT_CREDENTIALS}@${getRepoUrl()} --tags"
     // try to tag
     sh "git tag ${tag}"
-    sh "git push https://${env.GIT_CREDENTIALS}@${getRepoUrl()} ${tag}"
+    sh "git push https://${GIT_CREDENTIALS}@${getRepoUrl()} ${tag}"
 }
 
 // Get url of github repo
