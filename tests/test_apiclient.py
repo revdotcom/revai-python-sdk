@@ -14,7 +14,7 @@ class TestRevAiAPIClient:
 
         headers = client.session.headers
 
-        assert headers.get('User-Agent') == 'python_sdk-{}'.format(__version__)
+        assert headers.get('User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer {}'.format(token)
 
     @pytest.mark.parametrize('token', [None, ''])
