@@ -57,6 +57,61 @@ class TestJobEndpoints():
             mock_client.get_job_details(JOB_ID)
         mock_client.session.get.assert_called_once_with(JOB_ID_URL)
 
+    def test_get_list_of_jobs_limit_with_success(self, mock_client, make_mock_response):
+        status = 'transcribed'
+        created_on = '2018-05-05T23:23:22.29Z'
+        data = [
+            {
+                'id': JOB_ID,
+                'status': status,
+                'created_on': created_on
+            },
+            {
+                'id': '2',
+                'status': 'in_progress',
+                'created_on': created_on
+            }
+        ]
+        url = JOBS_URL + "?limit=2"
+        response = make_mock_response(url=url, json_data=data)
+        mock_client.session.get.return_value = response
+
+        res = mock_client.get_list_of_jobs(limit=2)
+
+        assert isinstance(res, list)
+        assert len(res) == 2
+        mock_client.session.get.assert_called_once_with(url)
+
+    def test_get_list_of_jobs_starting_after_with_success(self, mock_client, make_mock_response):
+        status = 'transcribed'
+        created_on = '2018-05-05T23:23:22.29Z'
+        data = [
+            {
+                'id': JOB_ID,
+                'status': status,
+                'created_on': created_on
+            }
+        ]
+        url = JOBS_URL + "?starting_after=4"
+        response = make_mock_response(url=url, json_data=data)
+        mock_client.session.get.return_value = response
+
+        res = mock_client.get_list_of_jobs(starting_after="4")
+
+        assert isinstance(res, list)
+        assert len(res) == 1
+        mock_client.session.get.assert_called_once_with(url)
+
+    @pytest.mark.parametrize('error', get_error_test_cases(
+        ['invalid-parameters', 'unauthorized']))
+    def test_get_list_of_jobs_with_error_response(self, error, mock_client, make_mock_response):
+        status = error.get('status')
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
+        mock_client.session.get.return_value = response
+        with pytest.raises(HTTPError, match=str(status)):
+            mock_client.get_list_of_jobs()
+        mock_client.session.get.assert_called_once_with(JOBS_URL)
+
     def test_submit_job_url_with_success(self, mock_client, make_mock_response):
         data = {
             'id': JOB_ID,

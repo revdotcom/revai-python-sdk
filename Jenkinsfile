@@ -106,20 +106,21 @@ def notifyComplete(String buildStatus) {
         echo "Slack notifications are disabled"
         return
     }
-    
+
     // build status of null means successful
     buildStatus =  buildStatus ?: SUCCESS
     def prevBuildResult = currentBuild.getPreviousBuild()?.getResult()
     echo "notifyComplete with status ${buildStatus}, previous build was ${prevBuildResult}"
-        
-    if (buildStatus == FAILURE)
+
+    // Slack channel ID CFPMB0BK4 refers to #revai-alerts-nonprod, does not change even if channel name changes
+    if (buildStatus == FAILURE && prevBuildResult != FAILURE)
         slackSend (
             color: '#FF0000', // red
-            channel: '#rev-ai-dev',
+            channel: 'CFPMB0BK4',
             message: "${env.JOB_NAME} ${env.BUILD_NUMBER} for release ${discoverVersion()} failed after ${currentBuild.durationString} (<${env.BUILD_URL}|Open>)")
     else if (buildStatus == SUCCESS && prevBuildResult != SUCCESS)
         slackSend (
             color: '#00FF00', // green
-            channel: '#rev-ai-dev', 
+            channel: 'CFPMB0BK4',
             message: "${env.JOB_NAME} ${env.BUILD_NUMBER} for release ${discoverVersion()} back to normal after ${currentBuild.durationString} (<${env.BUILD_URL}|Open>)")
 }
