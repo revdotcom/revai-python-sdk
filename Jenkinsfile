@@ -112,6 +112,7 @@ def notifyComplete(String buildStatus) {
     def prevBuildResult = currentBuild.getPreviousBuild()?.getResult()
     echo "notifyComplete with status ${buildStatus}, previous build was ${prevBuildResult}"
 
+    // Slack channel ID CFPMB0BK4 refers to #revai-alerts-nonprod, does not change even if channel name changes
     if (buildStatus == FAILURE && prevBuildResult != FAILURE)
         slackSend (
             color: '#FF0000', // red
