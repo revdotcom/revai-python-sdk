@@ -28,7 +28,7 @@ class RevAiAPIClient:
     # Default address of the API
     base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
 
-    #rev.ai transcript format
+    # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
     def __init__(self, access_token):
@@ -44,7 +44,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk-{}'.format(__version__)
+            'User-Agent': 'RevAi-PythonSDK/{}'.format(__version__)
         })
 
     def submit_job_url(
