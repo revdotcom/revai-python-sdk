@@ -25,7 +25,7 @@ Install from source with:
 ## Usage
 
 All you need to get started is your Access Token, which can be generated on
-your [Settings Page](https://www.rev.ai/settings). Create a client with the 
+your [Settings Page](https://www.rev.ai/settings). Create a client with the
 given Access Token:
 
 ```python
@@ -65,9 +65,37 @@ job_details = client.get_job_details(job.id)
 `job_details` will contain all information normally found in a successful response from
 our [Get Job](https://www.rev.ai/docs#operation/GetJobById) endpoint
 
+### Checking multiple files
+
+You can retrieve a list of transcription jobs with optional parameters
+
+```python
+jobs = client.get_list_of_jobs()
+
+# limit amount of retrieved jobs
+jobs = client.get_list_of_jobs(limits=3)
+
+# get jobs starting after a certain job id
+jobs = client.get_list_of_jobs(starting_after='3')
+```
+
+`jobs` will contain a list of job details having all information normally found in a successful response
+from our [Get List of Jobs](https://www.rev.ai/docs#operation/GetListOfJobs) endpoint
+
+### Deleting a job
+
+You can delete a transcription job using its `id`
+
+```python
+client.delete_job(job.id)
+```
+
+ All data related to the job, such as input media and transcript, will be permanently deleted.
+ A job can only by deleted once it's completed (either with success or failure).
+
 ### Getting your transcript
 
-Once your file is transcribed, you can get your transcript in a few different forms: 
+Once your file is transcribed, you can get your transcript in a few different forms:
 
 ```python
 # as text
@@ -82,5 +110,5 @@ transcript_object = client.get_transcript_object(job.id)
 
 Both the json and object forms contain all the formation outlined in the response
 of the [Get Transcript](https://www.rev.ai/docs#operation/GetTranscriptById) endpoint
-when using the json response schema. While the text output is a string containing 
+when using the json response schema. While the text output is a string containing
 just the text of your transcript
