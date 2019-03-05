@@ -28,7 +28,7 @@ class RevAiAPIClient:
     # Default address of the API
     base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
 
-    #rev.ai transcript format
+    # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
     #rev.ai transcript format
@@ -47,7 +47,7 @@ class RevAiAPIClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'python_sdk-{}'.format(__version__)
+            'User-Agent': 'RevAi-PythonSDK/{}'.format(__version__)
         })
 
     def submit_job_url(
@@ -104,7 +104,7 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
-            
+
         with open(filename, 'rb') as f:
             files = {
                 'media': (filename, f),
@@ -132,6 +132,31 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return Job.from_json(response.json())
+
+    def get_list_of_jobs(self, limit=None, starting_after=None):
+        """Get a list of transcription jobs submitted within the last week in reverse
+        chronological order up to the provided limit number of jobs per call.
+        Pagination is supported via passing the last job id from previous call into starting_after.
+
+        :param limit: optional, limits the number of jobs returned,
+                      if none, a default of 100 jobs is returned, max limit if 1000
+        :param starting_after: optional, returns jobs created after the job with this id,
+                               exclusive (job with this id is not included)
+        :returns: list of jobs response data
+        :raises: HTTPError
+        """
+        params = []
+        if limit is not None:
+            params.append('limit={}'.format(limit))
+        if starting_after is not None:
+            params.append('starting_after={}'.format(starting_after))
+
+        query = '?{}'.format('&'.join(params))
+        url = urljoin(self.base_url, 'jobs{}'.format(query))
+        response = self.session.get(url)
+        response.raise_for_status()
+
+        return [Job.from_json(job) for job in response.json()]
 
     def get_transcript_text(self, id_):
         """Get the transcript of a specific job as plain text.
