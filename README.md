@@ -76,7 +76,7 @@ jobs = client.get_list_of_jobs()
 jobs = client.get_list_of_jobs(limits=3)
 
 # get jobs starting after a certain job id
-jobs = client.get_list_of_jobs(starting_after='3')
+jobs = client.get_list_of_jobs(starting_after='Umx5c6F7pH7r')
 ```
 
 `jobs` will contain a list of job details having all information normally found in a successful response
