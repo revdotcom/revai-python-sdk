@@ -63,8 +63,11 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param custom_vocabularies: list of dictionaries containing a mapping from 'phrases'
-            to strings representing the words to add to the custom_vocabulary
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
+            vocabulary will inform and bias the speech recognition to find those phrases. 
+            Each dictionary should consist of a key "phrases" which maps to a list of strings,
+            each of which represents a phrase you would like the speech recognition to bias
+            itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -98,8 +101,11 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param custom_vocabularies: list of dictionaries containing a mapping from 'phrases'
-            to strings representing the words to add to the custom_vocabulary
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
+            vocabulary will inform and bias the speech recognition to find those phrases. 
+            Each dictionary should consist of a key "phrases" which maps to a list of strings,
+            each of which represents a phrase you would like the speech recognition to bias
+            itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
