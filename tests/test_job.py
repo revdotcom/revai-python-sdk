@@ -21,6 +21,7 @@ MEDIA_URL = 'https://example.com/test.mp3'
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
+CUSTOM_VOCAB = [{"phrases":["word one", "word two"]}]
 
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
@@ -123,7 +124,7 @@ class TestJobEndpoints():
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
 
-        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL)
+        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL, False, CUSTOM_VOCAB)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -135,7 +136,8 @@ class TestJobEndpoints():
             json={
                 'media_url': MEDIA_URL,
                 'callback_url': CALLBACK_URL,
-                'metadata': METADATA
+                'metadata': METADATA,
+                'custom_vocabularies': CUSTOM_VOCAB
             })
 
     @pytest.mark.parametrize('url', [None, ''])
@@ -167,7 +169,7 @@ class TestJobEndpoints():
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
-            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL)
+            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL, False, CUSTOM_VOCAB)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -182,7 +184,8 @@ class TestJobEndpoints():
                         None,
                         json.dumps({
                             'metadata': METADATA,
-                            'callback_url': CALLBACK_URL
+                            'callback_url': CALLBACK_URL,
+                            'custom_vocabularies': CUSTOM_VOCAB
                         })
                     )
                 })

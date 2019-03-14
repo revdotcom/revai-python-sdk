@@ -54,7 +54,8 @@ class RevAiAPIClient:
             self, media_url,
             metadata=None,
             callback_url=None,
-            skip_diarization=False):
+            skip_diarization=False,
+            custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -62,6 +63,11 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
+            vocabulary will inform and bias the speech recognition to find those phrases. 
+            Each dictionary should consist of a key "phrases" which maps to a list of strings,
+            each of which represents a phrase you would like the speech recognition to bias
+            itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -74,6 +80,8 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
+        if custom_vocabularies:
+            payload['custom_vocabularies'] = custom_vocabularies
 
         response = self.session.post(url, json=payload)
         response.raise_for_status()
@@ -84,7 +92,8 @@ class RevAiAPIClient:
             self, filename,
             metadata=None,
             callback_url=None,
-            skip_diarization=False):
+            skip_diarization=False,
+            custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -92,6 +101,11 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
+            vocabulary will inform and bias the speech recognition to find those phrases. 
+            Each dictionary should consist of a key "phrases" which maps to a list of strings,
+            each of which represents a phrase you would like the speech recognition to bias
+            itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -104,6 +118,8 @@ class RevAiAPIClient:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
+        if custom_vocabularies:
+            payload['custom_vocabularies'] = custom_vocabularies
 
         with open(filename, 'rb') as f:
             files = {
