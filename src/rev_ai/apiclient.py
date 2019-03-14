@@ -75,7 +75,7 @@ class RevAiAPIClient:
             raise ValueError('media_url must be provided')
 
         url = urljoin(self.base_url, 'jobs')
-        payload = {'media_url': media_url}
+        payload = {'media_url': media_url, 'skip_diarization': skip_diarization}
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
@@ -113,7 +113,7 @@ class RevAiAPIClient:
             raise ValueError('filename must be provided')
 
         url = urljoin(self.base_url, 'jobs')
-        payload = {}
+        payload = {'skip_diarization': skip_diarization}
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
