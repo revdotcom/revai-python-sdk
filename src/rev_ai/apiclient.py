@@ -54,7 +54,7 @@ class RevAiAPIClient:
             self, media_url,
             metadata=None,
             callback_url=None,
-            skip_diarization=None,
+            skip_diarization=False,
             custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
@@ -94,7 +94,7 @@ class RevAiAPIClient:
             self, filename,
             metadata=None,
             callback_url=None,
-            skip_diarization=None,
+            skip_diarization=False,
             custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
