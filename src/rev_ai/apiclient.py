@@ -54,7 +54,7 @@ class RevAiAPIClient:
             self, media_url,
             metadata=None,
             callback_url=None,
-            skip_diarization=False,
+            skip_diarization=None,
             custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
@@ -75,7 +75,9 @@ class RevAiAPIClient:
             raise ValueError('media_url must be provided')
 
         url = urljoin(self.base_url, 'jobs')
-        payload = {'media_url': media_url, 'skip_diarization': skip_diarization}
+        payload = {'media_url': media_url}
+        if skip_diarization:
+            payload['skip_diarization'] = skip_diarization
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
@@ -92,7 +94,7 @@ class RevAiAPIClient:
             self, filename,
             metadata=None,
             callback_url=None,
-            skip_diarization=False,
+            skip_diarization=None,
             custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
@@ -113,7 +115,9 @@ class RevAiAPIClient:
             raise ValueError('filename must be provided')
 
         url = urljoin(self.base_url, 'jobs')
-        payload = {'skip_diarization': skip_diarization}
+        payload = {}
+        if skip_diarization:
+            payload['skip_diarization'] = skip_diarization
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
