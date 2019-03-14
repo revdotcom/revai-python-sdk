@@ -186,7 +186,8 @@ class TestJobEndpoints():
                         json.dumps({
                             'metadata': METADATA,
                             'callback_url': CALLBACK_URL,
-                            'custom_vocabularies': CUSTOM_VOCAB
+                            'custom_vocabularies': CUSTOM_VOCAB,
+                            'skip_diarization': False
                         })
                     )
                 })
