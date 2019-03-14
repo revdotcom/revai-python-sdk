@@ -184,10 +184,10 @@ class TestJobEndpoints():
                     'options': (
                         None,
                         json.dumps({
+                            'skip_diarization': True,
                             'metadata': METADATA,
                             'callback_url': CALLBACK_URL,
-                            'custom_vocabularies': CUSTOM_VOCAB,
-                            'skip_diarization': True
+                            'custom_vocabularies': CUSTOM_VOCAB
                         })
                     )
                 })
