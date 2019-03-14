@@ -124,7 +124,7 @@ class TestJobEndpoints():
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.post.return_value = response
 
-        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL, False, CUSTOM_VOCAB)
+        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL, True, CUSTOM_VOCAB)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -137,7 +137,7 @@ class TestJobEndpoints():
                 'media_url': MEDIA_URL,
                 'callback_url': CALLBACK_URL,
                 'metadata': METADATA,
-                'skip_diarization': False,
+                'skip_diarization': True,
                 'custom_vocabularies': CUSTOM_VOCAB
             })
 
@@ -170,7 +170,7 @@ class TestJobEndpoints():
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
-            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL, False, CUSTOM_VOCAB)
+            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL, True, CUSTOM_VOCAB)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -187,7 +187,7 @@ class TestJobEndpoints():
                             'metadata': METADATA,
                             'callback_url': CALLBACK_URL,
                             'custom_vocabularies': CUSTOM_VOCAB,
-                            'skip_diarization': False
+                            'skip_diarization': True
                         })
                     )
                 })
