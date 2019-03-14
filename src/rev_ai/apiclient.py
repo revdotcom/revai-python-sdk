@@ -103,7 +103,7 @@ class RevAiAPIClient:
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
             vocabulary will inform and bias the speech recognition to find those phrases. 
-            Each dictionary should consist of a key "phrases" which maps to a list of strings,
+            Each dictionary have the key "phrases" which maps to a list of strings,
             each of which represents a phrase you would like the speech recognition to bias
             itself toward.
         :returns: raw response data
