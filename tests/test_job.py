@@ -137,7 +137,7 @@ class TestJobEndpoints():
                 'media_url': MEDIA_URL,
                 'callback_url': CALLBACK_URL,
                 'metadata': METADATA,
-                'skip_diarization': False
+                'skip_diarization': False,
                 'custom_vocabularies': CUSTOM_VOCAB
             })
 
