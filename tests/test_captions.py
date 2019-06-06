@@ -21,7 +21,7 @@ class TestCaptionEndpoint():
         filename = 'exampleFile'
         filepath = 'examplePath'
         os.mkdir(filepath)
-        path = os.path.join(filepath, filename)
+        path = os.path.join(filepath, filename+'.txt')
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
