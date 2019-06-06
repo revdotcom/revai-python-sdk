@@ -18,7 +18,7 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestCaptionEndpoint():
     def test_get_captions_with_success(self, mock_client, make_mock_response):
-        filename = 'exampleFile.txt'
+        filename = 'exampleFile'
         filepath = 'examplePath'
         os.mkdir(filepath)
         path = os.path.join(filepath, filename)
@@ -49,7 +49,7 @@ class TestCaptionEndpoint():
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
 
     def test_get_captions_with_filename_or_filepath(self, mock_client, make_mock_response):
-        filename = 'example.txt'
+        filename = 'exampleFile'
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
