@@ -28,7 +28,6 @@ class TestCaptionEndpoint():
 
         res = mock_client.get_captions(JOB_ID, filename, filepath)
 
-
         with open(path) as f:
             assert f.read() == data
         os.remove(path)

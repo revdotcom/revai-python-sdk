@@ -294,5 +294,3 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return Account.from_json(response.json())
-
-
