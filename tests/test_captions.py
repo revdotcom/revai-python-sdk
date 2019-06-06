@@ -10,7 +10,7 @@ try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
-    
+
 JOB_ID = '1'
 URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 
@@ -18,22 +18,48 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestCaptionEndpoint():
     def test_get_captions_with_success(self, mock_client, make_mock_response):
-        filename = 'TestFileToBeDeleted'
-        filepath = 'tempDir'
-        os.mkdir('tempDir')
+        filename = 'exampleFile.txt'
+        filepath = 'examplePath'
+        os.mkdir(filepath)
+        path = os.path.join(filepath, filename)
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
 
         res = mock_client.get_captions(JOB_ID, filename, filepath)
 
-        assert res == data
 
-        path = os.path.join(filepath, filename+'.txt')
         with open(path) as f:
             assert f.read() == data
         os.remove(path)
+        assert res == data
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
 
+    def test_get_captions_with_no_filename_or_filepath(self, mock_client, make_mock_response):
+        data = 'Test'
+        response = make_mock_response(url=URL, text=data)
+        mock_client.session.get.return_value = response
+        precallDir = os.listdir()
+
+        res = mock_client.get_captions(JOB_ID)
+
+        postcallDir = os.listdir()
+        assert precallDir == postcallDir
+        assert res == data
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
+
+    def test_get_captions_with_filename_or_filepath(self, mock_client, make_mock_response):
+        filename = 'example.txt'
+        data = 'Test'
+        response = make_mock_response(url=URL, text=data)
+        mock_client.session.get.return_value = response
+
+        res = mock_client.get_captions(JOB_ID, filename)
+
+        with open(path) as f:
+            assert f.read() == data
+        os.remove(path)
+        assert res == data
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
 
     @pytest.mark.parametrize('id', [None, ''])

@@ -221,7 +221,7 @@ class RevAiAPIClient:
         if filename:
             path = os.path.join(filepath or '', filename+'.json')
             with open(path,'w+') as f:
-                json.dump(response.json(), f)
+                json.dump(response.json(), f, indent = 4)
 
         return response.json()
 
