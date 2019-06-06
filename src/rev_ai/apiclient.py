@@ -3,6 +3,7 @@
 
 import requests
 import json
+import os.path
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -31,7 +32,7 @@ class RevAiAPIClient:
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
     # Rev.ai captions format
-    rev_captions_content_type = 'application/x-subripe'
+    rev_captions_content_type = 'application/x-subrip'
 
     def __init__(self, access_token):
         """Constructor
@@ -195,7 +196,8 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         if filename:
-            with open(filepath+'/'+filename+'.txt', 'w+') as f:
+            path = os.path.join(filepath, filename+'.txt')
+            with open(path, 'w+') as f:
                 f.write(response.text)
 
         return response.text
@@ -217,9 +219,10 @@ class RevAiAPIClient:
             url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
 
-        if file_:
-            with open(filepath+'/'+filename+'.json','w+') as f:
-                f.write(response.json())
+        if filename:
+            path = os.path.join(filepath, filename+'.json')
+            with open(path,'w+') as f:
+                json.dump(response.json(), f)
 
         return response.json()
 
@@ -258,7 +261,8 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         if filename:
-            with open(filepath+'/'+filename+'.txt','w+') as f:
+            path = os.path.join(filepath, filename+'.txt')
+            with open(path,'w+') as f:
                 f.write(response.text)
 
 

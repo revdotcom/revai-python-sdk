@@ -3,6 +3,7 @@
 
 import pytest
 import json
+import os.path
 from requests.exceptions import HTTPError
 from src.rev_ai.models import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
@@ -20,13 +21,21 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/transcript'.format(JOB_ID))
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestTranscriptEndpoints():
     def test_get_transcript_text_with_success(self, mock_client, make_mock_response):
+        filename = 'TestFileToBeDeleted'
+        filepath = ''
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
 
-        res = mock_client.get_transcript_text(JOB_ID)
+        res = mock_client.get_transcript_text(JOB_ID, filename, filepath)
 
         assert res == data
+
+        path = os.path.join(filepath, filename+'.txt')
+        with open(path) as f:
+            assert f.read() == data
+        os.remove(path)
+
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
 
     @pytest.mark.parametrize('id', [None, ''])
@@ -46,6 +55,8 @@ class TestTranscriptEndpoints():
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
 
     def test_get_transcript_json_with_success(self, mock_client, make_mock_response):
+        filename = 'TestToBeDeleted'
+        filepath = ''
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -62,9 +73,15 @@ class TestTranscriptEndpoints():
         response = make_mock_response(url=URL, json_data=data)
         mock_client.session.get.return_value = response
 
-        res = mock_client.get_transcript_json(JOB_ID)
+        res = mock_client.get_transcript_json(JOB_ID, filename, filepath)
 
         assert res == expected
+
+        path = os.path.join(filepath, filename+'.json')
+        with open(path) as f:
+            assert json.load(f) == expected
+        os.remove(path)
+
         mock_client.session.get.assert_called_once_with(
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
