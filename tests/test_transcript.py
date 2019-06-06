@@ -24,7 +24,7 @@ class TestTranscriptEndpoints():
         filename = 'exampleFile'
         filepath = 'exampleDir'
         os.mkdir(filepath)
-        path = os.path.join(filepath, filename)
+        path = os.path.join(filepath, filename+'.txt')
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
@@ -53,13 +53,14 @@ class TestTranscriptEndpoints():
 
     def test_get_transcript_text_with_filename_no_filepath(self, mock_client, make_mock_response):
         filename = 'exampleFile'
+        path = filename+'.txt'
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
 
         res = mock_client.get_transcript_text(JOB_ID, filename)
 
-        with open(path) as f:
+        with open() as f:
             assert f.read() == data
         os.remove(path)
         assert res == data
@@ -85,7 +86,7 @@ class TestTranscriptEndpoints():
         filename = 'exampleFile'
         filepath = 'exampleDir'
         os.mkdir(filepath)
-        path = os.path.join(filepath, filename)
+        path = os.path.join(filepath, filename+'.json')
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -140,6 +141,7 @@ class TestTranscriptEndpoints():
 
     def test_get_transcript_json_with_filename_no_filepath(self, mock_client, make_mock_response):
         filename = 'exampleFile'
+        path = filename+'.json'
         data = {
             'monologues': [{
                 'speaker': 1,

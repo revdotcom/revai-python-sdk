@@ -50,6 +50,7 @@ class TestCaptionEndpoint():
 
     def test_get_captions_with_filename_or_filepath(self, mock_client, make_mock_response):
         filename = 'exampleFile'
+        path = filename+'.txt'
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
