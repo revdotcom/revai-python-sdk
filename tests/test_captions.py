@@ -32,7 +32,7 @@ class TestCaptionEndpoint():
             assert f.read() == data
         os.remove(path)
 
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_captions_with_no_job_id(self, id, mock_client):
@@ -48,4 +48,4 @@ class TestCaptionEndpoint():
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_captions(JOB_ID)
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
+        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
