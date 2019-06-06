@@ -42,11 +42,11 @@ class TestTranscriptEndpoints():
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
-        precallList = os.listdir()
+        precallList = os.listdir('.')
 
         res = mock_client.get_transcript_text(JOB_ID)
 
-        postcallList = os.listdir()
+        postcallList = os.listdir('.')
         assert precallList == postcallList
         assert res == data
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
@@ -114,7 +114,7 @@ class TestTranscriptEndpoints():
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
 
     def test_get_transcript_json_with_no_filename_or_filepath(self, mock_client, make_mock_response):
-        precallList = os.listdir()
+        precallList = os.listdir('.')
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -133,7 +133,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_json(JOB_ID)
 
-        postcallList = os.listdir()
+        postcallList = os.listdir('.')
         assert precallList == postcallList
         assert res == expected
         mock_client.session.get.assert_called_once_with(

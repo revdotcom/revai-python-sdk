@@ -38,11 +38,11 @@ class TestCaptionEndpoint():
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
-        precallDir = os.listdir()
+        precallDir = os.listdir('.')
 
         res = mock_client.get_captions(JOB_ID)
 
-        postcallDir = os.listdir()
+        postcallDir = os.listdir('.')
         assert precallDir == postcallDir
         assert res == data
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
