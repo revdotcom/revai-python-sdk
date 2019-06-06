@@ -60,7 +60,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_text(JOB_ID, filename)
 
-        with open() as f:
+        with open(path) as f:
             assert f.read() == data
         os.remove(path)
         assert res == data
