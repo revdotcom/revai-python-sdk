@@ -11,7 +11,6 @@ try:
 except ImportError:
     from urlparse import urljoin
 
-
 class RevAiAPIClient:
     """Client which implements Rev.ai API
 
@@ -31,8 +30,8 @@ class RevAiAPIClient:
     # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    #rev.ai transcript format
-    rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
+    # Rev.ai captions format
+    rev_captions_content_type = 'application/x-subripe'
 
     def __init__(self, access_token):
         """Constructor
@@ -178,13 +177,16 @@ class RevAiAPIClient:
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_):
+    def get_transcript_text(self, id_, filename = None, filepath = ''):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
+               filename: (Optional) filename to save text to (without extension)
+               filepath: (Optional) directory to save the file to.
         :returns: transcript data as text
         :raises: HTTPError
         """
+
         if not id_:
             raise ValueError('id_ must be provided')
 
@@ -192,12 +194,18 @@ class RevAiAPIClient:
         response = self.session.get(url, headers={'Accept': 'text/plain'})
         response.raise_for_status()
 
+        if filename:
+            with open(filepath+'/'+filename+'.txt', 'w+') as f:
+                f.write(response.text)
+
         return response.text
 
-    def get_transcript_json(self, id_):
+    def get_transcript_json(self, id_, filename = None, filepath = ''):
         """Get the transcript of a specific job as json
 
         :param id_: id of job to be requested
+               filename: (Optional) filename to save text to (without extension)
+               filepath: (Optional) directory to save the file to.
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -208,6 +216,10 @@ class RevAiAPIClient:
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
+
+        if file_:
+            with open(filepath+'/'+filename+'.json','w+') as f:
+                f.write(response.json())
 
         return response.json()
 
@@ -227,6 +239,30 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return Transcript.from_json(response.json())
+
+    def get_captions(self, id_, filename = None, filepath = ''):
+        """Get the captions output of a specific job and return it as plain text
+            
+        :param id_: id of job to be requested
+               filename: (Optional) filename to save text to (without extension)
+               filepath: (Optional) directory to save the file to.
+        :returns: caption data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': self.rev_captions_content_type})
+        response.raise_for_status()
+
+        if filename:
+            with open(filepath+'/'+filename+'.txt','w+') as f:
+                f.write(response.text)
+
+
+        return response.text
 
     def delete_job(self, id_):
         """Delete a specific transcription job
@@ -256,3 +292,5 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         return Account.from_json(response.json())
+
+
