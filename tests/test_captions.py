@@ -10,6 +10,7 @@ try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
+    
 JOB_ID = '1'
 URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 
@@ -18,7 +19,8 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 class TestCaptionEndpoint():
     def test_get_captions_with_success(self, mock_client, make_mock_response):
         filename = 'TestFileToBeDeleted'
-        filepath = ''
+        filepath = 'tempDir'
+        os.mkdir('tempDir')
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response

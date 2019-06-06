@@ -178,16 +178,15 @@ class RevAiAPIClient:
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_, filename = None, filepath = ''):
+    def get_transcript_text(self, id_, filename = None, filepath = None):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
-               filename: (Optional) filename to save text to (without extension)
-               filepath: (Optional) directory to save the file to.
+        :param filename (optional): filename to save text to (without extension)
+        :param filepath (optional): directory to save the file to.
         :returns: transcript data as text
         :raises: HTTPError
         """
-
         if not id_:
             raise ValueError('id_ must be provided')
 
@@ -196,18 +195,18 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         if filename:
-            path = os.path.join(filepath, filename+'.txt')
+            path = os.path.join(filepath or '', filename+'.txt')
             with open(path, 'w+') as f:
                 f.write(response.text)
 
         return response.text
 
-    def get_transcript_json(self, id_, filename = None, filepath = ''):
+    def get_transcript_json(self, id_, filename = None, filepath = None):
         """Get the transcript of a specific job as json
 
         :param id_: id of job to be requested
-               filename: (Optional) filename to save text to (without extension)
-               filepath: (Optional) directory to save the file to.
+        :param filename (optional): filename to save json to (without extension)
+        :param filepath (optional): directory to save the file to.
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -220,7 +219,7 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         if filename:
-            path = os.path.join(filepath, filename+'.json')
+            path = os.path.join(filepath or '', filename+'.json')
             with open(path,'w+') as f:
                 json.dump(response.json(), f)
 
@@ -243,12 +242,12 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_, filename = None, filepath = ''):
+    def get_captions(self, id_, filename = None, filepath = None):
         """Get the captions output of a specific job and return it as plain text
             
         :param id_: id of job to be requested
-               filename: (Optional) filename to save text to (without extension)
-               filepath: (Optional) directory to save the file to.
+        :param filename (optional): filename to save text to (without extension)
+        :param filepath (optional): directory to save the file to.
         :returns: caption data as text
         :raises: HTTPError
         """
@@ -261,10 +260,9 @@ class RevAiAPIClient:
         response.raise_for_status()
 
         if filename:
-            path = os.path.join(filepath, filename+'.txt')
+            path = os.path.join(filepath or '', filename+'.txt')
             with open(path,'w+') as f:
                 f.write(response.text)
-
 
         return response.text
 

@@ -22,7 +22,8 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/transcript'.format(JOB_ID))
 class TestTranscriptEndpoints():
     def test_get_transcript_text_with_success(self, mock_client, make_mock_response):
         filename = 'TestFileToBeDeleted'
-        filepath = ''
+        filepath = 'tempDir'
+        os.mkdir(filepath)
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
         mock_client.session.get.return_value = response
@@ -35,7 +36,8 @@ class TestTranscriptEndpoints():
         with open(path) as f:
             assert f.read() == data
         os.remove(path)
-
+        os.rmdir(filepath)
+        
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'text/plain'})
 
     @pytest.mark.parametrize('id', [None, ''])
@@ -56,7 +58,8 @@ class TestTranscriptEndpoints():
 
     def test_get_transcript_json_with_success(self, mock_client, make_mock_response):
         filename = 'TestToBeDeleted'
-        filepath = ''
+        filepath = 'tempDir'
+        os.mkdir(filepath)
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -81,6 +84,7 @@ class TestTranscriptEndpoints():
         with open(path) as f:
             assert json.load(f) == expected
         os.remove(path)
+        os.rmdir(filepath)
 
         mock_client.session.get.assert_called_once_with(
             URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
