@@ -10,11 +10,11 @@ def on_error(error):
     pass
 
 def on_close(code, reason):
-    pass
+    print(code + readson)
 
-def on_open():
-    pass
-
+def on_connected(job_id):
+    return 'Connected, Job ID : {}'.format(job_id)
+-
 class RevAiStreamingClient():
     def __init__(self, 
                 access_token, 
@@ -22,7 +22,7 @@ class RevAiStreamingClient():
                 version = 'v1alpha',  
                 on_error = on_error, 
                 on_close = on_close, 
-                on_open = on_open):
+                on_connected = on_connected):
         """Constructor for Streaming Client
 
         :param access_token: access token which authorizes all requests and links them to your
@@ -34,7 +34,7 @@ class RevAiStreamingClient():
         :param on_message (optional): function to be called when recieving a message from the server
         :param on_error (optional): function to be called when recieving an error from the server
         :param on_close (optional): function to be called when the websocket closes
-        :param on_open (optional): function to be called when the websocket and thread starts successfully
+        :param on_connected (optional): function to be called when the websocket and thread starts successfully
         """
         if not access_token:
             raise ValueError('access_token must be provided')
@@ -45,27 +45,27 @@ class RevAiStreamingClient():
 
         self.access_token = access_token
         self.config = config
-        self.base_url = \
-                'wss://api.rev.ai/speechtotext/{}/stream'.format(version)
+        self.base_url = base_url = 'wss://api.rev.ai/speechtotext/{}/stream'.format(version)
         self.on_error = on_error
         self.on_close = on_close
-        self.on_open = on_open
-        self.thread = SpeechThread
+        self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread = True, 
             on_error = self.on_error, 
             on_close = self.on_close, 
-            on_open = self.on_open
+            on_connected = self.on_connected
             )
 
-    def start(self):
-        """Function to connect the websocket to the URL and start the response thread
+    def start(self, generator):
+        """Function to connect thde websocket to the URL and start the response thread
+
+        :param generator: generator object that yields binary audio data
         """
         url = self.base_url + '?access_token={}'.format(self.access_token) \
-              + '&content_type={}'.format(self.config.get_content_type_string()
-                )
+             + '&content_type={}'.format(self.config.get_content_type_string())
         try:
             self.client.connect(url)
-            self.on_open()
+            self._start_send_data_thread(generator)
+            return self.responses()
         except Exception as e:
             self.client.abort()
             self.on_error(e)
@@ -75,8 +75,8 @@ class RevAiStreamingClient():
         """
         self.client.abort()
 
-    def send_data_as_gen(self, generator):
-        """Function to send binary audio data from a generator
+    def _start_send_data_thread(self, generator):
+        """Function to send binary audio data from a generator with threading
 
         :param generator: generator object that yields binary audio data
         """
@@ -85,47 +85,16 @@ class RevAiStreamingClient():
 
         if hasattr(self, 'request_thread'):
             if self.request_thread.isAlive():
-                raise ValueError("""Data is still being sent and will interfere 
-                    with the responses.""")
+                raise ValueError("""Data is still being sent and will interfere with the responses.""")
 
-        self.request_thread = self.thread(self.RequestSending, [generator])
+        self.request_thread = threading.Thread(target = self._send_data, 
+                                args = [generator])
         self.request_thread.start()
 
-    def send_data_as_filepath(self, filepath):
-        """Function to send audio data from a given file
-
-        :param filepath: string containing file location
-        """
-        if not filepath:
-            raise ValueError('filepath must be provided')
-
-        if hasattr(self, 'request_thread'):
-            if self.request_thread.isAlive():
-                raise ValueError("""Data is still being sent and will interfere 
-                    with the responses.""")
-
-        self.send_data_as_gen(self.make_gen(filepath))
-
-    def make_gen(self, filepath):
-        """Get generator of audio data from a given filepath
-        
-        :param filepath: path to file including file name as string
-        :returns: generator of audio bytes
-        """
-        if not filepath:
-            raise ValueError('filepath must be provided')
-
-        with io.open(filepath, 'rb') as stream:
-            while True:
-                piece = stream.read(8192)
-                if not piece:
-                    break
-                yield piece
-
-    def RequestSending(self, generator):
+    def _send_data(self, generator):
         """Function used in a thread to send requests to the server.
 
-        :param generator: generator object yielding audio data
+        :param generator: enerator object that yields binary audio data
         """
         if not generator:
             raise ValueError('generator must be provided')
@@ -140,39 +109,26 @@ class RevAiStreamingClient():
         """
         while True:
             with self.client.readlock:
-                opcode, response = self.client.recv_data()
+                opcode, data = self.client.recv_data()
             if six.PY3 and opcode == websocket.ABNF.OPCODE_TEXT:
-                yield response.decode("utf-8")
+                dec_data = data.decode('utf-8') 
+                data_dict = json.loads(dec_data)
+                if data_dict['type'] == 'connected':
+                    yield 'Connected - Job ID : {}'.format(data_dict['id'])
+                else:
+                    yield dec_data
             elif opcode == websocket.ABNF.OPCODE_TEXT:
-                yield response
+                data_dict = json.loads(dec_data)
+                if data_dict['type'] == 'connected':
+                    yield 'Connected - Job ID : {}'.format(data_dict['id'])
+                else:
+                    yield data
             elif opcode == websocket.ABNF.OPCODE_CLOSE:
-                if response and len(response) >= 2:
-                    code = 256 * six.byte2int(response[0:1]) + six.byte2int(response[1:2])
-                    reason = response[2:].decode('utf-8')
+                if data and len(data) >= 2:
+                    code = 256 * six.byte2int(data[0:1]) + \
+                            six.byte2int(data[1:2])
+                    reason = data[2:].decode('utf-8')
                     self.on_close(code, reason)
                 return
             else:
                 yield ''
-
-class SpeechThread(threading.Thread):
-    def __init__(self, function, arg = None):
-        """Constructor for Speech Thread Class
-
-        :param function: function to be called by the thread
-        :param arg (optional): tuple of optional arguments to pass to the function
-        """
-        if not function:
-            raise ValueError('function must be provided')
-
-        threading.Thread.__init__(self)
-        self.function = function
-        self.arg = arg
-
-    def run(self):
-        """Function that to get called by thread.start(). Simply calls the function
-           with arguments passed in the constructor.
-        """
-        if self.arg:
-            self.function(*self.arg)
-        else:
-            self.function()
