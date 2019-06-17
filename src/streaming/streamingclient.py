@@ -7,14 +7,14 @@ import six
 import json
 
 def on_error(error):
-    pass
+    raise error
 
 def on_close(code, reason):
-    print(code + readson)
+    print("{} : {}".format(code, reason))
 
 def on_connected(job_id):
-    return 'Connected, Job ID : {}'.format(job_id)
--
+    print('Connected, Job ID : {}'.format(job_id))
+
 class RevAiStreamingClient():
     def __init__(self, 
                 access_token, 
@@ -42,7 +42,6 @@ class RevAiStreamingClient():
         if not config:
             raise ValueError('config must be provided')
 
-
         self.access_token = access_token
         self.config = config
         self.base_url = base_url = 'wss://api.rev.ai/speechtotext/{}/stream'.format(version)
@@ -52,8 +51,7 @@ class RevAiStreamingClient():
         self.client = websocket.WebSocket(enable_multithread = True, 
             on_error = self.on_error, 
             on_close = self.on_close, 
-            on_connected = self.on_connected
-            )
+            on_connected = self.on_connected)
 
     def start(self, generator):
         """Function to connect thde websocket to the URL and start the response thread
@@ -65,7 +63,7 @@ class RevAiStreamingClient():
         try:
             self.client.connect(url)
             self._start_send_data_thread(generator)
-            return self.responses()
+            return self._responses()
         except Exception as e:
             self.client.abort()
             self.on_error(e)
@@ -104,7 +102,7 @@ class RevAiStreamingClient():
 
         self.client.send("EOS")
 
-    def responses(self):
+    def _responses(self):
         """A generator of reponses from the server. Yields the data decoded.
         """
         while True:
@@ -114,13 +112,13 @@ class RevAiStreamingClient():
                 dec_data = data.decode('utf-8') 
                 data_dict = json.loads(dec_data)
                 if data_dict['type'] == 'connected':
-                    yield 'Connected - Job ID : {}'.format(data_dict['id'])
+                    yield self.on_connected(data_dict['id'])
                 else:
                     yield dec_data
             elif opcode == websocket.ABNF.OPCODE_TEXT:
                 data_dict = json.loads(dec_data)
                 if data_dict['type'] == 'connected':
-                    yield 'Connected - Job ID : {}'.format(data_dict['id'])
+                    yield self.on_connected(data_dict['id'])
                 else:
                     yield data
             elif opcode == websocket.ABNF.OPCODE_CLOSE:
