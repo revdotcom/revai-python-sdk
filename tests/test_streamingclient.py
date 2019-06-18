@@ -1,7 +1,6 @@
 """Unit tests for the streaming client"""
 
 import pytest
-import websocket
 import six
 from src.streaming.MediaConfig import MediaConfig
 from src.streaming.streamingclient import RevAiStreamingClient
@@ -57,9 +56,9 @@ class TestStreamingClient():
         else:
             example_data = '{"type":"partial","transcript":"Test"}'
         data = [
-            [websocket.ABNF.OPCODE_TEXT, '{"type":"connected","id":"testid"}'.encode('utf-8')],
-            [websocket.ABNF.OPCODE_TEXT, example_data],
-            [websocket.ABNF.OPCODE_CLOSE, b'\x03\xe8End of input. Closing']
+            [0x1, '{"type":"connected","id":"testid"}'.encode('utf-8')],
+            [0x1, example_data],
+            [0x8, b'\x03\xe8End of input. Closing']
         ]
         exp_responses = [
             'Connected, Job ID : testid\n',

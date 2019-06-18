@@ -1,5 +1,5 @@
 """StreamingClient tool used for streaming services"""
-from src.streaming.MediaConfig import MediaConfig
+from .MediaConfig import MediaConfig
 import websocket
 import io
 import threading
