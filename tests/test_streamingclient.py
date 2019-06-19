@@ -53,10 +53,12 @@ class TestStreamingClient():
             format(mock_streaming_client.config.get_content_type_string())
         if six.PY3:
             example_data = '{"type":"partial","transcript":"Test"}'.encode('utf-8')
+            example_connected = '{"type":"connected","id":"testid"}'.encode('utf-8')
         else:
             example_data = '{"type":"partial","transcript":"Test"}'
+            example_connected = '{"type":"connected","id":"testid"}'
         data = [
-            [0x1, '{"type":"connected","id":"testid"}'.encode('utf-8')],
+            [0x1, example_connected],
             [0x1, example_data],
             [0x8, b'\x03\xe8End of input. Closing']
         ]
@@ -85,7 +87,7 @@ class TestStreamingClient():
         with pytest.raises(ZeroDivisionError):
             mock_streaming_client.start(mock_generator())
 
-        mock_streaming_client.client.abort.assert_called_once()
+        assert mock_streaming_client.client.abort.called
 
     def test_end(self, mock_streaming_client):
         mock_streaming_client.end()

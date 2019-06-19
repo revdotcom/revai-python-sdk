@@ -1,7 +1,7 @@
 """Unit tests for the media config class"""
 
 import pytest
-from src.streaming import MediaConfig
+from src.streaming.MediaConfig import MediaConfig
 
 class TestMediaConfig():
     def test_constructor(self):
