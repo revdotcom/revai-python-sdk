@@ -1,7 +1,7 @@
 """Unit tests for the media config class"""
 
 import pytest
-from src.streaming.MediaConfig import MediaConfig
+from src.rev_ai.models.streaming import MediaConfig
 
 class TestMediaConfig():
     def test_constructor(self):

@@ -2,8 +2,8 @@
 
 import pytest
 import six
-from src.streaming.MediaConfig import MediaConfig
-from src.streaming.streamingclient import RevAiStreamingClient
+from src.rev_ai.models.streaming import MediaConfig
+from src.rev_ai.streamingclient import RevAiStreamingClient
 from tests.fixtures.mock_streaming_client import mock_streaming_client, mock_generator
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')

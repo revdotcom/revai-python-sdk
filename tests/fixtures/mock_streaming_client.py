@@ -1,6 +1,6 @@
 import pytest
-from src.streaming.streamingclient import RevAiStreamingClient
-from src.streaming.MediaConfig import MediaConfig
+from src.rev_ai.streamingclient import RevAiStreamingClient
+from src.rev_ai.models.streaming import MediaConfig
 import threading
 
 @pytest.fixture
