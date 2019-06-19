@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """StreamingClient tool used for streaming services"""
 from .models import MediaConfig
 import websocket

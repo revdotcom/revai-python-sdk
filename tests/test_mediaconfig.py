@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Unit tests for the media config class"""
 
 import pytest

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pytest
 from src.rev_ai.streamingclient import RevAiStreamingClient
 from src.rev_ai.models.streaming import MediaConfig
