@@ -2,4 +2,4 @@
 """Models"""
 
 from .streaming import MediaConfig
-from .async import Job, JobStatus, Account, Transcript
+from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Element

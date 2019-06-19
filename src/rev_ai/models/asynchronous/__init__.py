@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Models"""
+"""Async Models"""
 
 from .job import Job
 from .job_status import JobStatus

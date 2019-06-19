@@ -3,5 +3,4 @@
 
 __version__ = '2.4.0'
 
-from .models.async import Job, JobStatus, Account, Transcript
-from .models.streaming import MediaConfig
+from .models import Job, JobStatus, Account, Transcript, MediaConfig

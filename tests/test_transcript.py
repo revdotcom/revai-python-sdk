@@ -5,7 +5,7 @@ import pytest
 import json
 import os.path
 from requests.exceptions import HTTPError
-from src.rev_ai.models.async import Transcript, Monologue, Element
+from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
 from tests.helpers.errors import get_error_test_cases
 
