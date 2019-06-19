@@ -28,12 +28,9 @@ class RevAiStreamingClient():
         :param access_token: access token which authorizes all requests and 
             links them to your account. Generated on the settings page of your 
             account dashboard on Rev.ai.
-        :param config: an MediaConfig object containing audio information. 
+        :param config: a MediaConfig object containing audio information. 
             See MediaConfig.py for more information
-        :param version (optional): version of the streaming speech to text as  
-            string
-        :param on_message (optional): function to be called when recieving a 
-            message from the server
+        :param version (optional): version of the streaming api to be used
         :param on_error (optional): function to be called when recieving an 
             error from the server
         :param on_close (optional): function to be called when the websocket 
@@ -54,12 +51,7 @@ class RevAiStreamingClient():
         self.on_error = on_error
         self.on_close = on_close
         self.on_connected = on_connected
-        self.client = websocket.WebSocket(
-            enable_multithread = True, 
-            on_error = self.on_error, 
-            on_close = self.on_close, 
-            on_connected = self.on_connected
-        )
+        self.client = websocket.WebSocket(enable_multithread = True)
 
     def start(self, generator):
         """Function to connect thde websocket to the URL and start the response 
