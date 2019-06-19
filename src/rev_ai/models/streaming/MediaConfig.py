@@ -1,14 +1,14 @@
-"""
-    Configuration for an media stream
-"""
+# -*- coding: utf-8 -*-
+"""Media Config Model """
 
-class MediaConfig():
-    def __init__(self, content_type = 'audio/*', layout = None, rate = None, 
-                 audio_format = None, channels = None):
+
+class MediaConfig:
+    def __init__(self, content_type='audio/*', layout=None, rate=None,
+                 audio_format=None, channels=None):
         """Constructor for MediaConfig class
 
         :param content_type (optional): string containing content type. Default
-            will resort to 'audio/*' 
+            will resort to 'audio/*'
         :param layout (optional): layout of audio
         :param rate (optional): sampling rate of audio
         :param audio_format (optional): format of audio
@@ -21,7 +21,7 @@ class MediaConfig():
         self.channels = channels
 
     def get_content_type_string(self):
-        """Returns the content type and params as a string for the websocket 
+        """Returns the content type and params as a string for the websocket
             connection
         """
         return self.content_type + \

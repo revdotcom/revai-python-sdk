@@ -12,6 +12,7 @@ try:
 except ImportError:
     from urlparse import urljoin
 
+
 class RevAiAPIClient:
     """Client which implements Rev.ai API
 
@@ -63,8 +64,8 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
-            vocabulary will inform and bias the speech recognition to find those phrases. 
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
+            vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary should consist of a key "phrases" which maps to a list of strings,
             each of which represents a phrase you would like the speech recognition to bias
             itself toward.
@@ -103,8 +104,8 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom 
-            vocabulary will inform and bias the speech recognition to find those phrases. 
+        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
+            vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary have the key "phrases" which maps to a list of strings,
             each of which represents a phrase you would like the speech recognition to bias
             itself toward.
@@ -178,7 +179,7 @@ class RevAiAPIClient:
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_, filename = None, filepath = None):
+    def get_transcript_text(self, id_, filename=None, filepath=None):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
@@ -201,7 +202,7 @@ class RevAiAPIClient:
 
         return response.text
 
-    def get_transcript_json(self, id_, filename = None, filepath = None):
+    def get_transcript_json(self, id_, filename=None, filepath=None):
         """Get the transcript of a specific job as json
 
         :param id_: id of job to be requested
@@ -220,8 +221,8 @@ class RevAiAPIClient:
 
         if filename:
             path = os.path.join(filepath or '', filename+'.json')
-            with open(path,'w+') as f:
-                json.dump(response.json(), f, indent = 4)
+            with open(path, 'w+') as f:
+                json.dump(response.json(), f, indent=4)
 
         return response.json()
 
@@ -242,9 +243,9 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_, filename = None, filepath = None):
+    def get_captions(self, id_, filename=None, filepath=None):
         """Get the captions output of a specific job and return it as plain text
-            
+
         :param id_: id of job to be requested
         :param filename (optional): filename to save text to (without extension)
         :param filepath (optional): directory to save the file to.
@@ -261,7 +262,7 @@ class RevAiAPIClient:
 
         if filename:
             path = os.path.join(filepath or '', filename+'.txt')
-            with open(path,'w+') as f:
+            with open(path, 'w+') as f:
                 f.write(response.text)
 
         return response.text

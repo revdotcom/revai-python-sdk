@@ -1,40 +1,42 @@
 # -*- coding: utf-8 -*-
 """StreamingClient tool used for streaming services"""
-from .models import MediaConfig
 import websocket
-import io
 import threading
 import six
 import json
 
+
 def on_error(error):
     raise error
+
 
 def on_close(code, reason):
     print("Connection Closed. Code : {}; Reason : {}".format(code, reason))
 
+
 def on_connected(job_id):
     print('Connected, Job ID : {}'.format(job_id))
 
+
 class RevAiStreamingClient():
-    def __init__(self, 
-                access_token, 
-                config, 
-                version = 'v1alpha',  
-                on_error = on_error, 
-                on_close = on_close, 
-                on_connected = on_connected):
+    def __init__(self,
+                 access_token,
+                 config,
+                 version='v1alpha',
+                 on_error=on_error,
+                 on_close=on_close,
+                 on_connected=on_connected):
         """Constructor for Streaming Client
 
-        :param access_token: access token which authorizes all requests and 
-            links them to your account. Generated on the settings page of your 
+        :param access_token: access token which authorizes all requests and
+            links them to your account. Generated on the settings page of your
             account dashboard on Rev.ai.
-        :param config: a MediaConfig object containing audio information. 
+        :param config: a MediaConfig object containing audio information.
             See MediaConfig.py for more information
         :param version (optional): version of the streaming api to be used
-        :param on_error (optional): function to be called when recieving an 
+        :param on_error (optional): function to be called when recieving an
             error from the server
-        :param on_close (optional): function to be called when the websocket 
+        :param on_close (optional): function to be called when the websocket
             closes
         :param on_connected (optional): function to be called when the websocket
             and thread starts successfully
@@ -47,21 +49,21 @@ class RevAiStreamingClient():
 
         self.access_token = access_token
         self.config = config
-        self.base_url = base_url = 'wss://api.rev.ai/speechtotext/{}/stream'. \
+        self.base_url = 'wss://api.rev.ai/speechtotext/{}/stream'. \
             format(version)
         self.on_error = on_error
         self.on_close = on_close
         self.on_connected = on_connected
-        self.client = websocket.WebSocket(enable_multithread = True)
+        self.client = websocket.WebSocket(enable_multithread=True)
 
     def start(self, generator):
-        """Function to connect thde websocket to the URL and start the response 
+        """Function to connect thde websocket to the URL and start the response
             thread
 
         :param generator: generator object that yields binary audio data
         """
         url = self.base_url + '?access_token={}'.format(self.access_token) \
-             + '&content_type={}'.format(self.config.get_content_type_string())
+            + '&content_type={}'.format(self.config.get_content_type_string())
         try:
             self.client.connect(url)
             self._start_send_data_thread(generator)
@@ -85,11 +87,11 @@ class RevAiStreamingClient():
 
         if hasattr(self, 'request_thread'):
             if self.request_thread.isAlive():
-                raise ValueError("""Data is still being sent and will interfere 
+                raise ValueError("""Data is still being sent and will interfere
                     with the responses.""")
 
         self.request_thread = threading.Thread(
-            target=self._send_data, 
+            target=self._send_data,
             args=[generator]
         )
         self.request_thread.start()
@@ -114,7 +116,7 @@ class RevAiStreamingClient():
             with self.client.readlock:
                 opcode, data = self.client.recv_data()
             if six.PY3 and opcode == websocket.ABNF.OPCODE_TEXT:
-                dec_data = data.decode('utf-8') 
+                dec_data = data.decode('utf-8')
                 data_dict = json.loads(dec_data)
                 if data_dict['type'] == 'connected':
                     self.on_connected(data_dict['id'])
