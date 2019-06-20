@@ -90,24 +90,30 @@ def get_results(data_gen):
     """
     char_diff = 0
     prev_message_length = 0
+
+    #
     for data in data_gen:
         data = json.loads(data)
+
         if data['type'] == 'partial':
             message = data['transcript']
+
             if len(message) < prev_message_length:
                 char_diff = prev_message_length - len(message)
             else:
                 prev_message_length = len(message)
+
             sys.stdout.write(message+ " " * char_diff + "\r")
             sys.stdout.flush()
         elif data['type'] == 'final':
             message = data['transcript']
+
             if len(message) < prev_message_length:
                 char_diff = prev_message_length - len(message)
             else:
                 prev_message_length = len(message)
-            sys.stdout.write(message + " " * char_diff + "\n")
-            sys.stdout.flush()
+
+            print(message + " " * char_diff)
             prev_message_length = 0
             char_diff = 0
 
