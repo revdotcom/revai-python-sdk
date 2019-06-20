@@ -5,16 +5,10 @@ import threading
 import six
 import json
 
-try:
-    from urllib.parse import urljoin, urlunparse, urlparse
-except ImportError:
-    from urlparse import urljoin, urlunparse
 
 def on_error(error):
     raise error
 
-
-print(urlparse('wss://api.rev.ai/speechtotext/v1alpha/stream?content_type=content&access_token=token'))
 
 def on_close(code, reason):
     print("Connection Closed. Code : {}; Reason : {}".format(code, reason))
@@ -75,6 +69,7 @@ class RevAiStreamingClient():
             self.client.connect(url)
         except Exception as e:
             self.on_error(e)
+
         self._start_send_data_thread(generator)
 
         return self._get_response_generator()
