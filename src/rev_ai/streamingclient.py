@@ -5,6 +5,10 @@ import threading
 import six
 import json
 
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 def on_error(error):
     raise error
@@ -57,20 +61,23 @@ class RevAiStreamingClient():
         self.client = websocket.WebSocket(enable_multithread=True)
 
     def start(self, generator):
-        """Function to connect thde websocket to the URL and start the response
+        """Function to connect the websocket to the URL and start the response
             thread
 
         :param generator: generator object that yields binary audio data
         """
         url = self.base_url + '?access_token={}'.format(self.access_token) \
             + '&content_type={}'.format(self.config.get_content_type_string())
+
+        url = urljoin(self.base_url, 'stream?access_token={}&content_type={}' \
+            format(self.access_token, self.config.get_content_type_string()))
         try:
             self.client.connect(url)
-            self._start_send_data_thread(generator)
-            return self._get_response_generator()
         except Exception as e:
-            self.client.abort()
             self.on_error(e)
+        self._start_send_data_thread(generator)
+
+        return self._get_response_generator()
 
     def end(self):
         """Function to end the streaming service, close the websocket.
@@ -87,7 +94,7 @@ class RevAiStreamingClient():
 
         if hasattr(self, 'request_thread'):
             if self.request_thread.isAlive():
-                raise ValueError("""Data is still being sent and will interfere
+                raise RuntimeError("""Data is still being sent and will interfere
                     with the responses.""")
 
         self.request_thread = threading.Thread(
@@ -115,16 +122,11 @@ class RevAiStreamingClient():
         while True:
             with self.client.readlock:
                 opcode, data = self.client.recv_data()
-            if six.PY3 and opcode == websocket.ABNF.OPCODE_TEXT:
-                dec_data = data.decode('utf-8')
-                data_dict = json.loads(dec_data)
-                if data_dict['type'] == 'connected':
-                    self.on_connected(data_dict['id'])
-                else:
-                    yield dec_data
-            elif opcode == websocket.ABNF.OPCODE_TEXT:
+            if opcode == websocket.ABNF.OPCODE_TEXT:
+                if six.PY3:
+                    data = data.decode('utf-8')
                 data_dict = json.loads(data)
-                if data_dict['type'] == 'connected':
+               if data_dict['type'] == 'connected':
                     self.on_connected(data_dict['id'])
                 else:
                     yield data

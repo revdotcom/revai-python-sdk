@@ -42,9 +42,9 @@ class TestStreamingClient():
         example_token = 'token'
         example_config = MediaConfig()
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             RevAiStreamingClient(example_token)
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             RevAiStreamingClient(config = example_config)
 
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
@@ -52,12 +52,11 @@ class TestStreamingClient():
             '?access_token={}'.format(mock_streaming_client.access_token) + \
             '&content_type={}'. \
             format(mock_streaming_client.config.get_content_type_string())
+        example_data = '{"type":"partial","transcript":"Test"}'
+        example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
-            example_data = '{"type":"partial","transcript":"Test"}'.encode('utf-8')
-            example_connected = '{"type":"connected","id":"testid"}'.encode('utf-8')
-        else:
-            example_data = '{"type":"partial","transcript":"Test"}'
-            example_connected = '{"type":"connected","id":"testid"}'
+            example_data = example_data.encode('utf-8')
+            example_connected = example_connected.encode('utf-8')
         data = [
             [0x1, example_connected],
             [0x1, example_data],

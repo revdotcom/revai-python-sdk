@@ -29,26 +29,26 @@ class TestMediaConfig():
 
     def test_get_content_type_string_all(self):
         example_config = MediaConfig('content_type',
-                                     'layout',
-                                     'rate',
-                                     'format',
-                                     'channels')
+                                     'LAYOUT',
+                                     'RATE',
+                                     'FORMAT',
+                                     'CHANNELS')
 
         content_type_string = example_config.get_content_type_string()
 
         assert content_type_string == ('content_type'
-                                        ';layout=layout'
-                                        ';rate=rate'
-                                        ';format=format'
-                                        ';channels=channels')
+                                       ';layout=LAYOUT'
+                                       ';rate=RATE'
+                                       ';format=FORMAT'
+                                       ';channels=CHANNELS')
 
     def test_get_content_type_string_missing(self):
         example_config = MediaConfig('content_type',
-                                        '',
-                                        '',
-                                        '',
-                                        'channels')
+                                     '',
+                                     '',
+                                     '',
+                                     'CHANNELS')
 
         content_type_string = example_config.get_content_type_string()
 
-        assert content_type_string == 'content_type;channels=channels'
+        assert content_type_string == 'content_type;channels=CHANNELS'
