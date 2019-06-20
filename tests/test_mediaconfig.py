@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Unit tests for the media config class"""
 
-import pytest
 from src.rev_ai.models.streaming import MediaConfig
+
 
 class TestMediaConfig():
     def test_constructor(self):

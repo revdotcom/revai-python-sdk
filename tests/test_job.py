@@ -21,7 +21,7 @@ MEDIA_URL = 'https://example.com/test.mp3'
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
-CUSTOM_VOCAB = [{"phrases":["word one", "word two"]}]
+CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')

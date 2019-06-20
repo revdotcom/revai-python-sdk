@@ -5,7 +5,7 @@ import pytest
 import six
 from src.rev_ai.models.streaming import MediaConfig
 from src.rev_ai.streamingclient import RevAiStreamingClient
-from tests.fixtures.mock_streaming_client import mock_streaming_client, mock_generator
+
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
 class TestStreamingClient():
@@ -13,12 +13,12 @@ class TestStreamingClient():
         example_token = 'token'
         example_config = MediaConfig()
         example_version = 'example_version'
-        example_error_func = lambda example_error : example_error
+        example_error_func = lambda example_error: example_error
         example_close_func = lambda code, reason:  '{}:{}'.format(code, reason)
         example_connect_func = lambda id: id
         example_client = RevAiStreamingClient(
-            example_token, 
-            example_config, 
+            example_token,
+            example_config,
             example_version,
             example_error_func,
             example_close_func,
@@ -82,7 +82,7 @@ class TestStreamingClient():
         assert capsys.readouterr().out == exp_responses[2]
 
     def test_start_failure_to_connect(self, mock_streaming_client, mock_generator):
-        mock_streaming_client.client.connect = lambda x : 1/0
+        mock_streaming_client.client.connect = lambda x: 1/0
 
         with pytest.raises(ZeroDivisionError):
             mock_streaming_client.start(mock_generator())
