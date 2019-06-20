@@ -112,3 +112,13 @@ Both the json and object forms contain all the formation outlined in the respons
 of the [Get Transcript](https://www.rev.ai/docs#operation/GetTranscriptById) endpoint
 when using the json response schema. While the text output is a string containing
 just the text of your transcript
+
+### Streaming audio
+
+Once you have a streaming client setup with a MediaConfig and access token, you can obtain a transcription generator of your audio.
+
+```python
+response_generator = streamingclient.start(AUDIO_GENERATOR)
+```
+
+`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The start method creates an thread sending audio pieces from the audio_generator to our Streaming]e endpoint.
