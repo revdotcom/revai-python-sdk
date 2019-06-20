@@ -6,13 +6,15 @@ import six
 import json
 
 try:
-    from urllib.parse import urljoin
+    from urllib.parse import urljoin, urlunparse, urlparse
 except ImportError:
-    from urlparse import urljoin
+    from urlparse import urljoin, urlunparse
 
 def on_error(error):
     raise error
 
+
+print(urlparse('wss://api.rev.ai/speechtotext/v1alpha/stream?content_type=content&access_token=token'))
 
 def on_close(code, reason):
     print("Connection Closed. Code : {}; Reason : {}".format(code, reason))
@@ -69,8 +71,6 @@ class RevAiStreamingClient():
         url = self.base_url + '?access_token={}'.format(self.access_token) \
             + '&content_type={}'.format(self.config.get_content_type_string())
 
-        url = urljoin(self.base_url, 'stream?access_token={}&content_type={}' \
-            format(self.access_token, self.config.get_content_type_string()))
         try:
             self.client.connect(url)
         except Exception as e:
@@ -126,7 +126,7 @@ class RevAiStreamingClient():
                 if six.PY3:
                     data = data.decode('utf-8')
                 data_dict = json.loads(data)
-               if data_dict['type'] == 'connected':
+                if data_dict['type'] == 'connected':
                     self.on_connected(data_dict['id'])
                 else:
                     yield data
