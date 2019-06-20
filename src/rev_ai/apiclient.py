@@ -179,12 +179,10 @@ class RevAiAPIClient:
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_, filename=None, filepath=None):
+    def get_transcript_text(self, id_):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
-        :param filename (optional): filename to save text to (without extension)
-        :param filepath (optional): directory to save the file to.
         :returns: transcript data as text
         :raises: HTTPError
         """
@@ -195,19 +193,30 @@ class RevAiAPIClient:
         response = self.session.get(url, headers={'Accept': 'text/plain'})
         response.raise_for_status()
 
-        if filename:
-            path = os.path.join(filepath or '', filename+'.txt')
-            with open(path, 'w+') as f:
-                f.write(response.text)
-
         return response.text
 
-    def get_transcript_json(self, id_, filename=None, filepath=None):
-        """Get the transcript of a specific job as json
+    def get_transcript_text_as_stream(self, id_):
+        """Get the transcript of a specific job as a plain text stream.
 
         :param id_: id of job to be requested
-        :param filename (optional): filename to save json to (without extension)
-        :param filepath (optional): directory to save the file to.
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': 'text/plain'}, stream=True)
+        response.raise_for_status()
+
+        return response
+
+    def get_transcript_json(self, id_):
+        """Get the transcript of a specific job as json.
+
+        :param id_: id of job to be requested
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -219,12 +228,25 @@ class RevAiAPIClient:
             url, headers={'Accept': self.rev_json_content_type})
         response.raise_for_status()
 
-        if filename:
-            path = os.path.join(filepath or '', filename+'.json')
-            with open(path, 'w+') as f:
-                json.dump(response.json(), f, indent=4)
-
         return response.json()
+
+    def get_transcript_json_as_stream(self, id_):
+        """Get the transcript of a specific job as streamed json.
+
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': self.rev_json_content_type}, stream=True)
+        response.raise_for_status()
+
+        return response
 
     def get_transcript_object(self, id_):
         """Get the transcript of a specific job as a python object`.
@@ -243,12 +265,10 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_, filename=None, filepath=None):
+    def get_captions(self, id_):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
-        :param filename (optional): filename to save text to (without extension)
-        :param filepath (optional): directory to save the file to.
         :returns: caption data as text
         :raises: HTTPError
         """
@@ -260,12 +280,25 @@ class RevAiAPIClient:
             url, headers={'Accept': self.rev_captions_content_type})
         response.raise_for_status()
 
-        if filename:
-            path = os.path.join(filepath or '', filename+'.txt')
-            with open(path, 'w+') as f:
-                f.write(response.text)
-
         return response.text
+
+    def get_captions_as_stream(self, id_):
+        """Get the captions output of a specific job and return it as a plain text stream
+            
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
+        response = self.session.get(
+            url, headers={'Accept': self.rev_captions_content_type}, stream=True)
+        response.raise_for_status()
+
+        return response
 
     def delete_job(self, id_):
         """Delete a specific transcription job
