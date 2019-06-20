@@ -43,9 +43,9 @@ class TestStreamingClient():
         example_config = MediaConfig()
 
         with pytest.raises(ValueError):
-            RevAiStreamingClient(example_token)
+            RevAiStreamingClient(example_token, None)
         with pytest.raises(ValueError):
-            RevAiStreamingClient(config = example_config)
+            RevAiStreamingClient(None, example_config)
 
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
         url = mock_streaming_client.base_url + \
