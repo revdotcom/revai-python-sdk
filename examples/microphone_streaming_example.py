@@ -20,6 +20,7 @@ import pyaudio
 import sys
 import json
 
+
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
     def __init__(self, rate, chunk):
@@ -84,7 +85,7 @@ class MicrophoneStream(object):
 
 
 def get_results(data_gen):
-    """Function to print out the responses from data_gen. Prints partial transcripts and
+    """Function to display interim responses from data_gen. Prints partial transcripts and
         edits them as new responses change. Finalizes and makes a new line when recieving a
         final transcript.
     """
@@ -106,6 +107,7 @@ def get_results(data_gen):
 
             sys.stdout.write(message+ " " * char_diff + "\r")
             sys.stdout.flush()
+
         elif data['type'] == 'final':
             message = data['transcript']
 
@@ -121,17 +123,22 @@ def get_results(data_gen):
 rate = 44100
 chunk = 1024
 
+#Insert your access token here
 access_token = '02Jn8jDGSOpHC5ca5gvNl-7Tbw_cktAr1sdMVMZ-MjFOP1pRfwccKadqXim_lqGcw84c2VELmmt6jL6yzB48ugGkAR3oY'
 
+#Creates a media config with the settings set for raw microphone input
 example_mc = MediaConfig('audio/x-raw', 'interleaved', rate, 'S16LE', 1)
 
 streamclient = RevAiStreamingClient(access_token, example_mc)
 
+#Opens microphone input
 with MicrophoneStream(rate, chunk) as stream:
+    #Uses try method to allow users to manually close the stream
     try:
+        #Starts the server connection and thread sending microphone audio
         response_gen = streamclient.start(stream.generator())
+
         get_results(response_gen)
-        streamclient.end()
-    except Exception as e:
-        print(e)
-        streamclient.end()
+
+#Ends the websocket connection
+streamclient.end()
