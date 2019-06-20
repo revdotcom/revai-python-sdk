@@ -87,8 +87,6 @@ class TestStreamingClient():
         with pytest.raises(ZeroDivisionError):
             mock_streaming_client.start(mock_generator())
 
-        assert mock_streaming_client.client.abort.called
-
     def test_end(self, mock_streaming_client):
         mock_streaming_client.end()
 
