@@ -91,10 +91,11 @@ def get_results(data_gen):
     char_diff = 0
     prev_message_length = 0
 
-    #
+    #Iterates through the responses
     for data in data_gen:
         data = json.loads(data)
 
+        #Checks if response is partial or final (partial being best guess so far)
         if data['type'] == 'partial':
             message = data['transcript']
 
