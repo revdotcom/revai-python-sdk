@@ -61,7 +61,6 @@ while True:
 #Cuts off the beginning x jobs off the list returned
 list_of_jobs = client.get_list_of_jobs(limits=None, starting_after=None)
 
-
 #obtain transcript text as a string for the job.id.
 transcript_text = client.get_transcript_text(job.id)
 
@@ -76,7 +75,7 @@ captions = client.get_captions(job.id)
 
 #Use the objects however you please
 
-#Now that we are done with the job, we can delete it.
+#Once you are done with the job, you can delete it.
 #NOTE : This will PERMANENTLY DELETE all data related to a job. Exercise only
 #if sure you want to delete the job.
 client.delete_job(job.id)
