@@ -5,7 +5,7 @@ import json
 import pytest
 from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models import Job, JobStatus
+from src.rev_ai.models.asynchronous import Job, JobStatus
 from tests.helpers.errors import get_error_test_cases
 
 try:
@@ -21,7 +21,7 @@ MEDIA_URL = 'https://example.com/test.mp3'
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
-CUSTOM_VOCAB = [{"phrases":["word one", "word two"]}]
+CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')

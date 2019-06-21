@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import pytest
-import json
 import os.path
 from requests.exceptions import HTTPError
-from src.rev_ai.models import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
 from tests.helpers.errors import get_error_test_cases
 
@@ -19,7 +19,7 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 class TestCaptionEndpoint():
     def test_get_captions_with_success(self, mock_client, make_mock_response):
         filename = 'exampleFile'
-        filepath = 'examplePath'
+        filepath = 'exampleDir'
         os.mkdir(filepath)
         path = os.path.join(filepath, filename+'.txt')
         data = 'Test'
@@ -31,6 +31,7 @@ class TestCaptionEndpoint():
         with open(path) as f:
             assert f.read() == data
         os.remove(path)
+        os.rmdir(filepath)
         assert res == data
         mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
 
