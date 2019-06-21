@@ -15,10 +15,8 @@ limitations under the License.
 
 from rev_ai.models import MediaConfig
 from rev_ai.streamingclient import RevAiStreamingClient
-from six.moves import queue  
 import json
 import io
-import pyaudio
 
 ############### File Example ##################################################
 
@@ -26,24 +24,21 @@ import pyaudio
 filename = "english_test.raw"
 
 #String of your access token
-access_token = '02Jn8jDGSOpHC5ca5gvNl-7Tbw_cktAr1sdMVMZ-MjFOP1pRfwccKadqXim_lqGcw84c2VELmmt6jL6yzB48ugGkAR3oY'
+access_token = "your_access_token"
 
-#Media configuration of audio file. This includes the content type, rate, format, layout and # of channels
-config = MediaConfig("audio/x-raw",
-                     rate=None,
-                     audio_format=None,
-                     layout=None,
-                     channels=None)
+#Media configuration of audio file. This includes the content type, layout, rate, format, and # of channels
+config = MediaConfig("audio/x-raw", "interleaved", 16000, "S16LE", 1)
 
 #Create client with your access token and media configuration
 streamclient = RevAiStreamingClient(access_token, config)
 
 #Open file and read data into array. Practically, stream data would be divded into chunks
 with io.open(filename, 'rb') as stream:
-    data_array = [stream.read()]
+    MEDIA_GENERATOR = [stream.read()]
 
 #Starts the streaming connection and creates a thread to send bytes from data_array
-response_generator = streamclient.start(data_array)
+#Response_generator is a generator yielding responses from the server
+response_generator = streamclient.start(MEDIA_GENERATOR)
 
 #Iterates through the responses from the server when obtained
 for response in response_generator:
@@ -55,24 +50,24 @@ streamclient.end()
 ########## Generator Example ##################################################
 
 #String of your access token
-# access_token = "your_access_token"
+access_token = "your_access_token"
 
-# #Creating Media Configuration for the audio. Default lets the server guess based on the audio
-# #Can reject audio if it can't figure out the configuration
-# config = MediaConfig()
+#Creating Media Configuration for the audio. Default lets the server guess based on the audio
+#Can reject audio if the server can't figure out the configuration
+config = MediaConfig()
 
-# #Creates Streaming Client with a given access token and media configuration
-# streamclient = RevAiStreamingClient(access_token, config)
+#Creates Streaming Client with a given access token and media configuration
+streamclient = RevAiStreamingClient(access_token, config)
 
-# #Starts the streaming connection with a thread sending the data from the media generator
-# #MEDIA_GENERATOR is a generator object yielding audio data.
-# response_generator = streamclient.start(MEDIA_GENERATOR)
+#Starts the streaming connection with a thread sending the data from the media generator
+#MEDIA_GENERATOR is a generator object yielding audio data.
+response_generator = streamclient.start(MEDIA_GENERATOR)
 
-# #Iterates through the responses from the server when obtained
-# for response in response_generator:
-#     print(response)
+#Iterates through the responses from the server when obtained
+for response in response_generator:
+    print(response)
 
-# #Closes the streaming connection
-# streamclient.end()
+#Closes the streaming connection
+streamclient.end()
 
 ###############################################################################

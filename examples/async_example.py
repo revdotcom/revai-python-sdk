@@ -13,11 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from rev_ai import apiclient, streamingclient
-from rev_ai.models import MediaConfig
 import json
 import time
+from rev_ai import apiclient, streamingclient
+from rev_ai.models import MediaConfig
 
+#String containing your access token
 access_token = "your_access_token"
 
 #Create your api client
@@ -38,22 +39,26 @@ job = client.submit_job_local_file("your_local_file_path",
 #                             custom_vocabularies=None)
 
 while True:
-    #obtains details of a job in json format
+
+    #Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
     details_dict = json.loads(job_details)
     status = details_dict["status"]
+
     #Checks if the job has been transcribed
     if status == "in_progress":
         time.sleep(5)
         continue
     elif status == "failure":
+
         #Do something if the job failed
+
         break
     break
 
-#If you want to check the current jobs connected with your account
+#Getting a list of current jobs connected with your account
 #The optional parameters limits limits the length of the list. Starting_after
-#
+#Cuts off the beginning x jobs off the list returned
 list_of_jobs = client.get_list_of_jobs(limits=None, starting_after=None)
 
 
@@ -68,6 +73,8 @@ transcript_obj = client.get_transcript_object(job.id)
 
 #obtain captions for the job.id.
 captions = client.get_captions(job.id)
+
+#Use the objects however you please
 
 #Now that we are done with the job, we can delete it.
 #NOTE : This will PERMANENTLY DELETE all data related to a job. Exercise only

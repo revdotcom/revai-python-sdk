@@ -13,12 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from rev_ai.models import MediaConfig
-from rev_ai.streamingclient import RevAiStreamingClient
-from six.moves import queue
 import pyaudio
 import sys
 import json
+from rev_ai.models import MediaConfig
+from rev_ai.streamingclient import RevAiStreamingClient
+from six.moves import queue
 
 
 class MicrophoneStream(object):
@@ -120,14 +120,15 @@ def get_results(data_gen):
             prev_message_length = 0
             char_diff = 0
 
+#Sampling rate of your microphone and desirable chunk size
 rate = 44100
-chunk = 1024
+chunk = int(rate/10)
 
 #Insert your access token here
 access_token = '02Jn8jDGSOpHC5ca5gvNl-7Tbw_cktAr1sdMVMZ-MjFOP1pRfwccKadqXim_lqGcw84c2VELmmt6jL6yzB48ugGkAR3oY'
 
 #Creates a media config with the settings set for raw microphone input
-example_mc = MediaConfig('audio/x-raw', 'interleaved', rate, 'S16LE', 1)
+example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1)
 
 streamclient = RevAiStreamingClient(access_token, example_mc)
 
@@ -137,8 +138,9 @@ with MicrophoneStream(rate, chunk) as stream:
     try:
         #Starts the server connection and thread sending microphone audio
         response_gen = streamclient.start(stream.generator())
-
         get_results(response_gen)
+    except:
+        pass
 
 #Ends the websocket connection
 streamclient.end()
