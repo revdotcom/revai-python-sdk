@@ -18,7 +18,6 @@ from rev_ai.streamingclient import RevAiStreamingClient
 import json
 import io
 
-############### File Example ##################################################
 
 # Name of file to be transcribed
 filename = "english_test.raw"
@@ -44,31 +43,6 @@ response_generator = streamclient.start(MEDIA_GENERATOR)
 for response in response_generator:
     print(response)
 
-# Closes the streaming connection
+# Ends the connection early. Not needed as the server will close the connetion 
+# upon receiving an "EOS" message.
 streamclient.end()
-
-########## Generator Example ##################################################
-
-# String of your access token
-access_token = "your_access_token"
-
-# Creating Media Configuration for the audio. Default lets the server guess based on the audio
-# Can reject audio if the server can't figure out the configuration
-config = MediaConfig()
-
-# Creates Streaming Client with a given access token and media configuration
-streamclient = RevAiStreamingClient(access_token, config)
-
-# Starts the streaming connection with a thread sending the data from the media generator
-# MEDIA_GENERATOR is a generator object yielding audio data.
-response_generator = streamclient.start(MEDIA_GENERATOR)
-
-# Iterates through the responses from the server when obtained
-for response in response_generator:
-    print(response)
-
-# Closes the streaming connection early. The connection will normally close by
-# itself.
-streamclient.end()
-
-###############################################################################

@@ -132,7 +132,7 @@ example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1)
 
 streamclient = RevAiStreamingClient(access_token, example_mc)
 
-# Opens microphone input
+# Opens microphone input. The input will stop after a keyboard interrupt.
 with MicrophoneStream(rate, chunk) as stream:
     # Uses try method to allow users to manually close the stream
     try:
