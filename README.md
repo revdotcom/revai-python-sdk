@@ -115,10 +115,27 @@ just the text of your transcript
 
 ### Streaming audio
 
+In order to stream audio, you will need to setup a streaming client and a media configuration for the audio you will be sending.
+
+```python
+from rev_ai.streamingclient import RevAiStreamingClient
+from rev_ai.models import MediaConfig
+
+config = MediaConfig()
+streaming_client = RevAiStreamingClient(ACCESS_TOKEN, config)
+```
+
 Once you have a streaming client setup with a MediaConfig and access token, you can obtain a transcription generator of your audio.
 
 ```python
-response_generator = streamingclient.start(AUDIO_GENERATOR)
+response_generator = streaming_client.start(AUDIO_GENERATOR)
 ```
 
-`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The start method creates an thread sending audio pieces from the audio_generator to our Streaming]e endpoint.
+`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The start method creates a thread sending audio pieces from the audio_generator to our 
+[streaming] endpoint.
+
+If you want to end the connection early, you can!
+
+```python
+streaming_client.end()
+```

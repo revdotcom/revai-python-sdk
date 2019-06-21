@@ -92,11 +92,11 @@ def get_results(data_gen):
     char_diff = 0
     prev_message_length = 0
 
-    #Iterates through the responses
+    # Iterates through the responses
     for data in data_gen:
         data = json.loads(data)
 
-        #Checks if response is partial or final (partial being best guess so far)
+        # Checks if response is partial or final (partial being best guess so far)
         if data['type'] == 'partial':
             message = data['transcript']
 
@@ -120,27 +120,26 @@ def get_results(data_gen):
             prev_message_length = 0
             char_diff = 0
 
-#Sampling rate of your microphone and desirable chunk size
+# Sampling rate of your microphone and desired chunk size
 rate = 44100
 chunk = int(rate/10)
 
-#Insert your access token here
+# Insert your access token here
 access_token = "your_access_token"
 
-#Creates a media config with the settings set for raw microphone input
+# Creates a media config with the settings set for a raw microphone input
 example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1)
 
 streamclient = RevAiStreamingClient(access_token, example_mc)
 
-#Opens microphone input
+# Opens microphone input
 with MicrophoneStream(rate, chunk) as stream:
-    #Uses try method to allow users to manually close the stream
+    # Uses try method to allow users to manually close the stream
     try:
-        #Starts the server connection and thread sending microphone audio
+        # Starts the server connection and thread sending microphone audio
         response_gen = streamclient.start(stream.generator())
         get_results(response_gen)
-    except:
+    except KeyboardInterrupt:
+        # Ends the websocket connection.
+        streamclient.client.send("EOS")
         pass
-
-#Ends the websocket connection
-streamclient.end()
