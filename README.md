@@ -132,6 +132,7 @@ streaming_client = RevAiStreamingClient("ACCESS TOKEN",
                                         on_close=CLOSEFUNC,
                                         on_connected=CONNECTEDFUNC)
 ```
+
 `on_error`, `on_close`, and `on_connected` are optional parameters that are functions to be called when the websocket errors, closes, and connects respectively. The default `on_error` raises the error, `on_close` prints out the code and reason for closing, and `on_connected` prints out the job ID.
 If passing in custom functions, make sure you provide the right parameters. See the sample code for the parameters.
 
@@ -145,6 +146,7 @@ response_generator = streaming_client.start(AUDIO_GENERATOR)
 [streaming] endpoint.
 
 If you want to end the connection early, you can!
+
 ```python
 streaming_client.end()
 ```
