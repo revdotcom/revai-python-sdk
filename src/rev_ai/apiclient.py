@@ -3,7 +3,6 @@
 
 import requests
 import json
-import os.path
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -284,7 +283,7 @@ class RevAiAPIClient:
 
     def get_captions_as_stream(self, id_):
         """Get the captions output of a specific job and return it as a plain text stream
-            
+
         :param id_: id of job to be requested
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
