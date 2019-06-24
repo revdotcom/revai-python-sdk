@@ -112,3 +112,43 @@ Both the json and object forms contain all the formation outlined in the respons
 of the [Get Transcript](https://www.rev.ai/docs#operation/GetTranscriptById) endpoint
 when using the json response schema. While the text output is a string containing
 just the text of your transcript
+
+### Streaming audio
+
+In order to stream audio, you will need to setup a streaming client and a media configuration for the audio you will be sending.
+
+```python
+from rev_ai.streamingclient import RevAiStreamingClient
+from rev_ai.models import MediaConfig
+
+#on_error(error)
+#on_close(code, reason)
+#on_connected(id)
+
+config = MediaConfig()
+streaming_client = RevAiStreamingClient("ACCESS TOKEN",
+                                        config,
+                                        on_error=ERRORFUNC,
+                                        on_close=CLOSEFUNC,
+                                        on_connected=CONNECTEDFUNC)
+```
+
+`on_error`, `on_close`, and `on_connected` are optional parameters that are functions to be called when the websocket errors, closes, and connects respectively. The default `on_error` raises the error, `on_close` prints out the code and reason for closing, and `on_connected` prints out the job ID.
+If passing in custom functions, make sure you provide the right parameters. See the sample code for the parameters.
+
+Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio.
+
+```python
+response_generator = streaming_client.start(AUDIO_GENERATOR)
+```
+
+`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our 
+[streaming] endpoint.
+
+If you want to end the connection early, you can!
+
+```python
+streaming_client.end()
+```
+
+Otherwise, the connection will end when the server obtains an "EOS" message.
