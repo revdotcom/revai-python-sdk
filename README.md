@@ -113,7 +113,27 @@ of the [Get Transcript](https://www.rev.ai/docs#operation/GetTranscriptById) end
 when using the json response schema. While the text output is a string containing
 just the text of your transcript
 
-### Streaming audio
+### Getting captions output
+
+You can also get captions output from the SDK:
+
+```python
+captions = client.get_captions(job.id)
+```
+
+### Streamed outputs
+
+Any output format can be retrieved as a stream. In these cases we return the raw http response to you. The output can be retrieved via `response.content`, `response.iter_lines()` or `response.iter_content()`.
+
+```python
+text_stream = client.get_transcript_text_as_stream(job.id)
+
+json_stream = client.get_transcript_json_as_stream(job.id)
+
+captions_stream = client.get_captions_as_stream(job.id)
+```
+
+## Streaming audio
 
 In order to stream audio, you will need to setup a streaming client and a media configuration for the audio you will be sending.
 
