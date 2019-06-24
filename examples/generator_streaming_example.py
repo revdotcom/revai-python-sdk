@@ -43,6 +43,6 @@ response_generator = streamclient.start(MEDIA_GENERATOR)
 for response in response_generator:
     print(response)
 
-# Ends the connection early. Not needed as the server will close the connetion 
+# Ends the connection early. Not needed as the server will close the connection 
 # upon receiving an "EOS" message.
 streamclient.end()
