@@ -123,7 +123,7 @@ captions = client.get_captions(job.id)
 
 ### Streamed outputs
 
-Any output format can be retrieved as a stream for convenience. In these cases we return the raw http response to you. The output can be retrieved via `response.content`, `response.iter_lines()` or `response.iter_content()`.
+Any output format can be retrieved as a stream. In these cases we return the raw http response to you. The output can be retrieved via `response.content`, `response.iter_lines()` or `response.iter_content()`.
 
 ```python
 text_stream = client.get_transcript_text_as_stream(job.id)
