@@ -3,6 +3,7 @@
 
 import requests
 import json
+import sys
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -132,7 +133,8 @@ class RevAiAPIClient:
             }
 
             response = self.session.post(url, files=files)
-            response.raise_for_status()
+            self._api_failure_handler(response)
+
 
         return Job.from_json(response.json())
 
@@ -149,7 +151,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}'.format(id_))
         response = self.session.get(url)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return Job.from_json(response.json())
 
@@ -174,7 +176,7 @@ class RevAiAPIClient:
         query = '?{}'.format('&'.join(params))
         url = urljoin(self.base_url, 'jobs{}'.format(query))
         response = self.session.get(url)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return [Job.from_json(job) for job in response.json()]
 
@@ -190,10 +192,10 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(url, headers={'Accept': 'text/plain'})
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response.text
-
+        
     def get_transcript_text_as_stream(self, id_):
         """Get the transcript of a specific job as a plain text stream.
 
@@ -208,7 +210,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': 'text/plain'}, stream=True)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response
 
@@ -225,7 +227,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type})
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response.json()
 
@@ -243,7 +245,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type}, stream=True)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response
 
@@ -260,7 +262,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type})
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return Transcript.from_json(response.json())
 
@@ -277,7 +279,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_captions_content_type})
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response.text
 
@@ -295,7 +297,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_captions_content_type}, stream=True)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return response
 
@@ -313,7 +315,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}'.format(id_))
         response = self.session.delete(url)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return
 
@@ -324,6 +326,18 @@ class RevAiAPIClient:
         """
         url = urljoin(self.base_url, 'account')
         response = self.session.get(url)
-        response.raise_for_status()
+        self._api_failure_handler(response)
 
         return Account.from_json(response.json())
+
+    def _api_failure_handler(self, response):
+        """Helper function to provide more detailed error messages for the user
+        
+        :param response: response from the HTTP request
+        :raises: HTTPError
+        """
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            sys.stdout.write(response.text + '\n')
+            raise e
