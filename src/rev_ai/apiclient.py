@@ -135,7 +135,6 @@ class RevAiAPIClient:
             response = self.session.post(url, files=files)
             self._api_failure_handler(response)
 
-
         return Job.from_json(response.json())
 
     def get_job_details(self, id_):
