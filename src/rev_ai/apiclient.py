@@ -133,7 +133,7 @@ class RevAiAPIClient:
             }
 
             response = self.session.post(url, files=files)
-            self._api_failure_handler(response)
+            self._handle_api_failure(response)
 
         return Job.from_json(response.json())
 
@@ -150,7 +150,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}'.format(id_))
         response = self.session.get(url)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return Job.from_json(response.json())
 
@@ -175,7 +175,7 @@ class RevAiAPIClient:
         query = '?{}'.format('&'.join(params))
         url = urljoin(self.base_url, 'jobs{}'.format(query))
         response = self.session.get(url)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return [Job.from_json(job) for job in response.json()]
 
@@ -191,7 +191,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(url, headers={'Accept': 'text/plain'})
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response.text
 
@@ -209,7 +209,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': 'text/plain'}, stream=True)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response
 
@@ -226,7 +226,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type})
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response.json()
 
@@ -244,7 +244,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type}, stream=True)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response
 
@@ -261,7 +261,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_json_content_type})
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return Transcript.from_json(response.json())
 
@@ -278,7 +278,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_captions_content_type})
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response.text
 
@@ -296,7 +296,7 @@ class RevAiAPIClient:
         url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
         response = self.session.get(
             url, headers={'Accept': self.rev_captions_content_type}, stream=True)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return response
 
@@ -314,7 +314,7 @@ class RevAiAPIClient:
 
         url = urljoin(self.base_url, 'jobs/{}'.format(id_))
         response = self.session.delete(url)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return
 
@@ -325,11 +325,11 @@ class RevAiAPIClient:
         """
         url = urljoin(self.base_url, 'account')
         response = self.session.get(url)
-        self._api_failure_handler(response)
+        self._handle_api_failure(response)
 
         return Account.from_json(response.json())
 
-    def _api_failure_handler(self, response):
+    def _handle_api_failure(self, response):
         """Helper function to provide more detailed error messages for the user
         
         :param response: response from the HTTP request
