@@ -195,7 +195,7 @@ class RevAiAPIClient:
         self._api_failure_handler(response)
 
         return response.text
-        
+
     def get_transcript_text_as_stream(self, id_):
         """Get the transcript of a specific job as a plain text stream.
 
