@@ -338,5 +338,5 @@ class RevAiAPIClient:
         try:
             response.raise_for_status()
         except Exception as e:
-            sys.stdout.write(str(response.content))
+            sys.stdout.write(str(response.content) + '\n')
             raise e
