@@ -39,7 +39,7 @@ class TestTranscriptEndpoints():
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     def test_get_transcript_text_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -65,7 +65,7 @@ class TestTranscriptEndpoints():
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     def test_get_transcript_text_as_stream_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -104,7 +104,7 @@ class TestTranscriptEndpoints():
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     def test_get_transcript_json_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -144,7 +144,7 @@ class TestTranscriptEndpoints():
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     def test_get_transcript_json_as_stream_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -184,7 +184,7 @@ class TestTranscriptEndpoints():
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     def test_get_transcript_object_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):

@@ -34,7 +34,7 @@ class TestAccountEndpoints():
         ['unauthorized']))
     def test_get_account_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
+        response = make_mock_response(url=URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):

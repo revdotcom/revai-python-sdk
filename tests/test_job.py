@@ -51,7 +51,7 @@ class TestJobEndpoints():
         ['unauthorized', 'job-not-found']))
     def test_get_job_details_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -107,7 +107,7 @@ class TestJobEndpoints():
         ['invalid-parameters', 'unauthorized']))
     def test_get_list_of_jobs_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error, text=status)
         mock_client.session.get.return_value = response
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_list_of_jobs()
@@ -150,7 +150,7 @@ class TestJobEndpoints():
         ['invalid-parameters', 'unauthorized', 'out-of-credit']))
     def test_submit_job_url_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error, text=status)
         mock_client.session.post.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
@@ -202,7 +202,7 @@ class TestJobEndpoints():
     def test_submit_job_local_file_with_error_response(
             self, error, mocker, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=JOBS_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOBS_URL, status=status, json_data=error, text=status)
         mock_client.session.post.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
@@ -225,7 +225,7 @@ class TestJobEndpoints():
     def test_delete_job_with_error_response(
             self, error, mocker, mock_client, make_mock_response):
         status = error.get('status')
-        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error)
+        response = make_mock_response(url=JOB_ID_URL, status=status, json_data=error, text=status)
         mock_client.session.delete.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
