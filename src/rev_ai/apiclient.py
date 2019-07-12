@@ -3,7 +3,6 @@
 
 import requests
 import json
-import sys
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -331,12 +330,13 @@ class RevAiAPIClient:
 
     def _handle_api_failure(self, response):
         """Helper function to provide more detailed error messages for the user
-        
+
         :param response: response from the HTTP request
         :raises: HTTPError
         """
         try:
             response.raise_for_status()
         except Exception as err:
-           err.args = (response.text,)
-           raise 
+            err.args = (err.args[0] +
+                "; Server Response : {}".format(str(response.content, 'utf-8')),)
+            raise
