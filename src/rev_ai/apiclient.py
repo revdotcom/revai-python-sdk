@@ -3,6 +3,7 @@
 
 import requests
 import json
+from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -362,7 +363,7 @@ class RevAiAPIClient:
         try:
             response.raise_for_status()
             return response
-        except Exception as err:
+        except HTTPError as err:
             err.args = (err.args[0] +
                            "; Server Response : {}".format(str(response.content, 'utf-8')),)
             raise

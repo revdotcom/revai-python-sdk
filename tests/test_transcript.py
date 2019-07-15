@@ -3,7 +3,6 @@
 
 import pytest
 import json
-from requests.exceptions import HTTPError
 from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
 
