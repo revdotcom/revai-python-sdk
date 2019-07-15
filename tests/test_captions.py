@@ -42,7 +42,7 @@ class TestCaptionEndpoint():
 
         res = mock_client.get_captions_as_stream(JOB_ID)
 
-        assert str(res.content, 'utf-8') == data
+        assert res.content.decode('utf-8') == data
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,

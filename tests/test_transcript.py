@@ -39,7 +39,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_text_as_stream(JOB_ID)
 
-        assert str(res.content, 'utf-8') == data
+        assert res.content.decode('utf-8') == data
         mock_client.session.request.assert_called_once_with("GET", URL, headers={'Accept': 'text/plain'}, stream=True)
 
     @pytest.mark.parametrize('id', [None, ''])
@@ -94,7 +94,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_json_as_stream(JOB_ID)
 
-        assert json.loads(str(res.content, 'utf-8')) == expected
+        assert json.loads(res.content.decode('utf-8')) == expected
         mock_client.session.request.assert_called_once_with(
             "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}, stream=True)
 
