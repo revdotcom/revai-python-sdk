@@ -94,7 +94,7 @@ class TestTranscriptEndpoints():
 
         res = mock_client.get_transcript_json_as_stream(JOB_ID)
 
-        assert json.loads(res.content) == expected
+        assert json.loads(str(res.content, 'utf-8')) == expected
         mock_client.session.request.assert_called_once_with(
             "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}, stream=True)
 
