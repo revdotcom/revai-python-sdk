@@ -6,7 +6,6 @@ import json
 from requests.exceptions import HTTPError
 from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
-from tests.helpers.errors import get_error_test_cases
 
 try:
     from urllib.parse import urljoin
@@ -34,17 +33,6 @@ class TestTranscriptEndpoints():
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_text(id)
 
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_text_with_error_response(self, error, mock_client, make_mock_response):
-        status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
-
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client.get_transcript_text(JOB_ID)
-        mock_client.session.request.assert_called_once_with("GET", URL, headers={'Accept': 'text/plain'})
-
     def test_get_transcript_text_as_stream(self, mock_client, make_mock_response):
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
@@ -59,17 +47,6 @@ class TestTranscriptEndpoints():
     def test_get_transcript_text_as_stream_with_no_job_id(self, id, mock_client):
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_text_as_stream(id)
-
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_text_as_stream_with_error_response(self, error, mock_client, make_mock_response):
-        status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
-
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client.get_transcript_text_as_stream(JOB_ID)
-        mock_client.session.request.assert_called_once_with("GET", URL, headers={'Accept': 'text/plain'}, stream=True)
 
     def test_get_transcript_json(self, mock_client, make_mock_response):
         data = {
@@ -99,21 +76,6 @@ class TestTranscriptEndpoints():
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_json(id)
 
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_json_with_error_response(self, error, mock_client, make_mock_response):
-        status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
-
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client.get_transcript_json(JOB_ID)
-        mock_client.session.request.assert_called_once_with(
-            "GET",
-            URL,
-            headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}
-        )
-
     def test_get_transcript_json_as_stream(self, mock_client, make_mock_response):
         data = {
             'monologues': [{
@@ -141,18 +103,6 @@ class TestTranscriptEndpoints():
     def test_get_transcript_json_as_stream_with_no_job_id(self, id, mock_client):
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_json_as_stream(id)
-
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_json_as_stream_with_error_response(self, error, mock_client, make_mock_response):
-        status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
-
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client.get_transcript_json_as_stream(JOB_ID)
-        mock_client.session.request.assert_called_once_with(
-            "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}, stream=True)
 
     def test_get_transcript_object_with_success(self, mock_client, make_mock_response):
         data = {
@@ -182,14 +132,3 @@ class TestTranscriptEndpoints():
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_object(id)
 
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    def test_get_transcript_object_with_error_response(self, error, mock_client, make_mock_response):
-        status = error.get('status')
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
-
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client.get_transcript_object(JOB_ID)
-        mock_client.session.request.assert_called_once_with(
-            "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
