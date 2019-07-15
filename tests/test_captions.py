@@ -20,12 +20,16 @@ class TestCaptionEndpoint():
     def test_get_captions(self, mock_client, make_mock_response):
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
-        mock_client.session.get.return_value = response
+        mock_client.session.request.return_value = response
 
         res = mock_client.get_captions(JOB_ID)
 
         assert res == data
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            URL,
+            headers={'Accept': 'application/x-subrip'}
+        )
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_captions_with_no_job_id(self, id, mock_client):
@@ -37,21 +41,30 @@ class TestCaptionEndpoint():
     def test_get_captions_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
         response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.get.return_value = response
+        mock_client.session.request.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_captions(JOB_ID)
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'})
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            URL,
+            headers={'Accept': 'application/x-subrip'}
+        )
 
     def test_get_captions_as_stream(self, mock_client, make_mock_response):
         data = 'Test'
         response = make_mock_response(url=URL, text=data)
-        mock_client.session.get.return_value = response
+        mock_client.session.request.return_value = response
 
         res = mock_client.get_captions_as_stream(JOB_ID)
 
-        assert res.content == data
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'}, stream=True)
+        assert str(res.content, 'utf-8') == data
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            URL,
+            headers={'Accept': 'application/x-subrip'},
+            stream=True
+        )
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_captions_as_stream_with_no_job_id(self, id, mock_client):
@@ -63,8 +76,13 @@ class TestCaptionEndpoint():
     def test_get_captions_as_stream_with_error_response(self, error, mock_client, make_mock_response):
         status = error.get('status')
         response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.get.return_value = response
+        mock_client.session.request.return_value = response
 
         with pytest.raises(HTTPError, match=str(status)):
             mock_client.get_captions_as_stream(JOB_ID)
-        mock_client.session.get.assert_called_once_with(URL, headers={'Accept': 'application/x-subrip'}, stream=True)
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            URL,
+            headers={'Accept': 'application/x-subrip'},
+            stream=True
+        )
