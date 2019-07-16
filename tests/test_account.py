@@ -2,10 +2,8 @@
 """Unit tests for account endpoints"""
 
 import pytest
-from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous import Account
-from tests.helpers.errors import get_error_test_cases
 
 try:
     from urllib.parse import urljoin

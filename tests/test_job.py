@@ -5,7 +5,6 @@ import json
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous import Job, JobStatus
-from tests.helpers.errors import get_error_test_cases
 
 try:
     from urllib.parse import urljoin

@@ -2,6 +2,7 @@
 """Unit tests for RevAiApiClient"""
 
 import pytest
+import re
 from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai import __version__
@@ -27,12 +28,12 @@ class TestRevAiAPIClient:
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     @pytest.mark.parametrize('method', ["POST", "GET", "DELETE"])
-    def test_HTTP_handler(self, error, method, mock_client, make_mock_response):
+    def test_make_http_request(self, error, method, mock_client, make_mock_response):
         status = error.get('status')
         URL = RevAiAPIClient.base_url
         response = make_mock_response(url=URL, status=status, json_data=error)
         mock_client.session.request.return_value = response
 
-        with pytest.raises(HTTPError, match=str(status)):
-            mock_client._HTTPHandler(method, URL)
+        with pytest.raises(HTTPError, match= "(?=.*{})(?=.*{})".format(status, re.escape(str(error)))):
+            mock_client._make_http_request(method, URL)
         mock_client.session.request.assert_called_once_with(method, URL)

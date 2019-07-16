@@ -130,4 +130,3 @@ class TestTranscriptEndpoints():
     def test_get_transcript_object_with_no_job_id(self, id, mock_client):
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_transcript_object(id)
-

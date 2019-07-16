@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import os.path
 from src.rev_ai.apiclient import RevAiAPIClient
-from tests.helpers.errors import get_error_test_cases
 
 try:
     from urllib.parse import urljoin

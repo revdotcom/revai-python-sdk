@@ -85,7 +85,7 @@ class RevAiAPIClient:
         if custom_vocabularies:
             payload['custom_vocabularies'] = custom_vocabularies
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "POST",
                        urljoin(self.base_url, 'jobs'),
                        json=payload
@@ -133,7 +133,7 @@ class RevAiAPIClient:
                 'options': (None, json.dumps(payload))
             }
 
-            response = self._HTTPHandler(
+            response = self._make_http_request(
                            "POST",
                            urljoin(self.base_url, 'jobs'),
                            files=files
@@ -152,7 +152,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}'.format(id_))
         )
@@ -178,7 +178,7 @@ class RevAiAPIClient:
             params.append('starting_after={}'.format(starting_after))
 
         query = '?{}'.format('&'.join(params))
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs{}'.format(query))
         )
@@ -195,7 +195,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
                        headers={'Accept': 'text/plain'}
@@ -214,7 +214,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
                        headers={'Accept': 'text/plain'},
@@ -233,7 +233,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
                        headers={'Accept': self.rev_json_content_type}
@@ -252,7 +252,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
                        headers={'Accept': self.rev_json_content_type},
@@ -271,7 +271,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
                        headers={'Accept': self.rev_json_content_type}
@@ -289,7 +289,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
                        headers={'Accept': self.rev_captions_content_type}
@@ -308,7 +308,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
                        headers={'Accept': self.rev_captions_content_type},
@@ -329,7 +329,7 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        self._HTTPHandler(
+        self._make_http_request(
             "DELETE",
             urljoin(self.base_url, 'jobs/{}'.format(id_)),
         )
@@ -341,14 +341,14 @@ class RevAiAPIClient:
 
         :raises: HTTPError
         """
-        response = self._HTTPHandler(
+        response = self._make_http_request(
                       "GET",
                       urljoin(self.base_url, 'account')
         )
 
         return Account.from_json(response.json())
 
-    def _HTTPHandler(self, method, url, **kwargs):
+    def _make_http_request(self, method, url, **kwargs):
         """Wrapper method for initiating HTTP requests and handling potential
             errors.
 
@@ -364,6 +364,7 @@ class RevAiAPIClient:
             response.raise_for_status()
             return response
         except HTTPError as err:
-            err.args = (err.args[0] +
-                           "; Server Response : {}".format(str(response.content)),)
+            if (response.content):
+                err.args = (err.args[0] +
+                            "; Server Response : {}".format(json.loads(response.content.decode('utf-8'))),)
             raise
