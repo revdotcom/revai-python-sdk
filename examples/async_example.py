@@ -13,10 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import json
 import time
-from rev_ai import apiclient, streamingclient
-from rev_ai.models import MediaConfig
+from rev_ai import apiclient
 
 # String containing your access token
 access_token = "your_access_token"
@@ -60,25 +58,25 @@ while True:
         break
 
     if status == "TRANSCRIBED":
-      # Getting a list of current jobs connected with your account
-      # The optional parameters limits limits the length of the list. Starting_after
-      # Cuts off the beginning x jobs off the list returned
-      list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
+        # Getting a list of current jobs connected with your account
+        # The optional parameters limits limits the length of the list. Starting_after
+        # Cuts off the beginning x jobs off the list returned
+        list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
-      # obtain transcript text as a string for the job.
-      transcript_text = client.get_transcript_text(job.id)
-      print(transcript_text)
+        # obtain transcript text as a string for the job.
+        transcript_text = client.get_transcript_text(job.id)
+        print(transcript_text)
 
-      # obtain transcript text as a json object for the job.
-      transcript_json = client.get_transcript_json(job.id)
+        # obtain transcript text as a json object for the job.
+        transcript_json = client.get_transcript_json(job.id)
 
-      # obtain transcript object for the job.
-      transcript_obj = client.get_transcript_object(job.id)
+        # obtain transcript object for the job.
+        transcript_obj = client.get_transcript_object(job.id)
 
-      # obtain captions for the job.
-      captions = client.get_captions(job.id)
+        # obtain captions for the job.
+        captions = client.get_captions(job.id)
 
-      break
+        break
 
 # Use the objects however you please
 

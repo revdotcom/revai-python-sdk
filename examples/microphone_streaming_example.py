@@ -14,8 +14,6 @@ limitations under the License.
 """
 
 import pyaudio
-import sys
-import json
 from rev_ai.models import MediaConfig
 from rev_ai.streamingclient import RevAiStreamingClient
 from six.moves import queue
@@ -83,6 +81,7 @@ class MicrophoneStream(object):
 
             yield b''.join(data)
 
+
 # Sampling rate of your microphone and desired chunk size
 rate = 44100
 chunk = int(rate/10)
@@ -102,7 +101,7 @@ with MicrophoneStream(rate, chunk) as stream:
         # Starts the server connection and thread sending microphone audio
         response_gen = streamclient.start(stream.generator())
 
-        #Iterates through responses and prints them
+        # Iterates through responses and prints them
         for response in response_gen:
             print(response)
 

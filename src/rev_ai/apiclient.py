@@ -3,6 +3,7 @@
 
 import requests
 import json
+from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript
 from . import __version__
 
@@ -74,7 +75,6 @@ class RevAiAPIClient:
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        url = urljoin(self.base_url, 'jobs')
         payload = {'media_url': media_url}
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
@@ -85,8 +85,11 @@ class RevAiAPIClient:
         if custom_vocabularies:
             payload['custom_vocabularies'] = custom_vocabularies
 
-        response = self.session.post(url, json=payload)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "POST",
+                       urljoin(self.base_url, 'jobs'),
+                       json=payload
+        )
 
         return Job.from_json(response.json())
 
@@ -114,7 +117,6 @@ class RevAiAPIClient:
         if not filename:
             raise ValueError('filename must be provided')
 
-        url = urljoin(self.base_url, 'jobs')
         payload = {}
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
@@ -131,8 +133,11 @@ class RevAiAPIClient:
                 'options': (None, json.dumps(payload))
             }
 
-            response = self.session.post(url, files=files)
-            response.raise_for_status()
+            response = self._make_http_request(
+                           "POST",
+                           urljoin(self.base_url, 'jobs'),
+                           files=files
+            )
 
         return Job.from_json(response.json())
 
@@ -147,9 +152,10 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}'.format(id_))
-        response = self.session.get(url)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}'.format(id_))
+        )
 
         return Job.from_json(response.json())
 
@@ -172,9 +178,10 @@ class RevAiAPIClient:
             params.append('starting_after={}'.format(starting_after))
 
         query = '?{}'.format('&'.join(params))
-        url = urljoin(self.base_url, 'jobs{}'.format(query))
-        response = self.session.get(url)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs{}'.format(query))
+        )
 
         return [Job.from_json(job) for job in response.json()]
 
@@ -188,9 +195,11 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(url, headers={'Accept': 'text/plain'})
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+                       headers={'Accept': 'text/plain'}
+        )
 
         return response.text
 
@@ -205,10 +214,12 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': 'text/plain'}, stream=True)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+                       headers={'Accept': 'text/plain'},
+                       stream=True
+        )
 
         return response
 
@@ -222,10 +233,11 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': self.rev_json_content_type})
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+                       headers={'Accept': self.rev_json_content_type}
+        )
 
         return response.json()
 
@@ -240,10 +252,12 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': self.rev_json_content_type}, stream=True)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+                       headers={'Accept': self.rev_json_content_type},
+                       stream=True
+        )
 
         return response
 
@@ -257,10 +271,11 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/transcript'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': self.rev_json_content_type})
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+                       headers={'Accept': self.rev_json_content_type}
+        )
 
         return Transcript.from_json(response.json())
 
@@ -274,10 +289,11 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': self.rev_captions_content_type})
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
+                       headers={'Accept': self.rev_captions_content_type}
+        )
 
         return response.text
 
@@ -292,10 +308,12 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}/captions'.format(id_))
-        response = self.session.get(
-            url, headers={'Accept': self.rev_captions_content_type}, stream=True)
-        response.raise_for_status()
+        response = self._make_http_request(
+                       "GET",
+                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
+                       headers={'Accept': self.rev_captions_content_type},
+                       stream=True
+        )
 
         return response
 
@@ -311,9 +329,10 @@ class RevAiAPIClient:
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = urljoin(self.base_url, 'jobs/{}'.format(id_))
-        response = self.session.delete(url)
-        response.raise_for_status()
+        self._make_http_request(
+            "DELETE",
+            urljoin(self.base_url, 'jobs/{}'.format(id_)),
+        )
 
         return
 
@@ -322,8 +341,30 @@ class RevAiAPIClient:
 
         :raises: HTTPError
         """
-        url = urljoin(self.base_url, 'account')
-        response = self.session.get(url)
-        response.raise_for_status()
+        response = self._make_http_request(
+                      "GET",
+                      urljoin(self.base_url, 'account')
+        )
 
         return Account.from_json(response.json())
+
+    def _make_http_request(self, method, url, **kwargs):
+        """Wrapper method for initiating HTTP requests and handling potential
+            errors.
+
+        :param method: string of HTTP method request
+        :param url: string containing the URL to make the request to
+        :param (optional) **kwargs: potential extra arguments including header
+            and stream
+        :raises: HTTPError
+        """
+        response = self.session.request(method, url, **kwargs)
+
+        try:
+            response.raise_for_status()
+            return response
+        except HTTPError as err:
+            if (response.content):
+                err.args = (err.args[0] +
+                            "; Server Response : {}".format(response.content.decode('utf-8')),)
+            raise
