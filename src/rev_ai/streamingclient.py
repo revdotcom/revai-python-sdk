@@ -4,6 +4,10 @@ import websocket
 import threading
 import six
 import json
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 
 def on_error(error):
@@ -62,8 +66,10 @@ class RevAiStreamingClient():
 
         :param generator: generator object that yields binary audio data
         """
-        url = self.base_url + '?access_token={}'.format(self.access_token) \
-            + '&content_type={}'.format(self.config.get_content_type_string())
+        url = self.base_url + '?' + urlencode({
+            'access_token': self.access_token,
+            'content_type': self.config.get_content_type_string()
+        })
 
         try:
             self.client.connect(url)
