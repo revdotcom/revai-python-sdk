@@ -66,7 +66,7 @@ class RevAiStreamingClient():
 
         :param generator: generator object that yields binary audio data
         """
-        url = self.base_url + '?' + urlencode({
+        url = self.base_url + '/?' + urlencode({
             'access_token': self.access_token,
             'content_type': self.config.get_content_type_string()
         })
