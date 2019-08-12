@@ -3,4 +3,4 @@
 
 __version__ = '2.5.0'
 
-from .models import Job, JobStatus, Account, Transcript, MediaConfig
+from .models import Job, JobStatus, Account, Transcript, MediaConfig, CaptionType

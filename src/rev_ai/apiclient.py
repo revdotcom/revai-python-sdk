@@ -3,8 +3,9 @@
 
 import requests
 import json
+import sys
 from requests.exceptions import HTTPError
-from .models import Job, Account, Transcript
+from .models import Job, Account, Transcript, CaptionType
 from . import __version__
 
 try:
@@ -32,9 +33,6 @@ class RevAiAPIClient:
     # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    # Rev.ai captions format
-    rev_captions_content_type = 'application/x-subrip'
-
     def __init__(self, access_token):
         """Constructor
 
@@ -56,6 +54,8 @@ class RevAiAPIClient:
             metadata=None,
             callback_url=None,
             skip_diarization=False,
+            skip_punctuation=False,
+            speaker_channel_count=None,
             custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
@@ -64,6 +64,10 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
+        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+            the given audio will have each channel transcribed separately and each channel
+            will be treated as a single speaker. [1-8]
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary should consist of a key "phrases" which maps to a list of strings,
@@ -78,12 +82,16 @@ class RevAiAPIClient:
         payload = {'media_url': media_url}
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
+        if skip_punctuation:
+            payload['skip_punctuation'] = skip_punctuation
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
             payload['custom_vocabularies'] = custom_vocabularies
+        if speaker_channel_count:
+            payload['speaker_channel_count'] = speaker_channel_count
 
         response = self._make_http_request(
                        "POST",
@@ -98,6 +106,8 @@ class RevAiAPIClient:
             metadata=None,
             callback_url=None,
             skip_diarization=False,
+            skip_punctuation=False,
+            speaker_channel_count=None,
             custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
@@ -106,6 +116,10 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
+        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+            the given audio will have each channel transcribed separately and each channel
+            will be treated as a single speaker. [1-8]
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary have the key "phrases" which maps to a list of strings,
@@ -120,12 +134,16 @@ class RevAiAPIClient:
         payload = {}
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
+        if skip_punctuation:
+            payload['skip_punctuation'] = skip_punctuation
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
             payload['custom_vocabularies'] = custom_vocabularies
+        if speaker_channel_count:
+            payload['speaker_channel_count'] = speaker_channel_count
 
         with open(filename, 'rb') as f:
             files = {
@@ -279,7 +297,7 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_):
+    def get_captions(self, id_, contentType=None):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
@@ -288,16 +306,21 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        if not contentType:
+            if sys.version_info > (3, 0):
+                contentType = CaptionType.SRT.value
+            else:
+                contentType = CaptionType.SRT
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': self.rev_captions_content_type}
+                       headers={'Accept': contentType}
         )
 
         return response.text
 
-    def get_captions_as_stream(self, id_):
+    def get_captions_as_stream(self, id_, contentType=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
         :param id_: id of job to be requested
@@ -307,11 +330,16 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        if not contentType:
+            if sys.version_info > (3, 0):
+                contentType = CaptionType.SRT.value
+            else:
+                contentType = CaptionType.SRT
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': self.rev_captions_content_type},
+                       headers={'Accept': contentType},
                        stream=True
         )
 
