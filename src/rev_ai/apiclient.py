@@ -297,49 +297,45 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_, contentType=None):
+    def get_captions(self, id_, content_type=CaptionType.SRT):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
         :returns: caption data as text
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        if not contentType:
-            if sys.version_info > (3, 0):
-                contentType = CaptionType.SRT.value
-            else:
-                contentType = CaptionType.SRT
+        if sys.version_info > (3, 0):
+            content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': contentType}
+                       headers={'Accept': content_type}
         )
 
         return response.text
 
-    def get_captions_as_stream(self, id_, contentType=None):
+    def get_captions_as_stream(self, id_, content_type=CaptionType.SRT):
         """Get the captions output of a specific job and return it as a plain text stream
 
         :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        if not contentType:
-            if sys.version_info > (3, 0):
-                contentType = CaptionType.SRT.value
-            else:
-                contentType = CaptionType.SRT
+        if sys.version_info > (3, 0):
+            content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': contentType},
+                       headers={'Accept': content_type},
                        stream=True
         )
 
