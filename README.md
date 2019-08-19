@@ -50,8 +50,8 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 `job` will contain all the information normally found in a successful response from our
 [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
-If you want to get fancy, both send job methods take `metadata`, `callback_url`, a boolean
-`skip_diarization`, and `custom_vocabularies` as optional parameters, these are also described in the request body of
+If you want to get fancy, both send job methods take `metadata`, `callback_url`,
+`skip_diarization`, `skip_punctuation`, `speaker_channel_count` and `custom_vocabularies` as optional parameters, these are described in the request body of
 the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 ### Checking your file's status
@@ -115,10 +115,11 @@ just the text of your transcript
 
 ### Getting captions output
 
-You can also get captions output from the SDK:
+You can also get captions output from the SDK. We offer both SRT and VTT caption formats.
+If you submitted your job as a multichannel then you must also provide a `channel_id` to be captioned:
 
 ```python
-captions = client.get_captions(job.id)
+captions = client.get_captions(job.id, content_type=CaptionType.SRT, channel_id=None)
 ```
 
 ### Streamed outputs

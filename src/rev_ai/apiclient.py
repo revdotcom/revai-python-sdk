@@ -302,6 +302,7 @@ class RevAiAPIClient:
 
         :param id_: id of job to be requested
         :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: caption data as text
         :raises: HTTPError
         """
@@ -326,6 +327,7 @@ class RevAiAPIClient:
 
         :param id_: id of job to be requested
         :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
