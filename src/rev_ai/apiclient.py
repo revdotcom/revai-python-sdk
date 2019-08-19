@@ -148,7 +148,7 @@ class RevAiAPIClient:
         with open(filename, 'rb') as f:
             files = {
                 'media': (filename, f),
-                'options': (None, json.dumps(payload))
+                'options': (None, json.dumps(payload, sort_keys=True))
             }
 
             response = self._make_http_request(
