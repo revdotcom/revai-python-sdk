@@ -17,6 +17,10 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 class TestCaptionEndpoint():
     def test_get_captions(self, mock_client, make_mock_response):
         data = 'Test'
+        if sys.version_info > (3, 0):
+            expected_content_type = CaptionType.SRT.value
+        else:
+            expected_content_type = CaptionType.SRT
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -26,7 +30,7 @@ class TestCaptionEndpoint():
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,
-            headers={'Accept': CaptionType.SRT}
+            headers={'Accept': 'application/x-subrip'}
         )
 
     @pytest.mark.parametrize('id', [None, ''])
@@ -36,6 +40,10 @@ class TestCaptionEndpoint():
 
     def test_get_captions_as_stream(self, mock_client, make_mock_response):
         data = 'Test'
+        if sys.version_info > (3, 0):
+            expected_content_type = CaptionType.SRT.value
+        else:
+            expected_content_type = CaptionType.SRT
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
