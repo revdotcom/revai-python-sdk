@@ -22,6 +22,8 @@ class TestCaptionEndpoint():
             expected_content_type = CaptionType.SRT.value
         else:
             expected_content_type = CaptionType.SRT
+        
+        print(expected_content_type)
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
