@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import sys
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models import CaptionType
 
