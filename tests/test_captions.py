@@ -2,6 +2,7 @@
 
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import CaptionType
 
 try:
     from urllib.parse import urljoin
@@ -25,7 +26,7 @@ class TestCaptionEndpoint():
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,
-            headers={'Accept': 'application/x-subrip'}
+            headers={'Accept': CaptionType.SRT}
         )
 
     @pytest.mark.parametrize('id', [None, ''])

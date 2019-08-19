@@ -313,7 +313,7 @@ class RevAiAPIClient:
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': str(content_type)}
+                       headers={'Accept': content_type}
         )
 
         return response.text
@@ -335,7 +335,7 @@ class RevAiAPIClient:
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': str(content_type)},
+                       headers={'Accept': content_type},
                        stream=True
         )
 
