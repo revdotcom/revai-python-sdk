@@ -26,7 +26,7 @@ class TestCaptionEndpoint():
         mock_client.session.request.return_value = response
 
         res = mock_client.get_captions(JOB_ID)
-        print type(expected_content_type)
+        print(type(expected_content_type))
         assert res == data
         mock_client.session.request.assert_called_once_with(
             "GET",
