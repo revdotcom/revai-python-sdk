@@ -309,6 +309,8 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
         if sys.version_info > (3, 0):
             content_type = content_type.value
+        else:
+            content_type = str(content_type)
 
         response = self._make_http_request(
                        "GET",
@@ -331,6 +333,8 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
         if sys.version_info > (3, 0):
             content_type = content_type.value
+        else:
+            content_type = str(content_type)
 
         response = self._make_http_request(
                        "GET",
