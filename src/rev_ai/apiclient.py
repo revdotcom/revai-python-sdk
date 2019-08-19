@@ -297,7 +297,7 @@ class RevAiAPIClient:
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_, content_type=CaptionType.SRT):
+    def get_captions(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
@@ -307,18 +307,21 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        query = ""
+        if channel_id:
+            query = "?speaker_channel={}".format(channel_id)
         if sys.version_info > (3, 0):
             content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
-                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
+                       urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
                        headers={'Accept': content_type}
         )
 
         return response.text
 
-    def get_captions_as_stream(self, id_, content_type=CaptionType.SRT):
+    def get_captions_as_stream(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
         :param id_: id of job to be requested
@@ -329,12 +332,15 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        query = ""
+        if channel_id:
+            query = "?speaker_channel={}".format(channel_id)
         if sys.version_info > (3, 0):
             content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
-                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
+                       urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
                        headers={'Accept': content_type},
                        stream=True
         )

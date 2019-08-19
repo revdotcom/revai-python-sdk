@@ -13,15 +13,17 @@ except ImportError:
 JOB_ID = '1'
 URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 
+def getExpectedContentType(content_type):
+    if sys.version_info > (3, 0):
+        return content_type.value
+    else:
+        return content_type
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestCaptionEndpoint():
     def test_get_captions_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
-        if sys.version_info > (3, 0):
-            expected_content_type = CaptionType.SRT.value
-        else:
-            expected_content_type = CaptionType.SRT
+        expected_content_type = getExpectedContentType(CaptionType.SRT)
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -36,10 +38,7 @@ class TestCaptionEndpoint():
     @pytest.mark.parametrize('content_type', [CaptionType.SRT, CaptionType.VTT])
     def test_get_captions_with_content_type(self, content_type, mock_client, make_mock_response):
         data = 'Test'
-        if sys.version_info > (3, 0):
-            expected_content_type = content_type.value
-        else:
-            expected_content_type = content_type
+        expected_content_type = getExpectedContentType(content_type)
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -50,6 +49,22 @@ class TestCaptionEndpoint():
             URL,
             headers={'Accept': expected_content_type}
         )
+    
+    def test_get_captions_with_speaker_channel(self, mock_client, make_mock_response):
+        data = 'Test'
+        channel_id = 1
+        expected_url = URL + '?speaker_channel={}'.format(channel_id)
+        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        response = make_mock_response(url=expected_url, text=data)
+        mock_client.session.request.return_value = response
+
+        res = mock_client.get_captions(JOB_ID, channel_id=channel_id)
+        assert res == data
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            expected_url,
+            headers={'Accept': expected_content_type}
+        )
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_captions_with_no_job_id(self, id, mock_client):
@@ -58,10 +73,7 @@ class TestCaptionEndpoint():
 
     def test_get_captions_as_stream_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
-        if sys.version_info > (3, 0):
-            expected_content_type = CaptionType.SRT.value
-        else:
-            expected_content_type = CaptionType.SRT
+        expected_content_type = getExpectedContentType(CaptionType.SRT)
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -78,10 +90,7 @@ class TestCaptionEndpoint():
     @pytest.mark.parametrize('content_type', [CaptionType.SRT, CaptionType.VTT])
     def test_get_captions_as_stream_with_content_type(self, content_type, mock_client, make_mock_response):
         data = 'Test'
-        if sys.version_info > (3, 0):
-            expected_content_type = content_type.value
-        else:
-            expected_content_type = content_type
+        expected_content_type = getExpectedContentType(content_type)
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -90,6 +99,23 @@ class TestCaptionEndpoint():
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,
+            headers={'Accept': expected_content_type},
+            stream=True
+        )
+
+    def test_get_captions_as_stream_with_speaker_channel(self, mock_client, make_mock_response):
+        data = 'Test'
+        channel_id = 8
+        expected_url = URL + '?speaker_channel={}'.format(channel_id)
+        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        response = make_mock_response(url=expected_url, text=data)
+        mock_client.session.request.return_value = response
+
+        res = mock_client.get_captions_as_stream(JOB_ID, channel_id=channel_id)
+        assert res.content.decode('utf-8') == data
+        mock_client.session.request.assert_called_once_with(
+            "GET",
+            expected_url,
             headers={'Accept': expected_content_type},
             stream=True
         )
