@@ -309,13 +309,11 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
         if sys.version_info > (3, 0):
             content_type = content_type.value
-        else:
-            content_type = str(content_type)
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': content_type}
+                       headers={'Accept': str(content_type)}
         )
 
         return response.text
@@ -333,13 +331,11 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
         if sys.version_info > (3, 0):
             content_type = content_type.value
-        else:
-            content_type = str(content_type)
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': content_type},
+                       headers={'Accept': str(content_type)},
                        stream=True
         )
 
