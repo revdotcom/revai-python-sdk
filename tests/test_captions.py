@@ -21,12 +21,12 @@ class TestCaptionEndpoint():
         if sys.version_info > (3, 0):
             expected_content_type = CaptionType.SRT.value
         else:
-            expected_content_type = CaptionType.SRT
+            expected_content_type = CaptionType.SRT.value
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
         res = mock_client.get_captions(JOB_ID)
-        print(type(expected_content_type))
+        print(expected_content_type)
         assert res == data
         mock_client.session.request.assert_called_once_with(
             "GET",
