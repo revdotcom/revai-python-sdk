@@ -39,7 +39,7 @@ class TestCaptionEndpoint():
         if sys.version_info > (3, 0):
             expected_content_type = content_type.value
         else:
-            expected_content_type = content_type.SRT
+            expected_content_type = content_type
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -81,7 +81,7 @@ class TestCaptionEndpoint():
         if sys.version_info > (3, 0):
             expected_content_type = content_type.value
         else:
-            expected_content_type = content_type.SRT
+            expected_content_type = content_type
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
