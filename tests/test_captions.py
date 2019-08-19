@@ -16,12 +16,12 @@ URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestCaptionEndpoint():
-    def test_get_captions(self, mock_client, make_mock_response):
+    def test_get_captions_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
         if sys.version_info > (3, 0):
             expected_content_type = CaptionType.SRT.value
         else:
-            expected_content_type = CaptionType.SRT.value
+            expected_content_type = CaptionType.SRT
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -31,7 +31,7 @@ class TestCaptionEndpoint():
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,
-            headers={'Accept': 'application/x-subrip'}
+            headers={'Accept': expected_content_type}
         )
 
     @pytest.mark.parametrize('id', [None, ''])
@@ -39,7 +39,7 @@ class TestCaptionEndpoint():
         with pytest.raises(ValueError, match='id_ must be provided'):
             mock_client.get_captions(id)
 
-    def test_get_captions_as_stream(self, mock_client, make_mock_response):
+    def test_get_captions_as_stream_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
         if sys.version_info > (3, 0):
             expected_content_type = CaptionType.SRT.value
@@ -54,7 +54,7 @@ class TestCaptionEndpoint():
         mock_client.session.request.assert_called_once_with(
             "GET",
             URL,
-            headers={'Accept': 'application/x-subrip'},
+            headers={'Accept': expected_content_type},
             stream=True
         )
 
