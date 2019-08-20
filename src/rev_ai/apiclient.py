@@ -377,13 +377,13 @@ class RevAiAPIClient:
             raise
 
     def _create_job_options_payload(
-        self, media_url,
-        metadata=None,
-        callback_url=None,
-        skip_diarization=None,
-        skip_punctuation=None,
-        speaker_channel_count=None,
-        custom_vocabularies=None):
+            self, media_url,
+            metadata=None,
+            callback_url=None,
+            skip_diarization=None,
+            skip_punctuation=None,
+            speaker_channel_count=None,
+            custom_vocabularies=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url

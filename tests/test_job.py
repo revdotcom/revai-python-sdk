@@ -97,6 +97,7 @@ class TestJobEndpoints():
             'created_on': CREATED_ON,
             'metadata': METADATA,
             'callback_url': CALLBACK_URL,
+            'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channel_count': 1,
         }
