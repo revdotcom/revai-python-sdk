@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import sys
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models import CaptionType
 
@@ -13,17 +12,11 @@ except ImportError:
 JOB_ID = '1'
 URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
 
-def getExpectedContentType(content_type):
-    if sys.version_info > (3, 0):
-        return content_type.value
-    else:
-        return content_type
-
 @pytest.mark.usefixtures('mock_client', 'make_mock_response')
 class TestCaptionEndpoint():
     def test_get_captions_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
-        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        expected_content_type = CaptionType.SRT.value
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -38,7 +31,7 @@ class TestCaptionEndpoint():
     @pytest.mark.parametrize('content_type', [CaptionType.SRT, CaptionType.VTT])
     def test_get_captions_with_content_type(self, content_type, mock_client, make_mock_response):
         data = 'Test'
-        expected_content_type = getExpectedContentType(content_type)
+        expected_content_type = content_type.value
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -54,7 +47,7 @@ class TestCaptionEndpoint():
         data = 'Test'
         channel_id = 1
         expected_url = URL + '?speaker_channel={}'.format(channel_id)
-        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        expected_content_type = CaptionType.SRT.value
         response = make_mock_response(url=expected_url, text=data)
         mock_client.session.request.return_value = response
 
@@ -73,7 +66,7 @@ class TestCaptionEndpoint():
 
     def test_get_captions_as_stream_default_content_type(self, mock_client, make_mock_response):
         data = 'Test'
-        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        expected_content_type = CaptionType.SRT.value
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -90,7 +83,7 @@ class TestCaptionEndpoint():
     @pytest.mark.parametrize('content_type', [CaptionType.SRT, CaptionType.VTT])
     def test_get_captions_as_stream_with_content_type(self, content_type, mock_client, make_mock_response):
         data = 'Test'
-        expected_content_type = getExpectedContentType(content_type)
+        expected_content_type = content_type.value
         response = make_mock_response(url=URL, text=data)
         mock_client.session.request.return_value = response
 
@@ -107,7 +100,7 @@ class TestCaptionEndpoint():
         data = 'Test'
         channel_id = 8
         expected_url = URL + '?speaker_channel={}'.format(channel_id)
-        expected_content_type = getExpectedContentType(CaptionType.SRT)
+        expected_content_type = CaptionType.SRT.value
         response = make_mock_response(url=expected_url, text=data)
         mock_client.session.request.return_value = response
 

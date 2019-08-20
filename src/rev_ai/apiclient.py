@@ -3,7 +3,6 @@
 
 import requests
 import json
-import sys
 from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript, CaptionType
 from . import __version__
@@ -311,13 +310,11 @@ class RevAiAPIClient:
         query = ""
         if channel_id:
             query = "?speaker_channel={}".format(channel_id)
-        if sys.version_info > (3, 0):
-            content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
-                       headers={'Accept': content_type}
+                       headers={'Accept': content_type.value}
         )
 
         return response.text
@@ -337,13 +334,11 @@ class RevAiAPIClient:
         query = ""
         if channel_id:
             query = "?speaker_channel={}".format(channel_id)
-        if sys.version_info > (3, 0):
-            content_type = content_type.value
 
         response = self._make_http_request(
                        "GET",
                        urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
-                       headers={'Accept': content_type},
+                       headers={'Accept': content_type.value},
                        stream=True
         )
 
