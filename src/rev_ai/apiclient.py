@@ -393,5 +393,5 @@ class RevAiAPIClient:
         except HTTPError as err:
             if (response.content):
                 err.args = (err.args[0] +
-                            "; Server Response : {}".format(response.content.decode('utf-8')))
+                            "; Server Response : {}".format(response.content.decode('utf-8')),)
             raise
