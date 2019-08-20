@@ -103,7 +103,9 @@ class TestJobEndpoints():
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_client.session.request.return_value = response
 
-        res = mock_client.submit_job_url(MEDIA_URL, METADATA, CALLBACK_URL, True, True, 1, CUSTOM_VOCAB)
+        res = mock_client.submit_job_url(MEDIA_URL, METADATA,
+                                         CALLBACK_URL, True,
+                                         True, 1, CUSTOM_VOCAB)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -144,7 +146,9 @@ class TestJobEndpoints():
         mock_client.session.request.return_value = response
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
-            res = mock_client.submit_job_local_file(FILENAME, METADATA, CALLBACK_URL, True, True, 1, CUSTOM_VOCAB)
+            res = mock_client.submit_job_local_file(FILENAME, METADATA,
+                                                    CALLBACK_URL, True,
+                                                    True, 1, CUSTOM_VOCAB)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,

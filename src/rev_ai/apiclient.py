@@ -93,9 +93,9 @@ class RevAiAPIClient:
             payload['speaker_channel_count'] = speaker_channel_count
 
         response = self._make_http_request(
-                       "POST",
-                       urljoin(self.base_url, 'jobs'),
-                       json=payload
+            "POST",
+            urljoin(self.base_url, 'jobs'),
+            json=payload
         )
 
         return Job.from_json(response.json())
@@ -151,9 +151,9 @@ class RevAiAPIClient:
             }
 
             response = self._make_http_request(
-                           "POST",
-                           urljoin(self.base_url, 'jobs'),
-                           files=files
+                "POST",
+                urljoin(self.base_url, 'jobs'),
+                files=files
             )
 
         return Job.from_json(response.json())
@@ -170,8 +170,8 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}'.format(id_))
+            "GET",
+            urljoin(self.base_url, 'jobs/{}'.format(id_))
         )
 
         return Job.from_json(response.json())
@@ -196,8 +196,8 @@ class RevAiAPIClient:
 
         query = '?{}'.format('&'.join(params))
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs{}'.format(query))
+            "GET",
+            urljoin(self.base_url, 'jobs{}'.format(query))
         )
 
         return [Job.from_json(job) for job in response.json()]
@@ -213,9 +213,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': 'text/plain'}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': 'text/plain'}
         )
 
         return response.text
@@ -232,10 +232,10 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': 'text/plain'},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': 'text/plain'},
+            stream=True
         )
 
         return response
@@ -251,9 +251,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type}
         )
 
         return response.json()
@@ -270,10 +270,10 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type},
+            stream=True
         )
 
         return response
@@ -289,9 +289,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type}
         )
 
         return Transcript.from_json(response.json())
@@ -312,9 +312,9 @@ class RevAiAPIClient:
             query = "?speaker_channel={}".format(channel_id)
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
-                       headers={'Accept': content_type.value}
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value}
         )
 
         return response.text
@@ -336,10 +336,10 @@ class RevAiAPIClient:
             query = "?speaker_channel={}".format(channel_id)
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
-                       headers={'Accept': content_type.value},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value},
+            stream=True
         )
 
         return response
@@ -369,8 +369,8 @@ class RevAiAPIClient:
         :raises: HTTPError
         """
         response = self._make_http_request(
-                      "GET",
-                      urljoin(self.base_url, 'account')
+            "GET",
+            urljoin(self.base_url, 'account')
         )
 
         return Account.from_json(response.json())
@@ -393,5 +393,5 @@ class RevAiAPIClient:
         except HTTPError as err:
             if (response.content):
                 err.args = (err.args[0] +
-                            "; Server Response : {}".format(response.content.decode('utf-8')),)
+                            "; Server Response : {}".format(response.content.decode('utf-8')))
             raise

@@ -25,7 +25,9 @@ class TestTranscriptEndpoints():
         res = mock_client.get_transcript_text(JOB_ID)
 
         assert res == data
-        mock_client.session.request.assert_called_once_with("GET", URL, headers={'Accept': 'text/plain'})
+        mock_client.session.request.assert_called_once_with("GET",
+                                                            URL,
+                                                            headers={'Accept': 'text/plain'})
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_transcript_text_with_no_job_id(self, id, mock_client):
@@ -40,7 +42,10 @@ class TestTranscriptEndpoints():
         res = mock_client.get_transcript_text_as_stream(JOB_ID)
 
         assert res.content.decode('utf-8') == data
-        mock_client.session.request.assert_called_once_with("GET", URL, headers={'Accept': 'text/plain'}, stream=True)
+        mock_client.session.request.assert_called_once_with("GET",
+                                                            URL,
+                                                            headers={'Accept': 'text/plain'},
+                                                            stream=True)
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_transcript_text_as_stream_with_no_job_id(self, id, mock_client):

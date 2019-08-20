@@ -11,4 +11,6 @@ matrix:
       dist: xenial
       sudo: true
 install: pip install -r requirements.txt -r requirements_dev.txt
-script: make test
+script: 
+  - make test
+  - make lint
