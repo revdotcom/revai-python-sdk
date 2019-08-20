@@ -116,7 +116,7 @@ just the text of your transcript
 ### Getting captions output
 
 You can also get captions output from the SDK. We offer both SRT and VTT caption formats.
-If you submitted your job as a multichannel then you must also provide a `channel_id` to be captioned:
+If you submitted your job as speaker channeled audio then you must also provide a `channel_id` to be captioned:
 
 ```python
 captions = client.get_captions(job.id, content_type=CaptionType.SRT, channel_id=None)

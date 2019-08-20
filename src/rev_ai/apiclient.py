@@ -66,7 +66,7 @@ class RevAiAPIClient:
         :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
         :param speaker_channel_count: the number of speaker channels in the audio. If provided
             the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. [1-8]
+            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary should consist of a key "phrases" which maps to a list of strings,
@@ -78,19 +78,9 @@ class RevAiAPIClient:
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        payload = {'media_url': media_url}
-        if skip_diarization:
-            payload['skip_diarization'] = skip_diarization
-        if skip_punctuation:
-            payload['skip_punctuation'] = skip_punctuation
-        if metadata:
-            payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
-        if custom_vocabularies:
-            payload['custom_vocabularies'] = custom_vocabularies
-        if speaker_channel_count:
-            payload['speaker_channel_count'] = speaker_channel_count
+        payload = self._create_job_options_payload(
+            media_url, metadata, callback_url, skip_diarization,
+            skip_punctuation, speaker_channel_count, custom_vocabularies)
 
         response = self._make_http_request(
             "POST",
@@ -118,7 +108,7 @@ class RevAiAPIClient:
         :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
         :param speaker_channel_count: the number of speaker channels in the audio. If provided
             the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. [1-8]
+            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary have the key "phrases" which maps to a list of strings,
@@ -130,19 +120,9 @@ class RevAiAPIClient:
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = {}
-        if skip_diarization:
-            payload['skip_diarization'] = skip_diarization
-        if skip_punctuation:
-            payload['skip_punctuation'] = skip_punctuation
-        if metadata:
-            payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
-        if custom_vocabularies:
-            payload['custom_vocabularies'] = custom_vocabularies
-        if speaker_channel_count:
-            payload['speaker_channel_count'] = speaker_channel_count
+        payload = self._create_job_options_payload(
+            None, metadata, callback_url, skip_diarization,
+            skip_punctuation, speaker_channel_count, custom_vocabularies)
 
         with open(filename, 'rb') as f:
             files = {
@@ -395,3 +375,28 @@ class RevAiAPIClient:
                 err.args = (err.args[0] +
                             "; Server Response : {}".format(response.content.decode('utf-8')),)
             raise
+
+    def _create_job_options_payload(
+        self, media_url,
+        metadata=None,
+        callback_url=None,
+        skip_diarization=None,
+        skip_punctuation=None,
+        speaker_channel_count=None,
+        custom_vocabularies=None):
+        payload = {}
+        if media_url:
+            payload['media_url'] = media_url
+        if skip_diarization:
+            payload['skip_diarization'] = skip_diarization
+        if skip_punctuation:
+            payload['skip_punctuation'] = skip_punctuation
+        if metadata:
+            payload['metadata'] = metadata
+        if callback_url:
+            payload['callback_url'] = callback_url
+        if custom_vocabularies:
+            payload['custom_vocabularies'] = custom_vocabularies
+        if speaker_channel_count:
+            payload['speaker_channel_count'] = speaker_channel_count
+        return payload
