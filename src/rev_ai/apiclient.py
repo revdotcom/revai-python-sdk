@@ -287,9 +287,7 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        query = ""
-        if channel_id:
-            query = "?speaker_channel={}".format(channel_id)
+        query = self._create_captions_query(channel_id)
 
         response = self._make_http_request(
             "GET",
@@ -311,9 +309,7 @@ class RevAiAPIClient:
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        query = ""
-        if channel_id:
-            query = "?speaker_channel={}".format(channel_id)
+        query = self._create_captions_query(channel_id)
 
         response = self._make_http_request(
             "GET",
@@ -400,3 +396,6 @@ class RevAiAPIClient:
         if speaker_channel_count:
             payload['speaker_channel_count'] = speaker_channel_count
         return payload
+
+    def _create_captions_query(self, speaker_channel):
+        return '' if speaker_channel is None else '?speaker_channel={}'.format(speaker_channel)
