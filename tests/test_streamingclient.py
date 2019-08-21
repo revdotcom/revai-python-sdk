@@ -14,7 +14,7 @@ class TestStreamingClient():
         example_config = MediaConfig()
         example_version = 'example_version'
         example_error_func = lambda example_error: example_error
-        example_close_func = lambda code, reason:  '{}:{}'.format(code, reason)
+        example_close_func = lambda code, reason: '{}:{}'.format(code, reason)
         example_connect_func = lambda id: id
         example_client = RevAiStreamingClient(
             example_token,
@@ -78,11 +78,11 @@ class TestStreamingClient():
         assert hasattr(mock_streaming_client, 'request_thread')
         for ind, response in enumerate(response_gen):
             assert capsys.readouterr().out == exp_responses[ind]
-            assert exp_responses[ind+1] == response
+            assert exp_responses[ind + 1] == response
         assert capsys.readouterr().out == exp_responses[2]
 
     def test_start_failure_to_connect(self, mock_streaming_client, mock_generator):
-        mock_streaming_client.client.connect = lambda x: 1/0
+        mock_streaming_client.client.connect = lambda x: 1 / 0
 
         with pytest.raises(ZeroDivisionError):
             mock_streaming_client.start(mock_generator())

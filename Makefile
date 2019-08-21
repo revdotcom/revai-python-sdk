@@ -51,7 +51,8 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint: ## check style with flake8
-	flake8 rev_ai tests
+	flake8 rev_ai tests --ignore=F401,W504,E731
+	flake8 rev_ai src --ignore=F401,W504
 
 test: ## run tests quickly with the default Python
 	python setup.py test

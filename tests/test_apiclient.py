@@ -35,6 +35,9 @@ class TestRevAiAPIClient:
         response = make_mock_response(url=URL, status=status, json_data=error)
         mock_client.session.request.return_value = response
 
-        with pytest.raises(HTTPError, match= "(?=.*{})(?=.*{})".format(status, re.escape(json.dumps(error)))):
+        with pytest.raises(
+            HTTPError,
+            match="(?=.*{})(?=.*{})".format(status, re.escape(json.dumps(error)))
+        ):
             mock_client._make_http_request(method, URL)
         mock_client.session.request.assert_called_once_with(method, URL)

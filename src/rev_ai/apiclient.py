@@ -4,7 +4,7 @@
 import requests
 import json
 from requests.exceptions import HTTPError
-from .models import Job, Account, Transcript
+from .models import Job, Account, Transcript, CaptionType
 from . import __version__
 
 try:
@@ -32,9 +32,6 @@ class RevAiAPIClient:
     # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    # Rev.ai captions format
-    rev_captions_content_type = 'application/x-subrip'
-
     def __init__(self, access_token):
         """Constructor
 
@@ -56,6 +53,8 @@ class RevAiAPIClient:
             metadata=None,
             callback_url=None,
             skip_diarization=False,
+            skip_punctuation=False,
+            speaker_channel_count=None,
             custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
@@ -64,6 +63,10 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
+        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+            the given audio will have each channel transcribed separately and each channel
+            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary should consist of a key "phrases" which maps to a list of strings,
@@ -75,20 +78,14 @@ class RevAiAPIClient:
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        payload = {'media_url': media_url}
-        if skip_diarization:
-            payload['skip_diarization'] = skip_diarization
-        if metadata:
-            payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
-        if custom_vocabularies:
-            payload['custom_vocabularies'] = custom_vocabularies
+        payload = self._create_job_options_payload(
+            media_url, metadata, callback_url, skip_diarization,
+            skip_punctuation, speaker_channel_count, custom_vocabularies)
 
         response = self._make_http_request(
-                       "POST",
-                       urljoin(self.base_url, 'jobs'),
-                       json=payload
+            "POST",
+            urljoin(self.base_url, 'jobs'),
+            json=payload
         )
 
         return Job.from_json(response.json())
@@ -98,6 +95,8 @@ class RevAiAPIClient:
             metadata=None,
             callback_url=None,
             skip_diarization=False,
+            skip_punctuation=False,
+            speaker_channel_count=None,
             custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
@@ -106,6 +105,10 @@ class RevAiAPIClient:
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
+        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+            the given audio will have each channel transcribed separately and each channel
+            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
             vocabulary will inform and bias the speech recognition to find those phrases.
             Each dictionary have the key "phrases" which maps to a list of strings,
@@ -117,26 +120,20 @@ class RevAiAPIClient:
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = {}
-        if skip_diarization:
-            payload['skip_diarization'] = skip_diarization
-        if metadata:
-            payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
-        if custom_vocabularies:
-            payload['custom_vocabularies'] = custom_vocabularies
+        payload = self._create_job_options_payload(
+            None, metadata, callback_url, skip_diarization,
+            skip_punctuation, speaker_channel_count, custom_vocabularies)
 
         with open(filename, 'rb') as f:
             files = {
                 'media': (filename, f),
-                'options': (None, json.dumps(payload))
+                'options': (None, json.dumps(payload, sort_keys=True))
             }
 
             response = self._make_http_request(
-                           "POST",
-                           urljoin(self.base_url, 'jobs'),
-                           files=files
+                "POST",
+                urljoin(self.base_url, 'jobs'),
+                files=files
             )
 
         return Job.from_json(response.json())
@@ -153,8 +150,8 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}'.format(id_))
+            "GET",
+            urljoin(self.base_url, 'jobs/{}'.format(id_))
         )
 
         return Job.from_json(response.json())
@@ -179,8 +176,8 @@ class RevAiAPIClient:
 
         query = '?{}'.format('&'.join(params))
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs{}'.format(query))
+            "GET",
+            urljoin(self.base_url, 'jobs{}'.format(query))
         )
 
         return [Job.from_json(job) for job in response.json()]
@@ -196,9 +193,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': 'text/plain'}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': 'text/plain'}
         )
 
         return response.text
@@ -215,10 +212,10 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': 'text/plain'},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': 'text/plain'},
+            stream=True
         )
 
         return response
@@ -234,9 +231,9 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type}
         )
 
         return response.json()
@@ -253,10 +250,10 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type},
+            stream=True
         )
 
         return response
@@ -272,47 +269,53 @@ class RevAiAPIClient:
             raise ValueError('id_ must be provided')
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-                       headers={'Accept': self.rev_json_content_type}
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': self.rev_json_content_type}
         )
 
         return Transcript.from_json(response.json())
 
-    def get_captions(self, id_):
+    def get_captions(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: caption data as text
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': self.rev_captions_content_type}
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value}
         )
 
         return response.text
 
-    def get_captions_as_stream(self, id_):
+    def get_captions_as_stream(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
         :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
 
         response = self._make_http_request(
-                       "GET",
-                       urljoin(self.base_url, 'jobs/{}/captions'.format(id_)),
-                       headers={'Accept': self.rev_captions_content_type},
-                       stream=True
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value},
+            stream=True
         )
 
         return response
@@ -342,8 +345,8 @@ class RevAiAPIClient:
         :raises: HTTPError
         """
         response = self._make_http_request(
-                      "GET",
-                      urljoin(self.base_url, 'account')
+            "GET",
+            urljoin(self.base_url, 'account')
         )
 
         return Account.from_json(response.json())
@@ -368,3 +371,31 @@ class RevAiAPIClient:
                 err.args = (err.args[0] +
                             "; Server Response : {}".format(response.content.decode('utf-8')),)
             raise
+
+    def _create_job_options_payload(
+            self, media_url,
+            metadata=None,
+            callback_url=None,
+            skip_diarization=None,
+            skip_punctuation=None,
+            speaker_channel_count=None,
+            custom_vocabularies=None):
+        payload = {}
+        if media_url:
+            payload['media_url'] = media_url
+        if skip_diarization:
+            payload['skip_diarization'] = skip_diarization
+        if skip_punctuation:
+            payload['skip_punctuation'] = skip_punctuation
+        if metadata:
+            payload['metadata'] = metadata
+        if callback_url:
+            payload['callback_url'] = callback_url
+        if custom_vocabularies:
+            payload['custom_vocabularies'] = custom_vocabularies
+        if speaker_channel_count:
+            payload['speaker_channel_count'] = speaker_channel_count
+        return payload
+
+    def _create_captions_query(self, speaker_channel):
+        return '' if speaker_channel is None else '?speaker_channel={}'.format(speaker_channel)

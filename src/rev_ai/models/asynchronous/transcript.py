@@ -34,7 +34,7 @@ class Monologue:
         """Override default equality operator"""
         if isinstance(other, self.__class__):
             return all(a == b for a, b in zip(self.elements, other.elements)) \
-                   and self.speaker == other.speaker
+                and self.speaker == other.speaker
         return False
 
     @classmethod
