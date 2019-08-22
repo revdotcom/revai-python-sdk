@@ -22,8 +22,9 @@ class TestAccountEndpoints():
         data = {'email': email, 'balance_seconds': seconds}
         response = make_mock_response(url=URL, json_data=data)
         mock_session.request.return_value = response
+        client = RevAiAPIClient("token")
 
-        res = RevAiAPIClient("token").get_account()
+        res = client.get_account()
 
         assert res == Account(email, seconds)
-        mock_session.request.assert_called_once_with("GET", URL, headers=pytest.types)
+        mock_session.request.assert_called_once_with("GET", URL, headers=client.default_headers)
