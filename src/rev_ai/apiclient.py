@@ -363,7 +363,7 @@ class RevAiAPIClient:
         headers = self.default_headers.copy()
         if ('headers' in kwargs):
             headers.update(kwargs.get('headers'))
-            kwargs.remove('headers')
+            del kwargs['headers']
         with requests.Session() as session:
             response = session.request(method, url, headers=headers, **kwargs)
 

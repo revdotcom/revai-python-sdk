@@ -16,7 +16,7 @@ class TestRevAiAPIClient:
 
         client = RevAiAPIClient(token)
 
-        headers = client.session.headers
+        headers = client.default_headers
 
         assert headers.get('User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer {}'.format(token)
@@ -29,15 +29,16 @@ class TestRevAiAPIClient:
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     @pytest.mark.parametrize('method', ["POST", "GET", "DELETE"])
-    def test_make_http_request(self, error, method, mock_client, make_mock_response):
+    def test_make_http_request(self, error, method, mock_session, make_mock_response):
         status = error.get('status')
         URL = RevAiAPIClient.base_url
         response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient("token")
 
         with pytest.raises(
             HTTPError,
-            match="(?=.*{})(?=.*{})".format(status, re.escape(json.dumps(error)))
+            match="(?=.*{})(?=.*{})".format(status, re.escape(json.dumps(error).replace('\"','\'' )))
         ):
-            mock_client._make_http_request(method, URL)
-        mock_client.session.request.assert_called_once_with(method, URL)
+            client._make_http_request(method, URL)
+        mock_session.request.assert_called_once_with(method, URL, headers=client.default_headers)
