@@ -42,11 +42,10 @@ class RevAiAPIClient:
         if not access_token:
             raise ValueError('access_token must be provided')
 
-        self.session = requests.Session()
-        self.session.headers.update({
+        self.default_headers = {
             'Authorization': 'Bearer {}'.format(access_token),
             'User-Agent': 'RevAi-PythonSDK/{}'.format(__version__)
-        })
+        }
 
     def submit_job_url(
             self, media_url,
@@ -361,7 +360,12 @@ class RevAiAPIClient:
             and stream
         :raises: HTTPError
         """
-        response = self.session.request(method, url, **kwargs)
+        headers = self.default_headers.copy()
+        if ('headers' in kwargs):
+            headers.update(kwargs.get('headers'))
+            kwargs.remove('headers')
+        with requests.Session() as session:
+            response = session.request(method, url, headers=headers, **kwargs)
 
         try:
             response.raise_for_status()
