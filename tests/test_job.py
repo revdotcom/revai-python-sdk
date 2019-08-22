@@ -40,7 +40,9 @@ class TestJobEndpoints():
         res = client.get_job_details(JOB_ID)
 
         assert res == Job(JOB_ID, created_on, JobStatus.TRANSCRIBED)
-        mock_session.request.assert_called_once_with("GET", JOB_ID_URL, headers=client.default_headers)
+        mock_session.request.assert_called_once_with("GET",
+                                                     JOB_ID_URL,
+                                                     headers=client.default_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_get_job_details_with_no_job_id(self, id, mock_session):
@@ -110,8 +112,8 @@ class TestJobEndpoints():
         client = RevAiAPIClient(TOKEN)
 
         res = client.submit_job_url(MEDIA_URL, METADATA,
-                                         CALLBACK_URL, True,
-                                         True, 1, CUSTOM_VOCAB)
+                                    CALLBACK_URL, True,
+                                    True, 1, CUSTOM_VOCAB)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -155,8 +157,8 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
-                                                    CALLBACK_URL, True,
-                                                    True, 1, CUSTOM_VOCAB)
+                                               CALLBACK_URL, True,
+                                               True, 1, CUSTOM_VOCAB)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -195,7 +197,9 @@ class TestJobEndpoints():
         res = client.delete_job(JOB_ID)
 
         assert res is None
-        mock_session.request.assert_called_once_with("DELETE", JOB_ID_URL, headers=client.default_headers)
+        mock_session.request.assert_called_once_with("DELETE",
+                                                     JOB_ID_URL,
+                                                     headers=client.default_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
     def test_delete_job_with_no_id(self, id, mock_session):

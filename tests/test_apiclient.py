@@ -38,7 +38,9 @@ class TestRevAiAPIClient:
 
         with pytest.raises(
             HTTPError,
-            match="(?=.*{})(?=.*{})".format(status, re.escape(json.dumps(error).replace('\"','\'' )))
+            match="(?=.*{})(?=.*{})".format(
+                status,
+                re.escape(json.dumps(error).replace('\"', '\'')))
         ):
             client._make_http_request(method, URL)
         mock_session.request.assert_called_once_with(method, URL, headers=client.default_headers)
