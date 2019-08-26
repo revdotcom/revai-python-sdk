@@ -51,7 +51,7 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 If you want to get fancy, both send job methods take `metadata`, `callback_url`,
-`skip_diarization`, `skip_punctuation`, `speaker_channel_count` and `custom_vocabularies` as optional parameters, these are described in the request body of
+`skip_diarization`, `skip_punctuation`, `speaker_channels_count` and `custom_vocabularies` as optional parameters, these are described in the request body of
 the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 ### Checking your file's status

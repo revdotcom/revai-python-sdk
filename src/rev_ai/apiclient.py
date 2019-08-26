@@ -53,7 +53,7 @@ class RevAiAPIClient:
             callback_url=None,
             skip_diarization=False,
             skip_punctuation=False,
-            speaker_channel_count=None,
+            speaker_channels_count=None,
             custom_vocabularies=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
@@ -63,7 +63,7 @@ class RevAiAPIClient:
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
         :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+        :param speaker_channels_count: the number of speaker channels in the audio. If provided
             the given audio will have each channel transcribed separately and each channel
             will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
@@ -79,7 +79,7 @@ class RevAiAPIClient:
 
         payload = self._create_job_options_payload(
             media_url, metadata, callback_url, skip_diarization,
-            skip_punctuation, speaker_channel_count, custom_vocabularies)
+            skip_punctuation, speaker_channels_count, custom_vocabularies)
 
         response = self._make_http_request(
             "POST",
@@ -95,7 +95,7 @@ class RevAiAPIClient:
             callback_url=None,
             skip_diarization=False,
             skip_punctuation=False,
-            speaker_channel_count=None,
+            speaker_channels_count=None,
             custom_vocabularies=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
@@ -105,7 +105,7 @@ class RevAiAPIClient:
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should rev.ai skip diaization when transcribing this file
         :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channel_count: the number of speaker channels in the audio. If provided
+        :param speaker_channels_count: the number of speaker channels in the audio. If provided
             the given audio will have each channel transcribed separately and each channel
             will be treated as a single speaker. Valid values are integers 1-8 inclusive.
         :param custom_vocabularies: a collection of phrase dictionaries. Including custom
@@ -121,7 +121,7 @@ class RevAiAPIClient:
 
         payload = self._create_job_options_payload(
             None, metadata, callback_url, skip_diarization,
-            skip_punctuation, speaker_channel_count, custom_vocabularies)
+            skip_punctuation, speaker_channels_count, custom_vocabularies)
 
         with open(filename, 'rb') as f:
             files = {
@@ -382,7 +382,7 @@ class RevAiAPIClient:
             callback_url=None,
             skip_diarization=None,
             skip_punctuation=None,
-            speaker_channel_count=None,
+            speaker_channels_count=None,
             custom_vocabularies=None):
         payload = {}
         if media_url:
@@ -397,8 +397,8 @@ class RevAiAPIClient:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
             payload['custom_vocabularies'] = custom_vocabularies
-        if speaker_channel_count:
-            payload['speaker_channel_count'] = speaker_channel_count
+        if speaker_channels_count:
+            payload['speaker_channels_count'] = speaker_channels_count
         return payload
 
     def _create_captions_query(self, speaker_channel):
