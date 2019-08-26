@@ -12,6 +12,7 @@ except ImportError:
     from urlparse import urljoin
 
 JOB_ID = '1'
+TOKEN = "token"
 METADATA = 'test'
 CALLBACK_URL = 'https://callback.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
@@ -22,9 +23,9 @@ JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 
 
-@pytest.mark.usefixtures('mock_client', 'make_mock_response')
+@pytest.mark.usefixtures('mock_session', 'make_mock_response')
 class TestJobEndpoints():
-    def test_get_job_details_with_success(self, mock_client, make_mock_response):
+    def test_get_job_details_with_success(self, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
@@ -33,19 +34,22 @@ class TestJobEndpoints():
             'created_on': created_on
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
-        res = mock_client.get_job_details(JOB_ID)
+        res = client.get_job_details(JOB_ID)
 
         assert res == Job(JOB_ID, created_on, JobStatus.TRANSCRIBED)
-        mock_client.session.request.assert_called_once_with("GET", JOB_ID_URL)
+        mock_session.request.assert_called_once_with("GET",
+                                                     JOB_ID_URL,
+                                                     headers=client.default_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_job_details_with_no_job_id(self, id, mock_client):
+    def test_get_job_details_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_job_details(id)
+            RevAiAPIClient(TOKEN).get_job_details(id)
 
-    def test_get_list_of_jobs_limit_with_success(self, mock_client, make_mock_response):
+    def test_get_list_of_jobs_limit_with_success(self, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         data = [
@@ -62,15 +66,16 @@ class TestJobEndpoints():
         ]
         url = JOBS_URL + "?limit=2"
         response = make_mock_response(url=url, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
-        res = mock_client.get_list_of_jobs(limit=2)
+        res = client.get_list_of_jobs(limit=2)
 
         assert isinstance(res, list)
         assert len(res) == 2
-        mock_client.session.request.assert_called_once_with("GET", url)
+        mock_session.request.assert_called_once_with("GET", url, headers=client.default_headers)
 
-    def test_get_list_of_jobs_starting_after_with_success(self, mock_client, make_mock_response):
+    def test_get_list_of_jobs_starting_after_with_success(self, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         data = [
@@ -82,15 +87,16 @@ class TestJobEndpoints():
         ]
         url = JOBS_URL + "?starting_after=4"
         response = make_mock_response(url=url, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
-        res = mock_client.get_list_of_jobs(starting_after="4")
+        res = client.get_list_of_jobs(starting_after="4")
 
         assert isinstance(res, list)
         assert len(res) == 1
-        mock_client.session.request.assert_called_once_with("GET", url)
+        mock_session.request.assert_called_once_with("GET", url, headers=client.default_headers)
 
-    def test_submit_job_url_with_success(self, mock_client, make_mock_response):
+    def test_submit_job_url_with_success(self, mock_session, make_mock_response):
         data = {
             'id': JOB_ID,
             'status': 'in_progress',
@@ -102,18 +108,19 @@ class TestJobEndpoints():
             'speaker_channel_count': 1,
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
-        res = mock_client.submit_job_url(MEDIA_URL, METADATA,
-                                         CALLBACK_URL, True,
-                                         True, 1, CUSTOM_VOCAB)
+        res = client.submit_job_url(MEDIA_URL, METADATA,
+                                    CALLBACK_URL, True,
+                                    True, 1, CUSTOM_VOCAB)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           metadata=METADATA,
                           callback_url=CALLBACK_URL)
-        mock_client.session.request.assert_called_once_with(
+        mock_session.request.assert_called_once_with(
             "POST",
             JOBS_URL,
             json={
@@ -124,14 +131,15 @@ class TestJobEndpoints():
                 'skip_punctuation': True,
                 'speaker_channel_count': 1,
                 'custom_vocabularies': CUSTOM_VOCAB
-            })
+            },
+            headers=client.default_headers)
 
     @pytest.mark.parametrize('url', [None, ''])
-    def test_submit_job_url_with_no_media_url(self, url, mock_client):
+    def test_submit_job_url_with_no_media_url(self, url, mock_session):
         with pytest.raises(ValueError, match='media_url must be provided'):
-            mock_client.submit_job_url(url)
+            RevAiAPIClient(TOKEN).submit_job_url(url)
 
-    def test_submit_job_local_file_with_success(self, mocker, mock_client, make_mock_response):
+    def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
         data = {
             'id': JOB_ID,
@@ -144,19 +152,20 @@ class TestJobEndpoints():
             'speaker_channel_count': 1
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
-            res = mock_client.submit_job_local_file(FILENAME, METADATA,
-                                                    CALLBACK_URL, True,
-                                                    True, 1, CUSTOM_VOCAB)
+            res = client.submit_job_local_file(FILENAME, METADATA,
+                                               CALLBACK_URL, True,
+                                               True, 1, CUSTOM_VOCAB)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
                               JobStatus.IN_PROGRESS,
                               metadata=METADATA,
                               callback_url=CALLBACK_URL)
-            mock_client.session.request.assert_called_once_with(
+            mock_session.request.assert_called_once_with(
                 "POST",
                 JOBS_URL,
                 files={
@@ -172,23 +181,27 @@ class TestJobEndpoints():
                             'custom_vocabularies': CUSTOM_VOCAB
                         }, sort_keys=True)
                     )
-                })
+                },
+                headers=client.default_headers)
 
     @pytest.mark.parametrize('filename', [None, ''])
-    def test_submit_job_url_with_no_filename(self, filename, mock_client):
+    def test_submit_job_url_with_no_filename(self, filename, mock_session):
         with pytest.raises(ValueError, match='filename must be provided'):
-            mock_client.submit_job_local_file(filename, None)
+            RevAiAPIClient(TOKEN).submit_job_local_file(filename, None)
 
-    def test_delete_job_success(self, mock_client, make_mock_response):
+    def test_delete_job_success(self, mock_session, make_mock_response):
         response = make_mock_response(url=JOB_ID_URL, status=204)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
 
-        res = mock_client.delete_job(JOB_ID)
+        res = client.delete_job(JOB_ID)
 
         assert res is None
-        mock_client.session.request.assert_called_once_with("DELETE", JOB_ID_URL)
+        mock_session.request.assert_called_once_with("DELETE",
+                                                     JOB_ID_URL,
+                                                     headers=client.default_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_delete_job_with_no_id(self, id, mock_client):
+    def test_delete_job_with_no_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.delete_job(id)
+            RevAiAPIClient(TOKEN).delete_job(id)

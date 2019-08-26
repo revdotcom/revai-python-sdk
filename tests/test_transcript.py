@@ -12,47 +12,54 @@ except ImportError:
     from urlparse import urljoin
 
 JOB_ID = '1'
+TOKEN = "token"
 URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/transcript'.format(JOB_ID))
 
 
-@pytest.mark.usefixtures('mock_client', 'make_mock_response')
+@pytest.mark.usefixtures('mock_session', 'make_mock_response')
 class TestTranscriptEndpoints():
-    def test_get_transcript_text(self, mock_client, make_mock_response):
+    def test_get_transcript_text(self, mock_session, make_mock_response):
         data = 'Test'
+        client = RevAiAPIClient(TOKEN)
+        expected_headers = {'Accept': 'text/plain'}
+        expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, text=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
 
-        res = mock_client.get_transcript_text(JOB_ID)
+        res = client.get_transcript_text(JOB_ID)
 
         assert res == data
-        mock_client.session.request.assert_called_once_with("GET",
-                                                            URL,
-                                                            headers={'Accept': 'text/plain'})
+        mock_session.request.assert_called_once_with("GET",
+                                                     URL,
+                                                     headers=expected_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_transcript_text_with_no_job_id(self, id, mock_client):
+    def test_get_transcript_text_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_transcript_text(id)
+            RevAiAPIClient(TOKEN).get_transcript_text(id)
 
-    def test_get_transcript_text_as_stream(self, mock_client, make_mock_response):
+    def test_get_transcript_text_as_stream(self, mock_session, make_mock_response):
         data = 'Test'
+        client = RevAiAPIClient(TOKEN)
+        expected_headers = {'Accept': 'text/plain'}
+        expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, text=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
 
-        res = mock_client.get_transcript_text_as_stream(JOB_ID)
+        res = client.get_transcript_text_as_stream(JOB_ID)
 
-        assert res.content.decode('utf-8') == data
-        mock_client.session.request.assert_called_once_with("GET",
-                                                            URL,
-                                                            headers={'Accept': 'text/plain'},
-                                                            stream=True)
+        assert res.content == data
+        mock_session.request.assert_called_once_with("GET",
+                                                     URL,
+                                                     headers=expected_headers,
+                                                     stream=True)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_transcript_text_as_stream_with_no_job_id(self, id, mock_client):
+    def test_get_transcript_text_as_stream_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_transcript_text_as_stream(id)
+            RevAiAPIClient(TOKEN).get_transcript_text_as_stream(id)
 
-    def test_get_transcript_json(self, mock_client, make_mock_response):
+    def test_get_transcript_json(self, mock_session, make_mock_response):
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -66,21 +73,24 @@ class TestTranscriptEndpoints():
             }]
         }
         expected = json.loads(json.dumps(data))
+        client = RevAiAPIClient(TOKEN)
+        expected_headers = {'Accept': 'application/vnd.rev.transcript.v1.0+json'}
+        expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
 
-        res = mock_client.get_transcript_json(JOB_ID)
+        res = client.get_transcript_json(JOB_ID)
 
         assert res == expected
-        mock_client.session.request.assert_called_once_with(
-            "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
+        mock_session.request.assert_called_once_with(
+            "GET", URL, headers=expected_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_transcript_json_with_no_job_id(self, id, mock_client):
+    def test_get_transcript_json_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_transcript_json(id)
+            RevAiAPIClient(TOKEN).get_transcript_json(id)
 
-    def test_get_transcript_json_as_stream(self, mock_client, make_mock_response):
+    def test_get_transcript_json_as_stream(self, mock_session, make_mock_response):
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -94,21 +104,24 @@ class TestTranscriptEndpoints():
             }]
         }
         expected = json.loads(json.dumps(data))
+        client = RevAiAPIClient(TOKEN)
+        expected_headers = {'Accept': 'application/vnd.rev.transcript.v1.0+json'}
+        expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
 
-        res = mock_client.get_transcript_json_as_stream(JOB_ID)
+        res = client.get_transcript_json_as_stream(JOB_ID)
 
-        assert json.loads(res.content.decode('utf-8')) == expected
-        mock_client.session.request.assert_called_once_with(
-            "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'}, stream=True)
+        assert json.loads(res.content.decode('utf-8').replace("\'", "\"")) == expected
+        mock_session.request.assert_called_once_with(
+            "GET", URL, headers=expected_headers, stream=True)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_transcript_json_as_stream_with_no_job_id(self, id, mock_client):
+    def test_get_transcript_json_as_stream_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_transcript_json_as_stream(id)
+            RevAiAPIClient(TOKEN).get_transcript_json_as_stream(id)
 
-    def test_get_transcript_object_with_success(self, mock_client, make_mock_response):
+    def test_get_transcript_object_with_success(self, mock_session, make_mock_response):
         data = {
             'monologues': [{
                 'speaker': 1,
@@ -122,16 +135,19 @@ class TestTranscriptEndpoints():
             }]
         }
         expected = Transcript([Monologue(1, [Element('text', 'Hello', 0.75, 1.25, 0.85)])])
+        client = RevAiAPIClient(TOKEN)
+        expected_headers = {'Accept': 'application/vnd.rev.transcript.v1.0+json'}
+        expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, json_data=data)
-        mock_client.session.request.return_value = response
+        mock_session.request.return_value = response
 
-        res = mock_client.get_transcript_object(JOB_ID)
+        res = client.get_transcript_object(JOB_ID)
 
         assert res == expected
-        mock_client.session.request.assert_called_once_with(
-            "GET", URL, headers={'Accept': 'application/vnd.rev.transcript.v1.0+json'})
+        mock_session.request.assert_called_once_with(
+            "GET", URL, headers=expected_headers)
 
     @pytest.mark.parametrize('id', [None, ''])
-    def test_get_transcript_object_with_no_job_id(self, id, mock_client):
+    def test_get_transcript_object_with_no_job_id(self, id, mock_session):
         with pytest.raises(ValueError, match='id_ must be provided'):
-            mock_client.get_transcript_object(id)
+            RevAiAPIClient(TOKEN).get_transcript_object(id)
