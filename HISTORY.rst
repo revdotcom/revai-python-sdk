@@ -26,3 +26,27 @@ History
 ------------------
 
 * Fix pypi readme formatting
+
+2.3.0
+------------------
+
+* Add get_list_of_jobs
+
+2.4.0
+------------------
+
+* Add support for custom vocabularies
+
+2.5.0
+------------------
+
+* Add examples
+* Improve error handling
+* Add streaming client
+
+2.6.0
+------------------
+
+* Support skip_punctuation
+* Support .vtt captions output
+* Support speaker channel jobs
