@@ -361,7 +361,7 @@ class RevAiAPIClient:
         :raises: HTTPError
         """
         headers = self.default_headers.copy()
-        if ('headers' in kwargs):
+        if 'headers' in kwargs:
             headers.update(kwargs.get('headers'))
             del kwargs['headers']
         with requests.Session() as session:
