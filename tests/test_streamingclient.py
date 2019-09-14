@@ -10,7 +10,7 @@ from src.rev_ai.streamingclient import RevAiStreamingClient
 try:
     from urllib.parse import quote
 except ImportError:
-    from urlparse import quote
+    from urllib import quote
 
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
@@ -54,7 +54,7 @@ class TestStreamingClient():
             RevAiStreamingClient(None, example_config)
 
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
-        metadata="my metadata"
+        metadata = "my metadata"
         url = mock_streaming_client.base_url + \
             '?access_token={}'.format(mock_streaming_client.access_token) + \
             '&content_type={}'. \
