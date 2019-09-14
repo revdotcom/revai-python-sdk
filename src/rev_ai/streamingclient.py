@@ -11,6 +11,7 @@ try:
 except ImportError:
     from urllib import quote
 
+
 def on_error(error):
     raise error
 
