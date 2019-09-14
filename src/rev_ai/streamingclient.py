@@ -74,7 +74,7 @@ class RevAiStreamingClient():
             + '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe=''))
 
         if metadata:
-            url += '&metadata={}'.format(quote(metadata))
+            url += '&metadata={}'.format(quote(metadata, safe=''))
 
         try:
             self.client.connect(url)
