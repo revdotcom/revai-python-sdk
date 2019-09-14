@@ -4,7 +4,12 @@ import websocket
 import threading
 import six
 import json
+from . import __version__
 
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urlparse import quote
 
 def on_error(error):
     raise error
@@ -56,14 +61,19 @@ class RevAiStreamingClient():
         self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread=True)
 
-    def start(self, generator):
+    def start(self, generator, metadata=None):
         """Function to connect the websocket to the URL and start the response
             thread
 
         :param generator: generator object that yields binary audio data
+        :param metadata: metadata to be attached to streaming job
         """
         url = self.base_url + '?access_token={}'.format(self.access_token) \
-            + '&content_type={}'.format(self.config.get_content_type_string())
+            + '&content_type={}'.format(self.config.get_content_type_string()) \
+            + '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe=''))
+
+        if metadata:
+            url += '&metadata={}'.format(quote(metadata))
 
         try:
             self.client.connect(url)
