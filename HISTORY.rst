@@ -50,3 +50,8 @@ History
 * Support skip_punctuation
 * Support .vtt captions output
 * Support speaker channel jobs
+
+2.6.1
+------------------
+
+* Add metadata to streaming client
