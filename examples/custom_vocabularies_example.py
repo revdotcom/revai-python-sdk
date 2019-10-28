@@ -14,9 +14,8 @@ limitations under the License.
 """
 
 from rev_ai import customvocabulariesclient
-import os
 
-access_token = os.environ["REVAI_TOKEN"]
+access_token = "your_access_token"
 
 print("Creating Custom Vocab Client")
 
@@ -28,7 +27,7 @@ print("Submitting")
 
 custom_vocab = client.submit_custom_vocabularies([{"phrases":["Peace out"]}])
 
-print("success")
+print("Succeeded submission")
 
 print("Getting Custom Vocabs")
 
