@@ -11,7 +11,7 @@ class CustomVocabulary:
         """
         self.phrases = [phrase for phrase in phrases]
 
-    def get_raw():
+    def get_raw(self):
         """Returns the raw form of the custom vocabularies as the api
         expects them"""
-        return {'phrases': phrases}
+        return {'phrases': self.phrases}

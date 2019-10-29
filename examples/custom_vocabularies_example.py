@@ -13,24 +13,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import time
 from rev_ai import customvocabulariesclient
+from rev_ai.models import CustomVocabulary
 
 access_token = "your_access_token"
 
 print("Creating Custom Vocab Client")
-
 client = customvocabulariesclient.RevAiCustomVocabulariesClient(access_token)
 
-print("Succeeded in creating client")
-
 print("Submitting")
+custom_vocabularies_job = client.submit_custom_vocabularies(
+    [
+        {"phrases": ["Peace out"]},
+        CustomVocabulary(["What Up", "skeddadle"]).get_raw()
+    ]
+)
 
-custom_vocab = client.submit_custom_vocabularies([{"phrases":["Peace out"]}])
+job_id = custom_vocabularies_job["id"]
 
-print("Succeeded submission")
+while True:
 
-print("Getting Custom Vocabs")
+    custom_vocabularies = client.get_custom_vocabularies(job_id)
+    status = custom_vocabularies["status"]
 
-result = client.get_custom_vocabularies(custom_vocab["id"])
+    print("Job Status: {}".format(status))
 
-print(result)
+    if status == "in_progress":
+        time.sleep(5)
+        continue
+
+    elif status == "failed":
+        print("Job Failed : {}".format(custom_vocabularies["failure_detail"]))
+        break
+
+    if status == "complete":
+        print("SUCCESS: {}".format(custom_vocabularies))
+        break

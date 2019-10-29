@@ -5,6 +5,7 @@ import requests
 import json
 from requests.exceptions import HTTPError
 from . import __version__
+from .models import CustomVocabulary
 
 try:
     from urllib.parse import urljoin
@@ -63,3 +64,9 @@ class BaseClient:
                             "; Server Response : {}".
                             format(response.content.decode('utf-8')),)
             raise
+
+    def _process_vocabularies(self, unprocessed_vocabularies):
+        processed_vocabularies = []
+        for custom_vocabulary in unprocessed_vocabularies:
+            processed_vocabularies.append(custom_vocabulary.get_raw() if isinstance(custom_vocabulary, CustomVocabulary) else custom_vocabulary)
+        return processed_vocabularies
