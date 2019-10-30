@@ -2,15 +2,9 @@
 """Speech recognition tools for using Rev.ai"""
 
 import requests
-import json
 from requests.exceptions import HTTPError
 from . import __version__
-from .models import CustomVocabulary
-
-try:
-    from urllib.parse import urljoin
-except:
-    from urlparse import urljoin
+from . import CustomVocabulary
 
 
 class BaseClient:
@@ -66,4 +60,6 @@ class BaseClient:
             raise
 
     def _process_vocabularies(self, unprocessed_vocabularies):
-        return list(map(lambda custom_vocabulary: custom_vocabulary.to_dict() if isinstance(custom_vocabulary, CustomVocabulary) else custom_vocabulary, unprocessed_vocabularies))
+        return list(map(lambda custom_vocabulary: custom_vocabulary.to_dict()
+                        if isinstance(custom_vocabulary, CustomVocabulary)
+                        else custom_vocabulary, unprocessed_vocabularies))
