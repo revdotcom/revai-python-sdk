@@ -2,7 +2,8 @@
 """Speech recognition tools for using Rev.ai"""
 
 import json
-from . import __version__, BaseClient
+from . import __version__
+from .baseclient import BaseClient
 
 try:
     from urllib.parse import urljoin

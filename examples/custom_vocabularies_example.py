@@ -25,15 +25,14 @@ client = customvocabulariesclient.RevAiCustomVocabulariesClient(access_token)
 print("Submitting")
 custom_vocabularies_job = client.submit_custom_vocabularies(
     [
-        {"phrases": ["Peace out"]},
-        CustomVocabulary(["What Up", "skeddadle"]).get_raw()
+        {"phrases": ["Patrick Henry Winston"]},
+        CustomVocabulary(["Robert Berwick", "Noam Chomsky"])
     ]
 )
 
 job_id = custom_vocabularies_job["id"]
 
 while True:
-
     custom_vocabularies = client.get_custom_vocabularies(job_id)
     status = custom_vocabularies["status"]
 

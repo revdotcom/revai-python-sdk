@@ -5,7 +5,7 @@ import requests
 import json
 from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript, CaptionType
-from . import BaseClient
+from .baseclient import BaseClient
 from . import __version__
 
 try:

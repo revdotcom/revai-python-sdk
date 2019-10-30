@@ -66,7 +66,4 @@ class BaseClient:
             raise
 
     def _process_vocabularies(self, unprocessed_vocabularies):
-        processed_vocabularies = []
-        for custom_vocabulary in unprocessed_vocabularies:
-            processed_vocabularies.append(custom_vocabulary.get_raw() if isinstance(custom_vocabulary, CustomVocabulary) else custom_vocabulary)
-        return processed_vocabularies
+        return list(map(lambda custom_vocabulary: custom_vocabulary.to_dict() if isinstance(custom_vocabulary, CustomVocabulary) else custom_vocabulary, unprocessed_vocabularies))
