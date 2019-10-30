@@ -14,13 +14,13 @@ limitations under the License.
 """
 
 import time
-from rev_ai import customvocabulariesclient
+from rev_ai import custom_vocabularies_client
 from rev_ai.models import CustomVocabulary
 
 access_token = "your_access_token"
 
 print("Creating Custom Vocab Client")
-client = customvocabulariesclient.RevAiCustomVocabulariesClient(access_token)
+client = custom_vocabularies_client.RevAiCustomVocabulariesClient(access_token)
 
 print("Submitting")
 custom_vocabularies_job = client.submit_custom_vocabularies(

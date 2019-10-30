@@ -22,7 +22,9 @@ access_token = "your_access_token"
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)
 
-# Submitting a job through a local file. The optional parameters are shown below.
+# Submitting a job through a local file. The optional parameters
+# are shown below.
+#
 # job = client.submit_job_local_file("your_local_file_path",
 #                                    metadata=None,
 #                                    callback_url=None,
@@ -59,8 +61,8 @@ while True:
 
     if status == "TRANSCRIBED":
         # Getting a list of current jobs connected with your account
-        # The optional parameters limits limits the length of the list. Starting_after
-        # Cuts off the beginning x jobs off the list returned
+        # The optional parameters limits the length of the list.
+        # Starting_after cuts off the beginning x jobs off the list returned
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
         # obtain transcript text as a string for the job.

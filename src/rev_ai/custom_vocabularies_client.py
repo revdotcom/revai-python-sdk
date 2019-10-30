@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 """Speech recognition tools for using Rev.ai"""
 
-import json
-from . import __version__
 from .baseclient import BaseClient
 
 try:
     from urllib.parse import urljoin
-except:
+except ImportError:
     from urlparse import urljoin
 
 
@@ -81,5 +79,6 @@ class RevAiCustomVocabulariesClient(BaseClient):
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:
-            payload['custom_vocabularies'] = self._process_vocabularies(custom_vocabularies)
+            payload['custom_vocabularies'] =\
+                self._process_vocabularies(custom_vocabularies)
         return payload

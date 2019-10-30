@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 """Speech recognition tools for using Rev.ai"""
 
-import requests
 import json
-from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript, CaptionType
 from .baseclient import BaseClient
-from . import __version__
 
 try:
     from urllib.parse import urljoin
@@ -17,9 +14,10 @@ except ImportError:
 class RevAiAPIClient(BaseClient):
     """Client which implements Rev.ai API
 
-    Note that HTTPErrors can be thrown by methods of the API client. The HTTP response payload
-    attached to these error is a problem details. The problem details information is represented
-    as a JSON object with error specific properties that help to troubleshoot the problem.
+    Note that HTTPErrors can be thrown by methods of the API client. The HTTP
+    response payload attached to these error is a problem details. The problem
+    details information is represented as a JSON object with error specific
+    properties that help to troubleshoot the problem.
 
     Problem details are defined at https://tools.ietf.org/html/rfc7807.
     """
@@ -50,16 +48,21 @@ class RevAiAPIClient(BaseClient):
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
-        :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channels_count: the number of speaker channels in the audio. If provided
-            the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
-            vocabulary will inform and bias the speech recognition to find those phrases.
-            Each dictionary should consist of a key "phrases" which maps to a list of strings,
-            each of which represents a phrase you would like the speech recognition to bias
+        :param callback_url: callback url to invoke on job completion as
+                             a webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when
+                                 transcribing this file
+        :param speaker_channels_count: the number of speaker channels in the
+            audio. If provided the given audio will have each channel
+            transcribed separately and each channel will be treated as a single
+            speaker. Valid values are integers 1-8 inclusive.
+        :param custom_vocabularies: a collection of phrase dictionaries.
+            Including custom vocabulary will inform and bias the speech
+            recognition to find those phrases. Each dictionary should consist
+            of a key "phrases" which maps to a list of strings, each of which
+            represents a phrase you would like the speech recognition to bias
             itself toward.
         :returns: raw response data
         :raises: HTTPError
@@ -92,17 +95,21 @@ class RevAiAPIClient(BaseClient):
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
-        :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channels_count: the number of speaker channels in the audio. If provided
-            the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
-            vocabulary will inform and bias the speech recognition to find those phrases.
-            Each dictionary have the key "phrases" which maps to a list of strings,
-            each of which represents a phrase you would like the speech recognition to bias
-            itself toward.
+        :param callback_url: callback url to invoke on job completion as a
+                             webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when
+                                 transcribing this file
+        :param speaker_channels_count: the number of speaker channels in the
+            audio. If provided the given audio will have each channel
+            transcribed separately and each channel will be treated as a single
+            speaker. Valid values are integers 1-8 inclusive.
+        :param custom_vocabularies: a collection of phrase dictionaries.
+            Including custom vocabulary will inform and bias the speech
+            recognition to find those phrases. Each dictionary has the key
+            "phrases" which maps to a list of strings, each of which represents
+            a phrase you would like the speech recognition to bias itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
