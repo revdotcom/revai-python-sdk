@@ -62,7 +62,8 @@ while True:
     if status == "TRANSCRIBED":
         # Getting a list of current jobs connected with your account
         # The optional parameters limits the length of the list.
-        # Starting_after cuts off the beginning x jobs off the list returned
+        # starting_after is a job id which causes the removal of
+        # all jobs from the list which were created before that job
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
         # obtain transcript text as a string for the job.
