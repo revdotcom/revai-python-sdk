@@ -187,7 +187,7 @@ from rev_ai.models import CustomVocabulary
 client = custom_vocabularies_client.RevAiCustomVocabulariesClient("ACCESS TOKEN")
 
 # Construct a CustomVocabulary object using your desired phrases
-custom_vocabulary = CustomVocabulary(["Patrick Henry Winston", "Robert Berwick", "Noam Chomsky"])
+custom_vocabulary = CustomVocabulary(["Patrick Henry Winston", "Robert C Berwick", "Noam Chomsky"])
 
 # Submit the CustomVocabulary
 custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
@@ -196,4 +196,4 @@ custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
 job_state = client.get_custom_vocabularies(custom_vocabularies_job['id'])
 ```
 
-For more details, check out the custom vocabularies example.
+For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).
