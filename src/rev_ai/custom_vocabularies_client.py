@@ -2,6 +2,7 @@
 """Speech recognition tools for using Rev.ai"""
 
 from .baseclient import BaseClient
+from . import utils
 
 try:
     from urllib.parse import urljoin
@@ -80,5 +81,5 @@ class RevAiCustomVocabulariesClient(BaseClient):
             payload['metadata'] = metadata
         if custom_vocabularies:
             payload['custom_vocabularies'] =\
-                self._process_vocabularies(custom_vocabularies)
+                utils._process_vocabularies(custom_vocabularies)
         return payload

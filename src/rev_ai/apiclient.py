@@ -4,6 +4,7 @@
 import json
 from .models import Job, Account, Transcript, CaptionType
 from .baseclient import BaseClient
+from . import utils
 
 try:
     from urllib.parse import urljoin
@@ -367,7 +368,7 @@ class RevAiAPIClient(BaseClient):
         if callback_url:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
-            payload['custom_vocabularies'] = self._process_vocabularies(custom_vocabularies)
+            payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
             payload['speaker_channels_count'] = speaker_channels_count
         return payload
