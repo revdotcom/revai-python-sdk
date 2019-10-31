@@ -31,7 +31,8 @@ class TestBaseClient:
     @pytest.mark.parametrize('error', get_error_test_cases(
         ['unauthorized', 'job-not-found', 'invalid-job-state']))
     @pytest.mark.parametrize('method', ["POST", "GET", "DELETE"])
-    def test_make_http_request(self, error, method, mock_session, make_mock_response):
+    def test_make_http_request(self, error, method, mock_session,
+                               make_mock_response):
         status = error.get('status')
         URL = RevAiAPIClient.base_url
         response = make_mock_response(url=URL, status=status, json_data=error)
