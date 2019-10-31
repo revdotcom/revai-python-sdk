@@ -368,7 +368,10 @@ class RevAiAPIClient(BaseClient):
         if callback_url:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
-            payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
+            processed_vocabularies =\
+                utils._process_vocabularies(custom_vocabularies)
+            utils._validate_custom_vocabularies(processed_vocabularies)
+            payload['custom_vocabularies'] = processed_vocabularies
         if speaker_channels_count:
             payload['speaker_channels_count'] = speaker_channels_count
         return payload

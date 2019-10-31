@@ -80,6 +80,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:
-            payload['custom_vocabularies'] =\
+            processed_vocabularies =\
                 utils._process_vocabularies(custom_vocabularies)
+            utils._validate_custom_vocabularies(processed_vocabularies)
+            payload['custom_vocabularies'] = processed_vocabularies
         return payload
