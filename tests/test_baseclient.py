@@ -19,7 +19,8 @@ class TestBaseClient:
 
         headers = client.default_headers
 
-        assert headers.get('User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
+        assert headers.get(
+            'User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer {}'.format(TOKEN)
 
     @pytest.mark.parametrize('token', [None, ''])
@@ -44,4 +45,7 @@ class TestBaseClient:
                 re.escape(json.dumps(error).replace('\"', '\'')))
         ):
             client._make_http_request(method, URL)
-        mock_session.request.assert_called_once_with(method, URL, headers=client.default_headers)
+        mock_session.request.assert_called_once_with(
+            method, URL,
+            headers=client.default_headers
+        )

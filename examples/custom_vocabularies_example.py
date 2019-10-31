@@ -25,8 +25,8 @@ client = custom_vocabularies_client.RevAiCustomVocabulariesClient(access_token)
 print("Submitting")
 custom_vocabularies_job = client.submit_custom_vocabularies(
     [
-        {"phrases": ["Patrick Henry Winston"]},
-        CustomVocabulary(["Robert Berwick", "Noam Chomsky"])
+        CustomVocabulary(["Robert C Berwick", "Noam Chomsky"]),
+        {"phrases": ["Patrick Henry Winston"]}
     ]
 )
 
