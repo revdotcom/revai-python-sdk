@@ -25,22 +25,3 @@ class TestRevAiAPIClient:
     def test_constructor_with_no_token(self, token):
         with pytest.raises(ValueError, match='access_token must be provided'):
             RevAiAPIClient(token)
-
-    @pytest.mark.parametrize('error', get_error_test_cases(
-        ['unauthorized', 'job-not-found', 'invalid-job-state']))
-    @pytest.mark.parametrize('method', ["POST", "GET", "DELETE"])
-    def test_make_http_request(self, error, method, mock_session, make_mock_response):
-        status = error.get('status')
-        URL = RevAiAPIClient.base_url
-        response = make_mock_response(url=URL, status=status, json_data=error)
-        mock_session.request.return_value = response
-        client = RevAiAPIClient(TOKEN)
-
-        with pytest.raises(
-            HTTPError,
-            match="(?=.*{})(?=.*{})".format(
-                status,
-                re.escape(json.dumps(error).replace('\"', '\'')))
-        ):
-            client._make_http_request(method, URL)
-        mock_session.request.assert_called_once_with(method, URL, headers=client.default_headers)
