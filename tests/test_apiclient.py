@@ -2,12 +2,8 @@
 """Unit tests for RevAiApiClient"""
 
 import pytest
-import re
-import json
-from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai import __version__
-from tests.helpers.errors import get_error_test_cases
 
 TOKEN = "token"
 
