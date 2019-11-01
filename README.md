@@ -163,7 +163,7 @@ Once you have a streaming client setup with a `MediaConfig` and access token, yo
 response_generator = streaming_client.start(AUDIO_GENERATOR)
 ```
 
-`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our 
+`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our
 [streaming] endpoint.
 
 If you want to end the connection early, you can!
