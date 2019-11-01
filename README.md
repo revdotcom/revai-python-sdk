@@ -176,9 +176,11 @@ Otherwise, the connection will end when the server obtains an "EOS" message.
 
 ### Submitting Custom Vocabularies
 
-In addition to passing custom vocabularies as parameters in the async api client, you can create and view your custom vocabularies independently.
+In addition to passing custom vocabularies as parameters in the async api client, you can create and submit your custom vocabularies independently and directly to the custom vocabularies api, as well as check on their progress.
 
-In this example you see how to construct custom vocabulary objects, submit them to the api, and check on their progress!
+Primarily, the custom vocabularies client allows you to submit and preprocess vocabularies for use with the streaming client, in order to have streaming jobs with custom vocabularies!
+
+In this example you see how to construct custom vocabulary objects, submit them to the api, and check on their progress - and metadata!
 
 ```python
 from rev_ai import custom_vocabularies_client
