@@ -21,7 +21,7 @@ class TestBaseClient:
 
         assert headers.get(
             'User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
-        assert headers.get('Authorization') == 'Bearer {}'.format(TOKEN)
+        assert headers.get('Authorization') == 'Bearer token'
 
     @pytest.mark.parametrize('token', [None, ''])
     def test_constructor_with_no_token(self, token):
