@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit tests for RevAi Utils"""
 
-import pytest
-from unittest import mock
 from src.rev_ai.utils import _process_vocabularies
 from src.rev_ai.models import CustomVocabulary
 
@@ -11,8 +9,6 @@ other_phrases = ['Steve Jobs']
 
 
 class TestUtils:
-
-
     def test_process_vocabularies_with_custom_vocab_dict(self):
         customvocabs = [{'phrases': phrases}]
 
@@ -32,7 +28,7 @@ class TestUtils:
 
         processed_vocabs = _process_vocabularies(customvocabs)
 
-        assert processed_vocabs == [{'phrases': phrases}, {'phrases':other_phrases}]
+        assert processed_vocabs == [{'phrases': phrases}, {'phrases': other_phrases}]
 
     def test_process_vocabularies_with_empty_list(self):
         processed_vocabs = _process_vocabularies([])
