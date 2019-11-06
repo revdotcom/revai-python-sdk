@@ -14,7 +14,7 @@ class TestCustomVocabulary:
         assert custom_vocabulary.phrases == phrases
 
     def test_no_aliasing_phrases_list(self):
-        alias = phrases.copy()
+        alias = [phrase for phrase in phrases]
         custom_vocabulary = CustomVocabulary(alias)
 
         alias.pop()

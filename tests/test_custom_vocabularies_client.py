@@ -2,6 +2,11 @@ import pytest
 from src.rev_ai import __version__
 from src.rev_ai.custom_vocabularies_client import RevAiCustomVocabulariesClient
 
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
 TOKEN = "token"
 
 
