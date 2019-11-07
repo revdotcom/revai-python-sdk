@@ -62,7 +62,7 @@ class RevAiStreamingClient():
         self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread=True)
 
-    def start(self, generator, metadata=None):
+    def start(self, generator, custom_vocabulary_id=None, metadata=None):
         """Function to connect the websocket to the URL and start the response
             thread
 
@@ -72,6 +72,9 @@ class RevAiStreamingClient():
         url = self.base_url + '?access_token={}'.format(self.access_token) \
             + '&content_type={}'.format(self.config.get_content_type_string()) \
             + '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe=''))
+
+        if custom_vocabulary_id:
+            url += '&custom_vocabulary_id={}'.format(quote(custom_vocabulary_id), safe='')
 
         if metadata:
             url += '&metadata={}'.format(quote(metadata, safe=''))

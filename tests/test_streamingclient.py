@@ -54,13 +54,15 @@ class TestStreamingClient():
             RevAiStreamingClient(None, example_config)
 
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
+        custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
         url = mock_streaming_client.base_url + \
             '?access_token={}'.format(mock_streaming_client.access_token) + \
             '&content_type={}'. \
             format(mock_streaming_client.config.get_content_type_string()) + \
             '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe='')) + \
-            '&metadata={}'.format(quote(metadata))
+            '&custom_vocabulary_id={}'.format(quote(custom_vocabulary_id), safe='') + \
+            '&metadata={}'.format(quote(metadata), safe='')
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
@@ -78,7 +80,7 @@ class TestStreamingClient():
         ]
         mock_streaming_client.client.recv_data.side_effect = data
 
-        response_gen = mock_streaming_client.start(mock_generator(), metadata)
+        response_gen = mock_streaming_client.start(mock_generator(), custom_vocabulary_id, metadata)
 
         mock_streaming_client.client.connect.assert_called_once_with(url)
         mock_streaming_client.client.send_binary.assert_any_call(0)
