@@ -76,14 +76,10 @@ class RevAiStreamingClient():
         })
 
         if custom_vocabulary_id:
-            url += '&' + urlencode({
-                'custom_vocabulary_id': custom_vocabulary_id
-                })
+            url += '&' + urlencode({'custom_vocabulary_id': custom_vocabulary_id})
 
         if metadata:
-            url += '&' + urlencode({
-                'metadata': metadata
-                })
+            url += '&' + urlencode({'metadata': metadata})
 
         try:
             self.client.connect(url)
