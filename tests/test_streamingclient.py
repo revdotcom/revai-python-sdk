@@ -17,6 +17,7 @@ try:
 except ImportError:
     from urlparse import parse_qs, urlparse
 
+
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
 class TestStreamingClient():
     def test_constructor(self):
@@ -67,7 +68,6 @@ class TestStreamingClient():
             'custom_vocabulary_id': custom_vocabulary_id,
             'metadata': metadata
         }
-        url = mock_streaming_client.base_url + '?' + urlencode(query_dict)
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
@@ -110,9 +110,9 @@ class TestStreamingClient():
 
         mock_streaming_client.client.abort.assert_called_once_with()
 
+
 def validate_query_parameters(called_url, query_dict):
         called_query_string = urlparse(called_url).query
         called_query_parameters = parse_qs(called_query_string)
         for key in called_query_parameters:
             assert called_query_parameters[key][0] == query_dict[key]
-
