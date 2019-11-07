@@ -103,3 +103,7 @@ ENV/
 
 # VS code settings
 .vscode
+
+# Sublime Text settings
+*.sublime-project
+*.sublime-workspace
