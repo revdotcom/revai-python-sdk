@@ -72,12 +72,12 @@ class TestStreamingClient():
             [0x1, example_connected],
             [0x1, example_data],
             [0x8, b'\x03\xe8End of input. Closing']
-        ]
+            ]
         exp_responses = [
             'Connected, Job ID : testid\n',
             '{"type":"partial","transcript":"Test"}',
             'Connection Closed. Code : 1000; Reason : End of input. Closing\n'
-        ]
+            ]
         mock_streaming_client.client.recv_data.side_effect = data
 
         response_gen = mock_streaming_client.start(mock_generator(), custom_vocabulary_id, metadata)
