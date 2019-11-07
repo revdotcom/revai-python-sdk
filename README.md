@@ -163,7 +163,7 @@ Once you have a streaming client setup with a `MediaConfig` and access token, yo
 response_generator = streaming_client.start(AUDIO_GENERATOR, custom_vocabulary_id="CUSTOM VOCAB ID")
 ```
 
-`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our 
+`response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our
 [streaming] endpoint.
 
 If you want to end the connection early, you can!
@@ -173,3 +173,29 @@ streaming_client.end()
 ```
 
 Otherwise, the connection will end when the server obtains an "EOS" message.
+
+### Submitting Custom Vocabularies
+
+In addition to passing custom vocabularies as parameters in the async api client, you can create and submit your custom vocabularies independently and directly to the custom vocabularies api, as well as check on their progress.
+
+Primarily, the custom vocabularies client allows you to submit and preprocess vocabularies for use with the streaming client, in order to have streaming jobs with custom vocabularies!
+
+In this example you see how to construct custom vocabulary objects, submit them to the api, and check on their progress - and metadata!
+
+```python
+from rev_ai import custom_vocabularies_client
+from rev_ai.models import CustomVocabulary
+# Create a client
+client = custom_vocabularies_client.RevAiCustomVocabulariesClient("ACCESS TOKEN")
+
+# Construct a CustomVocabulary object using your desired phrases
+custom_vocabulary = CustomVocabulary(["Patrick Henry Winston", "Robert C Berwick", "Noam Chomsky"])
+
+# Submit the CustomVocabulary
+custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
+
+# View the job's progress
+job_state = client.get_custom_vocabularies(custom_vocabularies_job['id'])
+```
+
+For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).

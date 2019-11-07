@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Speech recognition tools for using Rev.ai"""
 
-import requests
 import json
-from requests.exceptions import HTTPError
 from .models import Job, Account, Transcript, CaptionType
-from . import __version__
+from .baseclient import BaseClient
+from . import utils
 
 try:
     from urllib.parse import urljoin
@@ -13,21 +12,16 @@ except ImportError:
     from urlparse import urljoin
 
 
-class RevAiAPIClient:
+class RevAiAPIClient(BaseClient):
     """Client which implements Rev.ai API
 
-    Note that HTTPErrors can be thrown by methods of the API client. The HTTP response payload
-    attached to these error is a problem details. The problem details information is represented
-    as a JSON object with error specific properties that help to troubleshoot the problem.
+    Note that HTTPErrors can be thrown by methods of the API client. The HTTP
+    response payload attached to these error is a problem details. The problem
+    details information is represented as a JSON object with error specific
+    properties that help to troubleshoot the problem.
 
     Problem details are defined at https://tools.ietf.org/html/rfc7807.
     """
-
-    # Default version of Rev.ai
-    version = 'v1'
-
-    # Default address of the API
-    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
 
     # Rev.ai transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
@@ -39,13 +33,8 @@ class RevAiAPIClient:
                              account. Generated on the settings page of your account dashboard
                              on Rev.ai.
         """
-        if not access_token:
-            raise ValueError('access_token must be provided')
 
-        self.default_headers = {
-            'Authorization': 'Bearer {}'.format(access_token),
-            'User-Agent': 'RevAi-PythonSDK/{}'.format(__version__)
-        }
+        BaseClient.__init__(self, access_token)
 
     def submit_job_url(
             self, media_url,
@@ -60,16 +49,21 @@ class RevAiAPIClient:
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
-        :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channels_count: the number of speaker channels in the audio. If provided
-            the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
-            vocabulary will inform and bias the speech recognition to find those phrases.
-            Each dictionary should consist of a key "phrases" which maps to a list of strings,
-            each of which represents a phrase you would like the speech recognition to bias
+        :param callback_url: callback url to invoke on job completion as
+                             a webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when
+                                 transcribing this file
+        :param speaker_channels_count: the number of speaker channels in the
+            audio. If provided the given audio will have each channel
+            transcribed separately and each channel will be treated as a single
+            speaker. Valid values are integers 1-8 inclusive.
+        :param custom_vocabularies: a collection of phrase dictionaries.
+            Including custom vocabulary will inform and bias the speech
+            recognition to find those phrases. Each dictionary should consist
+            of a key "phrases" which maps to a list of strings, each of which
+            represents a phrase you would like the speech recognition to bias
             itself toward.
         :returns: raw response data
         :raises: HTTPError
@@ -102,17 +96,21 @@ class RevAiAPIClient:
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a webhook
-        :param skip_diarization: should rev.ai skip diaization when transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when transcribing this file
-        :param speaker_channels_count: the number of speaker channels in the audio. If provided
-            the given audio will have each channel transcribed separately and each channel
-            will be treated as a single speaker. Valid values are integers 1-8 inclusive.
-        :param custom_vocabularies: a collection of phrase dictionaries. Including custom
-            vocabulary will inform and bias the speech recognition to find those phrases.
-            Each dictionary have the key "phrases" which maps to a list of strings,
-            each of which represents a phrase you would like the speech recognition to bias
-            itself toward.
+        :param callback_url: callback url to invoke on job completion as a
+                             webhook
+        :param skip_diarization: should rev.ai skip diaization when
+                                 transcribing this file
+        :param skip_punctuation: should rev.ai skip punctuation when
+                                 transcribing this file
+        :param speaker_channels_count: the number of speaker channels in the
+            audio. If provided the given audio will have each channel
+            transcribed separately and each channel will be treated as a single
+            speaker. Valid values are integers 1-8 inclusive.
+        :param custom_vocabularies: a collection of phrase dictionaries.
+            Including custom vocabulary will inform and bias the speech
+            recognition to find those phrases. Each dictionary has the key
+            "phrases" which maps to a list of strings, each of which represents
+            a phrase you would like the speech recognition to bias itself toward.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -350,32 +348,6 @@ class RevAiAPIClient:
 
         return Account.from_json(response.json())
 
-    def _make_http_request(self, method, url, **kwargs):
-        """Wrapper method for initiating HTTP requests and handling potential
-            errors.
-
-        :param method: string of HTTP method request
-        :param url: string containing the URL to make the request to
-        :param (optional) **kwargs: potential extra arguments including header
-            and stream
-        :raises: HTTPError
-        """
-        headers = self.default_headers.copy()
-        if 'headers' in kwargs:
-            headers.update(kwargs.get('headers'))
-            del kwargs['headers']
-        with requests.Session() as session:
-            response = session.request(method, url, headers=headers, **kwargs)
-
-        try:
-            response.raise_for_status()
-            return response
-        except HTTPError as err:
-            if (response.content):
-                err.args = (err.args[0] +
-                            "; Server Response : {}".format(response.content.decode('utf-8')),)
-            raise
-
     def _create_job_options_payload(
             self, media_url,
             metadata=None,
@@ -396,7 +368,8 @@ class RevAiAPIClient:
         if callback_url:
             payload['callback_url'] = callback_url
         if custom_vocabularies:
-            payload['custom_vocabularies'] = custom_vocabularies
+            payload['custom_vocabularies'] =\
+                utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
             payload['speaker_channels_count'] = speaker_channels_count
         return payload
