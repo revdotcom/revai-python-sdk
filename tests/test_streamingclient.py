@@ -8,11 +8,6 @@ from src.rev_ai.models.streaming import MediaConfig
 from src.rev_ai.streamingclient import RevAiStreamingClient
 
 try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
-
-try:
     from urllib.parse import parse_qs, urlparse
 except ImportError:
     from urlparse import parse_qs, urlparse
@@ -112,7 +107,7 @@ class TestStreamingClient():
 
 
 def validate_query_parameters(called_url, query_dict):
-        called_query_string = urlparse(called_url).query
-        called_query_parameters = parse_qs(called_query_string)
-        for key in called_query_parameters:
-            assert called_query_parameters[key][0] == query_dict[key]
+    called_query_string = urlparse(called_url).query
+    called_query_parameters = parse_qs(called_query_string)
+    for key in called_query_parameters:
+        assert called_query_parameters[key][0] == query_dict[key]
