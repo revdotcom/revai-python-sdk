@@ -12,6 +12,10 @@ try:
 except ImportError:
     from urllib import urlencode
 
+try:
+    from urllib.parse import parse_qs, urlparse
+except ImportError:
+    from urlparse import parse_qs, urlparse
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
 class TestStreamingClient():
@@ -56,13 +60,14 @@ class TestStreamingClient():
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
         custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
-        url = mock_streaming_client.base_url + '?' + urlencode({
-                'access_token': mock_streaming_client.access_token,
-                'content_type': mock_streaming_client.config.get_content_type_string(),
-                'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
-                'custom_vocabulary_id': custom_vocabulary_id,
-                'metadata': metadata
-            })
+        query_dict = {
+            'access_token': mock_streaming_client.access_token,
+            'content_type': mock_streaming_client.config.get_content_type_string(),
+            'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
+            'custom_vocabulary_id': custom_vocabulary_id,
+            'metadata': metadata
+        }
+        url = mock_streaming_client.base_url + '?' + urlencode(query_dict)
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
@@ -82,7 +87,9 @@ class TestStreamingClient():
 
         response_gen = mock_streaming_client.start(mock_generator(), custom_vocabulary_id, metadata)
 
-        mock_streaming_client.client.connect.assert_called_once_with(url)
+        mock_streaming_client.client.connect.assert_called_once()
+        called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
+        validate_query_parameters(called_url, query_dict)
         mock_streaming_client.client.send_binary.assert_any_call(0)
         mock_streaming_client.client.send_binary.assert_any_call(1)
         mock_streaming_client.client.send_binary.assert_any_call(2)
@@ -102,3 +109,10 @@ class TestStreamingClient():
         mock_streaming_client.end()
 
         mock_streaming_client.client.abort.assert_called_once_with()
+
+def validate_query_parameters(called_url, query_dict):
+        called_query_string = urlparse(called_url).query
+        called_query_parameters = parse_qs(called_query_string)
+        for key in called_query_parameters:
+            assert called_query_parameters[key][0] == query_dict[key]
+
