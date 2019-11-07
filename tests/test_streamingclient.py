@@ -8,9 +8,9 @@ from src.rev_ai.models.streaming import MediaConfig
 from src.rev_ai.streamingclient import RevAiStreamingClient
 
 try:
-    from urllib.parse import quote
+    from urllib.parse import urlencode
 except ImportError:
-    from urllib import quote
+    from urllib import urlencode
 
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
@@ -56,13 +56,13 @@ class TestStreamingClient():
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
         custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
-        url = mock_streaming_client.base_url + \
-            '?access_token={}'.format(mock_streaming_client.access_token) + \
-            '&content_type={}'. \
-            format(mock_streaming_client.config.get_content_type_string()) + \
-            '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe='')) + \
-            '&custom_vocabulary_id={}'.format(quote(custom_vocabulary_id), safe='') + \
-            '&metadata={}'.format(quote(metadata), safe='')
+        url = mock_streaming_client.base_url + '?' + urlencode({
+                'access_token': mock_streaming_client.access_token,
+                'content_type': mock_streaming_client.config.get_content_type_string(),
+                'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
+                'custom_vocabulary_id': custom_vocabulary_id,
+                'metadata': metadata
+            })
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
