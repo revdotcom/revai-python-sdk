@@ -62,7 +62,7 @@ class RevAiStreamingClient():
         self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread=True)
 
-    def start(self, generator, custom_vocabulary_id=None, metadata=None):
+    def start(self, generator, metadata=None, custom_vocabulary_id=None):
         """Function to connect the websocket to the URL and start the response
             thread
 

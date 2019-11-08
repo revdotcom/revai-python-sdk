@@ -76,7 +76,7 @@ class TestStreamingClient():
                          'Connection Closed. Code : 1000; Reason : End of input. Closing\n']
         mock_streaming_client.client.recv_data.side_effect = data
 
-        response_gen = mock_streaming_client.start(mock_generator(), custom_vocabulary_id, metadata)
+        response_gen = mock_streaming_client.start(mock_generator(), metadata, custom_vocabulary_id)
 
         assert mock_streaming_client.client.connect.call_count == 1
         called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
