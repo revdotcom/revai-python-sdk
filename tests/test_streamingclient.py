@@ -78,7 +78,7 @@ class TestStreamingClient():
 
         response_gen = mock_streaming_client.start(mock_generator(), custom_vocabulary_id, metadata)
 
-        mock_streaming_client.client.connect.assert_called_once()
+        assert mock_streaming_client.client.connect.call_count == 1
         called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
         validate_query_parameters(called_url, query_dict)
         mock_streaming_client.client.send_binary.assert_any_call(0)
