@@ -7,9 +7,9 @@ import json
 from . import __version__
 
 try:
-    from urllib.parse import quote
+    from urllib.parse import urlencode
 except ImportError:
-    from urllib import quote
+    from urllib import urlencode
 
 
 def on_error(error):
@@ -62,19 +62,24 @@ class RevAiStreamingClient():
         self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread=True)
 
-    def start(self, generator, metadata=None):
+    def start(self, generator, metadata=None, custom_vocabulary_id=None):
         """Function to connect the websocket to the URL and start the response
             thread
 
         :param generator: generator object that yields binary audio data
         :param metadata: metadata to be attached to streaming job
         """
-        url = self.base_url + '?access_token={}'.format(self.access_token) \
-            + '&content_type={}'.format(self.config.get_content_type_string()) \
-            + '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe=''))
+        url = self.base_url + '?' + urlencode({
+            'access_token': self.access_token,
+            'content_type': self.config.get_content_type_string(),
+            'user_agent': 'RevAi-PythonSDK/{}'.format(__version__)
+        })
+
+        if custom_vocabulary_id:
+            url += '&' + urlencode({'custom_vocabulary_id': custom_vocabulary_id})
 
         if metadata:
-            url += '&metadata={}'.format(quote(metadata, safe=''))
+            url += '&' + urlencode({'metadata': metadata})
 
         try:
             self.client.connect(url)

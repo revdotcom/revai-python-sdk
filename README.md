@@ -157,10 +157,10 @@ streaming_client = RevAiStreamingClient("ACCESS TOKEN",
 `on_error`, `on_close`, and `on_connected` are optional parameters that are functions to be called when the websocket errors, closes, and connects respectively. The default `on_error` raises the error, `on_close` prints out the code and reason for closing, and `on_connected` prints out the job ID.
 If passing in custom functions, make sure you provide the right parameters. See the sample code for the parameters.
 
-Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio.
+Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio. You can also use a custom vocabulary with your streaming job by supplying the optional `custom_vocabulary_id` when starting a connection!
 
 ```python
-response_generator = streaming_client.start(AUDIO_GENERATOR)
+response_generator = streaming_client.start(AUDIO_GENERATOR, custom_vocabulary_id="CUSTOM VOCAB ID")
 ```
 
 `response_generator` is a generator object that yields the transcription results of the audio including partial and final transcriptions. The `start` method creates a thread sending audio pieces from the `AUDIO_GENERATOR` to our

@@ -8,9 +8,9 @@ from src.rev_ai.models.streaming import MediaConfig
 from src.rev_ai.streamingclient import RevAiStreamingClient
 
 try:
-    from urllib.parse import quote
+    from urllib.parse import parse_qs, urlparse
 except ImportError:
-    from urllib import quote
+    from urlparse import parse_qs, urlparse
 
 
 @pytest.mark.usefixtures('mock_streaming_client', 'mock_generator')
@@ -54,33 +54,33 @@ class TestStreamingClient():
             RevAiStreamingClient(None, example_config)
 
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
+        custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
-        url = mock_streaming_client.base_url + \
-            '?access_token={}'.format(mock_streaming_client.access_token) + \
-            '&content_type={}'. \
-            format(mock_streaming_client.config.get_content_type_string()) + \
-            '&user_agent={}'.format(quote('RevAi-PythonSDK/{}'.format(__version__), safe='')) + \
-            '&metadata={}'.format(quote(metadata))
+        query_dict = {
+            'access_token': mock_streaming_client.access_token,
+            'content_type': mock_streaming_client.config.get_content_type_string(),
+            'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
+            'custom_vocabulary_id': custom_vocabulary_id,
+            'metadata': metadata
+        }
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
         if six.PY3:
             example_data = example_data.encode('utf-8')
             example_connected = example_connected.encode('utf-8')
-        data = [
-            [0x1, example_connected],
-            [0x1, example_data],
-            [0x8, b'\x03\xe8End of input. Closing']
-        ]
-        exp_responses = [
-            'Connected, Job ID : testid\n',
-            '{"type":"partial","transcript":"Test"}',
-            'Connection Closed. Code : 1000; Reason : End of input. Closing\n'
-        ]
+        data = [[0x1, example_connected],
+                [0x1, example_data],
+                [0x8, b'\x03\xe8End of input. Closing']]
+        exp_responses = ['Connected, Job ID : testid\n',
+                         '{"type":"partial","transcript":"Test"}',
+                         'Connection Closed. Code : 1000; Reason : End of input. Closing\n']
         mock_streaming_client.client.recv_data.side_effect = data
 
-        response_gen = mock_streaming_client.start(mock_generator(), metadata)
+        response_gen = mock_streaming_client.start(mock_generator(), metadata, custom_vocabulary_id)
 
-        mock_streaming_client.client.connect.assert_called_once_with(url)
+        assert mock_streaming_client.client.connect.call_count == 1
+        called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
+        validate_query_parameters(called_url, query_dict)
         mock_streaming_client.client.send_binary.assert_any_call(0)
         mock_streaming_client.client.send_binary.assert_any_call(1)
         mock_streaming_client.client.send_binary.assert_any_call(2)
@@ -100,3 +100,10 @@ class TestStreamingClient():
         mock_streaming_client.end()
 
         mock_streaming_client.client.abort.assert_called_once_with()
+
+
+def validate_query_parameters(called_url, query_dict):
+    called_query_string = urlparse(called_url).query
+    called_query_parameters = parse_qs(called_query_string)
+    for key in called_query_parameters:
+        assert called_query_parameters[key][0] == query_dict[key]
