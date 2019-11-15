@@ -33,7 +33,7 @@ custom_vocabularies_job = client.submit_custom_vocabularies(
 job_id = custom_vocabularies_job["id"]
 
 while True:
-    custom_vocabularies = client.get_custom_vocabularies(job_id)
+    custom_vocabularies = client.get_custom_vocabularies_information(job_id)
     status = custom_vocabularies["status"]
 
     print("Job Status: {}".format(status))
