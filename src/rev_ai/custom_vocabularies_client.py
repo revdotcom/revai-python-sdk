@@ -55,7 +55,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         return response.json()
 
-    def get_custom_vocabularies(
+    def get_custom_vocabularies_information(
             self,
             id):
         """ Get the custom vocabulary status

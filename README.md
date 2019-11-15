@@ -195,7 +195,7 @@ custom_vocabulary = CustomVocabulary(["Patrick Henry Winston", "Robert C Berwick
 custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
 
 # View the job's progress
-job_state = client.get_custom_vocabularies(custom_vocabularies_job['id'])
+job_state = client.get_custom_vocabularies_information(custom_vocabularies_job['id'])
 ```
 
 For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).
