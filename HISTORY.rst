@@ -55,3 +55,13 @@ History
 ------------------
 
 * Add metadata to streaming client
+
+2.7.0
+------------------
+
+* Add custom vocabularies to streaming client
+
+2.7.1
+------------------
+
+* Use v1 of the streaming api

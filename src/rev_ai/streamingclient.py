@@ -28,7 +28,7 @@ class RevAiStreamingClient():
     def __init__(self,
                  access_token,
                  config,
-                 version='v1alpha',
+                 version='v1',
                  on_error=on_error,
                  on_close=on_close,
                  on_connected=on_connected):
