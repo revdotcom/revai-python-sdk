@@ -15,12 +15,23 @@ limitations under the License.
 
 import time
 from rev_ai import apiclient
+from rev_ai.models import CustomVocabulary
 
 # String containing your access token
 access_token = "your_access_token"
 
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)
+
+# Construct CustomVocabulary objects using our premade class for ease
+mit_professors = CustomVocabulary(
+    ["Robert Berwick", "Noam Chomsky", "Evelina Fedorenko"]
+)
+# Or manually construct CustomVocabulary as such
+other_scientists = {"phrases": ["Albert Einstein"]}
+# Important: place custom vocabularies in a list before passing them into
+# either of client.submit_job_local_file() or sclient.ubmit_job_url()
+custom_vocabularies = [mit_professors, other_scientists]
 
 # Submitting a job through a local file. The optional parameters
 # are shown below.
