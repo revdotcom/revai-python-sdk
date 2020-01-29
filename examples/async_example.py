@@ -30,7 +30,7 @@ mit_professors = CustomVocabulary(
 # Or manually construct CustomVocabulary as such
 other_scientists = {"phrases": ["Albert Einstein"]}
 # Important: place custom vocabularies in a list before passing them into
-# either of client.submit_job_local_file() or sclient.ubmit_job_url()
+# either of client.submit_job_local_file() or client.submit_job_url()
 custom_vocabularies = [mit_professors, other_scientists]
 
 # Submitting a job through a local file. The optional parameters
