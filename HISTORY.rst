@@ -65,3 +65,4 @@ History
 ------------------
 
 * Use v1 of the streaming api
+* Add custom vocabulary to async example
