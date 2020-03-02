@@ -159,6 +159,8 @@ If passing in custom functions, make sure you provide the right parameters. See 
 
 Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio. You can also use a custom vocabulary with your streaming job by supplying the optional `custom_vocabulary_id` when starting a connection!
 
+More optional parameters can be supplied when starting a connection, these are `metadata` and `filter_profanity`. For a description of these optional parameters look at our [streaming documentation](https://www.rev.ai/docs/streaming#section/WebSocket-Endpoint).
+
 ```python
 response_generator = streaming_client.start(AUDIO_GENERATOR, custom_vocabulary_id="CUSTOM VOCAB ID")
 ```
