@@ -107,3 +107,6 @@ ENV/
 # Sublime Text settings
 *.sublime-project
 *.sublime-workspace
+
+# filesystem
+.DS_Store
