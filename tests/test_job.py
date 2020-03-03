@@ -107,6 +107,7 @@ class TestJobEndpoints():
             'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channels_count': 1,
+            'filter_profanity': FILTER_PROFANITY
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -151,7 +152,8 @@ class TestJobEndpoints():
             'callback_url': CALLBACK_URL,
             'skip_punctuation': True,
             'skip_diarization': True,
-            'speaker_channels_count': 1
+            'speaker_channels_count': 1,
+            'filter_profanity': FILTER_PROFANITY
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -160,7 +162,7 @@ class TestJobEndpoints():
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, True,
-                                               True, 1, CUSTOM_VOCAB)
+                                               True, 1, CUSTOM_VOCAB, FILTER_PROFANITY)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
