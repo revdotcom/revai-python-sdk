@@ -86,7 +86,7 @@ class RevAiStreamingClient():
             url += '&' + urlencode({'metadata': metadata})
 
         if filter_profanity:
-            url += '&' + urlencode({'filter_profanity': filter_profanity})
+            url += '&' + urlencode({'filter_profanity': 'true'})
 
         try:
             self.client.connect(url)

@@ -56,7 +56,7 @@ class TestStreamingClient():
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
         custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
-        filter_profanity = True
+        filter_profanity = 'true'
         query_dict = {
             'access_token': mock_streaming_client.access_token,
             'content_type': mock_streaming_client.config.get_content_type_string(),
@@ -79,7 +79,7 @@ class TestStreamingClient():
         mock_streaming_client.client.recv_data.side_effect = data
 
         response_gen = mock_streaming_client.start(mock_generator(), metadata,
-                                                   custom_vocabulary_id, filter_profanity)
+                                                   custom_vocabulary_id, True)
 
         assert mock_streaming_client.client.connect.call_count == 1
         called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
