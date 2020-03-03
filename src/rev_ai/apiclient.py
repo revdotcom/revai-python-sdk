@@ -2,7 +2,7 @@
 """Speech recognition tools for using Rev.ai"""
 
 import json
-from .models import Job, Account, Transcript, CaptionType
+from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
 
@@ -43,7 +43,8 @@ class RevAiAPIClient(BaseClient):
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
-            custom_vocabularies=None):
+            custom_vocabularies=None,
+            filter_profanity=False):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -71,9 +72,10 @@ class RevAiAPIClient(BaseClient):
         if not media_url:
             raise ValueError('media_url must be provided')
 
-        payload = self._create_job_options_payload(
-            media_url, metadata, callback_url, skip_diarization,
-            skip_punctuation, speaker_channels_count, custom_vocabularies)
+        payload = self._create_job_options_payload(media_url, metadata,
+                                                   callback_url, skip_diarization,
+                                                   skip_punctuation, speaker_channels_count,
+                                                   custom_vocabularies, filter_profanity)
 
         response = self._make_http_request(
             "POST",
@@ -90,7 +92,8 @@ class RevAiAPIClient(BaseClient):
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
-            custom_vocabularies=None):
+            custom_vocabularies=None,
+            filter_profanity=False):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -117,9 +120,9 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(
-            None, metadata, callback_url, skip_diarization,
-            skip_punctuation, speaker_channels_count, custom_vocabularies)
+        payload = self._create_job_options_payload(None, metadata, callback_url, skip_diarization,
+                                                   skip_punctuation, speaker_channels_count,
+                                                   custom_vocabularies, filter_profanity)
 
         with open(filename, 'rb') as f:
             files = {
@@ -355,7 +358,8 @@ class RevAiAPIClient(BaseClient):
             skip_diarization=None,
             skip_punctuation=None,
             speaker_channels_count=None,
-            custom_vocabularies=None):
+            custom_vocabularies=None,
+            filter_profanity=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -372,6 +376,8 @@ class RevAiAPIClient(BaseClient):
                 utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
             payload['speaker_channels_count'] = speaker_channels_count
+        if filter_profanity:
+            payload['filter_profanity'] = filter_profanity
         return payload
 
     def _create_captions_query(self, speaker_channel):

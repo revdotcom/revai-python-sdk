@@ -21,6 +21,7 @@ FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
+FILTER_PROFANITY = True
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -106,6 +107,7 @@ class TestJobEndpoints():
             'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channels_count': 1,
+            'filter_profanity': FILTER_PROFANITY
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -113,7 +115,7 @@ class TestJobEndpoints():
 
         res = client.submit_job_url(MEDIA_URL, METADATA,
                                     CALLBACK_URL, True,
-                                    True, 1, CUSTOM_VOCAB)
+                                    True, 1, CUSTOM_VOCAB, FILTER_PROFANITY)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -130,7 +132,8 @@ class TestJobEndpoints():
                 'skip_diarization': True,
                 'skip_punctuation': True,
                 'speaker_channels_count': 1,
-                'custom_vocabularies': CUSTOM_VOCAB
+                'custom_vocabularies': CUSTOM_VOCAB,
+                'filter_profanity': FILTER_PROFANITY
             },
             headers=client.default_headers)
 
@@ -149,7 +152,8 @@ class TestJobEndpoints():
             'callback_url': CALLBACK_URL,
             'skip_punctuation': True,
             'skip_diarization': True,
-            'speaker_channels_count': 1
+            'speaker_channels_count': 1,
+            'filter_profanity': FILTER_PROFANITY
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -158,7 +162,7 @@ class TestJobEndpoints():
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, True,
-                                               True, 1, CUSTOM_VOCAB)
+                                               True, 1, CUSTOM_VOCAB, FILTER_PROFANITY)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -178,7 +182,8 @@ class TestJobEndpoints():
                             'skip_punctuation': True,
                             'skip_diarization': True,
                             'speaker_channels_count': 1,
-                            'custom_vocabularies': CUSTOM_VOCAB
+                            'custom_vocabularies': CUSTOM_VOCAB,
+                            'filter_profanity': FILTER_PROFANITY
                         }, sort_keys=True)
                     )
                 },

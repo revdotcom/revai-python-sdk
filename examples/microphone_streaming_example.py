@@ -99,7 +99,7 @@ with MicrophoneStream(rate, chunk) as stream:
     # Uses try method to allow users to manually close the stream
     try:
         # Starts the server connection and thread sending microphone audio
-        response_gen = streamclient.start(stream.generator())
+        response_gen = streamclient.start(stream.generator(), filter_profanity=True)
 
         # Iterates through responses and prints them
         for response in response_gen:

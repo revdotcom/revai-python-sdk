@@ -56,12 +56,14 @@ class TestStreamingClient():
     def test_start_success(self, mock_streaming_client, mock_generator, capsys):
         custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
+        filter_profanity = 'true'
         query_dict = {
             'access_token': mock_streaming_client.access_token,
             'content_type': mock_streaming_client.config.get_content_type_string(),
             'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
             'custom_vocabulary_id': custom_vocabulary_id,
-            'metadata': metadata
+            'metadata': metadata,
+            'filter_profanity': filter_profanity
         }
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -76,7 +78,8 @@ class TestStreamingClient():
                          'Connection Closed. Code : 1000; Reason : End of input. Closing\n']
         mock_streaming_client.client.recv_data.side_effect = data
 
-        response_gen = mock_streaming_client.start(mock_generator(), metadata, custom_vocabulary_id)
+        response_gen = mock_streaming_client.start(mock_generator(), metadata,
+                                                   custom_vocabulary_id, True)
 
         assert mock_streaming_client.client.connect.call_count == 1
         called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]

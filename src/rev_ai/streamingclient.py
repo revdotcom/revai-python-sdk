@@ -62,7 +62,11 @@ class RevAiStreamingClient():
         self.on_connected = on_connected
         self.client = websocket.WebSocket(enable_multithread=True)
 
-    def start(self, generator, metadata=None, custom_vocabulary_id=None):
+    def start(self,
+              generator,
+              metadata=None,
+              custom_vocabulary_id=None,
+              filter_profanity=None):
         """Function to connect the websocket to the URL and start the response
             thread
 
@@ -80,6 +84,9 @@ class RevAiStreamingClient():
 
         if metadata:
             url += '&' + urlencode({'metadata': metadata})
+
+        if filter_profanity:
+            url += '&' + urlencode({'filter_profanity': 'true'})
 
         try:
             self.client.connect(url)

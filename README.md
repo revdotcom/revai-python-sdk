@@ -51,7 +51,7 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 If you want to get fancy, both send job methods take `metadata`, `callback_url`,
-`skip_diarization`, `skip_punctuation`, `speaker_channels_count` and `custom_vocabularies` as optional parameters, these are described in the request body of
+`skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies` and `filter_profanity` as optional parameters, these are described in the request body of
 the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 ### Checking your file's status
@@ -158,6 +158,8 @@ streaming_client = RevAiStreamingClient("ACCESS TOKEN",
 If passing in custom functions, make sure you provide the right parameters. See the sample code for the parameters.
 
 Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio. You can also use a custom vocabulary with your streaming job by supplying the optional `custom_vocabulary_id` when starting a connection!
+
+More optional parameters can be supplied when starting a connection, these are `metadata` and `filter_profanity`. For a description of these optional parameters look at our [streaming documentation](https://www.rev.ai/docs/streaming#section/WebSocket-Endpoint).
 
 ```python
 response_generator = streaming_client.start(AUDIO_GENERATOR, custom_vocabulary_id="CUSTOM VOCAB ID")
