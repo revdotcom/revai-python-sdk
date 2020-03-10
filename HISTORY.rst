@@ -67,3 +67,4 @@ History
 * Use v1 of the streaming api
 * Add custom vocabulary to async example
 * Add filter_profanity to async and streaming clients, examples, and documentation
+* Add remove_disfluencies to async client
