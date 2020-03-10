@@ -44,7 +44,8 @@ class RevAiAPIClient(BaseClient):
             skip_punctuation=False,
             speaker_channels_count=None,
             custom_vocabularies=None,
-            filter_profanity=False):
+            filter_profanity=False,
+            remove_disfluencies=False):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -66,6 +67,10 @@ class RevAiAPIClient(BaseClient):
             of a key "phrases" which maps to a list of strings, each of which
             represents a phrase you would like the speech recognition to bias
             itself toward.
+        :param filter_profanity: should rev.ai obscure profane words when
+                                 transcribing this file
+        :param remove_disfluencies: should rev.ai remove disfluencies when
+                                    transcribing this file
         :returns: raw response data
         :raises: HTTPError
         """
@@ -75,7 +80,8 @@ class RevAiAPIClient(BaseClient):
         payload = self._create_job_options_payload(media_url, metadata,
                                                    callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
-                                                   custom_vocabularies, filter_profanity)
+                                                   custom_vocabularies, filter_profanity, 
+                                                   remove_disfluencies)
 
         response = self._make_http_request(
             "POST",
@@ -93,7 +99,8 @@ class RevAiAPIClient(BaseClient):
             skip_punctuation=False,
             speaker_channels_count=None,
             custom_vocabularies=None,
-            filter_profanity=False):
+            filter_profanity=False,
+            remove_disfluencies=False):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -114,6 +121,10 @@ class RevAiAPIClient(BaseClient):
             recognition to find those phrases. Each dictionary has the key
             "phrases" which maps to a list of strings, each of which represents
             a phrase you would like the speech recognition to bias itself toward.
+        :param filter_profanity: should rev.ai obscure profane words when
+                                 transcribing this file
+        :param remove_disfluencies: should rev.ai remove disfluencies when
+                                    transcribing this file
         :returns: raw response data
         :raises: HTTPError
         """
@@ -122,7 +133,8 @@ class RevAiAPIClient(BaseClient):
 
         payload = self._create_job_options_payload(None, metadata, callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
-                                                   custom_vocabularies, filter_profanity)
+                                                   custom_vocabularies, filter_profanity,
+                                                   remove_disfluencies)
 
         with open(filename, 'rb') as f:
             files = {
@@ -359,7 +371,8 @@ class RevAiAPIClient(BaseClient):
             skip_punctuation=None,
             speaker_channels_count=None,
             custom_vocabularies=None,
-            filter_profanity=None):
+            filter_profanity=None,
+            remove_disfluencies=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -378,6 +391,8 @@ class RevAiAPIClient(BaseClient):
             payload['speaker_channels_count'] = speaker_channels_count
         if filter_profanity:
             payload['filter_profanity'] = filter_profanity
+        if remove_disfluencies:
+            payload['remove_disfluencies'] = remove_disfluencies
         return payload
 
     def _create_captions_query(self, speaker_channel):

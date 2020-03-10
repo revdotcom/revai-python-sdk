@@ -201,3 +201,7 @@ job_state = client.get_custom_vocabularies_information(custom_vocabularies_job['
 ```
 
 For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).
+
+# For Rev.ai PythonSDK Developers
+
+Remember in your development to follow the PEP8 style guide. Your code editor likely has Python PEP8 linting packages which can assist you in your development.
