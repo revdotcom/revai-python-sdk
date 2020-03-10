@@ -80,7 +80,7 @@ class RevAiAPIClient(BaseClient):
         payload = self._create_job_options_payload(media_url, metadata,
                                                    callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
-                                                   custom_vocabularies, filter_profanity, 
+                                                   custom_vocabularies, filter_profanity,
                                                    remove_disfluencies)
 
         response = self._make_http_request(
