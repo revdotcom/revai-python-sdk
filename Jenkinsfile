@@ -27,38 +27,39 @@ pipeline {
             steps {
                 echo 'Testing..'
                 sh '''
+                    ls ./dist
                     virtualenv ./sdk-test
                     . ./sdk-test/bin/activate
                     tox
                 '''
             }
         }
-        stage("Version Check") {
-            steps {
-                checkVersion(discoverVersion())
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-                sh '''
-                    . ./sdk-deploy/bin/activate
-                    python -m pip install twine
-                    twine upload dist/* -u ${PYPI_USER_ID} -p ${PYPI_PASSWORD}
-                    rm -r dist
-                '''
-                tagRepo(discoverVersion())
-            }
-        }
+        // stage("Version Check") {
+        //     steps {
+        //         checkVersion(discoverVersion())
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         echo 'Deploying....'
+        //         sh '''
+        //             . ./sdk-deploy/bin/activate
+        //             python -m pip install twine
+        //             twine upload dist/* -u ${PYPI_USER_ID} -p ${PYPI_PASSWORD}
+        //             rm -r dist
+        //         '''
+        //         tagRepo(discoverVersion())
+        //     }
+        // }
     }
-    post {
-        success {
-            notifyComplete('SUCCESS')
-        }
-        failure {
-            notifyComplete('FAILURE')
-        }
-    }
+    // post {
+    //     success {
+    //         notifyComplete('SUCCESS')
+    //     }
+    //     failure {
+    //         notifyComplete('FAILURE')
+    //     }
+    // }
 }
 
 // Get version number from PKG-INFO file
