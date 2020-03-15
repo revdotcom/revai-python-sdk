@@ -7,18 +7,12 @@ pipeline {
     }
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image "python:3"
-                } 
-            }
+            agent { docker { image "python:3" } }
             steps {
                 echo 'Building..'
                 sh '''
                     python3 -m venv ./sdk-deploy
                     . ./sdk-deploy/bin/activate
-                    
-                    pip install wheel
                     python setup.py sdist bdist_wheel
                 '''
             }
