@@ -12,7 +12,7 @@ pipeline {
                 echo 'Building..'
                 sh '''
                     rm -r dist
-                    python3 -m venv ./sdk-deploy
+                    python -m venv ./sdk-deploy
                     . ./sdk-deploy/bin/activate
                     python setup.py sdist bdist_wheel
                 '''
@@ -28,7 +28,6 @@ pipeline {
             steps {
                 echo 'Testing..'
                 sh '''
-                    ls ./dist
                     virtualenv ./sdk-test
                     . ./sdk-test/bin/activate
                     tox
