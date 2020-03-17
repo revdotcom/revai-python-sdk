@@ -35,11 +35,13 @@ pipeline {
             }
         }
         stage("Version Check") {
+            agent { docker { image "python:3" } }
             steps {
                 checkVersion(discoverVersion())
             }
         }
         stage('Deploy') {
+            agent { docker { image "python:3" } }
             steps {
                 echo 'Deploying....'
                 sh '''
