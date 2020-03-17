@@ -7,13 +7,14 @@ pipeline {
     }
     stages {
         stage('Build') {
+            agent { docker { image "python:3" } }
             steps {
                 echo 'Building..'
                 sh '''
-                    virtualenv ./sdk-deploy
+                    rm -r dist
+                    python -m venv ./sdk-deploy
                     . ./sdk-deploy/bin/activate
-                    python setup.py sdist
-                    python setup.py bdist_wheel
+                    python setup.py sdist bdist_wheel
                 '''
             }
         }
