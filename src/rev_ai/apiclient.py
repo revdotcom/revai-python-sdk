@@ -352,7 +352,7 @@ class RevAiAPIClient(BaseClient):
         return
 
     def get_account(self):
-        """Get account information, such as remaining balance.
+        """Get account information, such as remaining credits.
 
         :raises: HTTPError
         """
