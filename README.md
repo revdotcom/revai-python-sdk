@@ -198,6 +198,9 @@ custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
 
 # View the job's progress
 job_state = client.get_custom_vocabularies_information(custom_vocabularies_job['id'])
+
+# Delete the CustomVocabulary
+client.delete_custom_vocabulary(custom_vocabularies_job['id'])
 ```
 
 For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).

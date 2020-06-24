@@ -55,19 +55,31 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         return response.json()
 
-    def get_custom_vocabularies_information(
-            self,
-            id):
+    def get_custom_vocabularies_information(self, id):
         """ Get the custom vocabulary status
         :param id: string id of custom vocabulary submission
         """
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, "{}".format(id))
+            urljoin(self.base_url, id)
         )
 
         return response.json()
+
+    def delete_custom_vocabulary(self, id):
+        """ Delete a custom vocabulary
+        :param id: string id of custom vocabulary to be deleted
+        :returns: None if job was successfully deleted
+        :raises: HTTPError
+        """
+
+        self._make_http_request(
+            "DELETE",
+            urljoin(self.base_url, id)
+        )
+
+        return
 
     def _create_custom_vocabularies_options_payload(
             self,

@@ -41,7 +41,6 @@ while True:
     if status == "in_progress":
         time.sleep(5)
         continue
-
     elif status == "failed":
         print("Job Failed : {}".format(custom_vocabularies["failure_detail"]))
         break
@@ -49,3 +48,6 @@ while True:
     if status == "complete":
         print("SUCCESS: {}".format(custom_vocabularies))
         break
+
+# print("Deleting custom vocabulary")
+# client.delete_custom_vocabulary(job_id)
