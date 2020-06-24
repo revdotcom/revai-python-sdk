@@ -49,5 +49,5 @@ while True:
         print("SUCCESS: {}".format(custom_vocabularies))
         break
 
-print("Deleting custom vocabulary")
-client.delete_custom_vocabulary(job_id)
+# print("Deleting custom vocabulary")
+# client.delete_custom_vocabulary(job_id)
