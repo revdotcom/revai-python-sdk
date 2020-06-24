@@ -60,11 +60,20 @@ class RevAiCustomVocabulariesClient(BaseClient):
         :param id: string id of custom vocabulary submission
         """
 
-        response = self._make_http_request(
-            "GET",
-            urljoin(self.base_url, id)
-        )
+        response = self._make_http_request("GET", urljoin(self.base_url, id))
+        return response.json()
 
+    def get_list_of_custom_vocabularies(self, limit=None):
+        """ Get a list of custom vocabularies
+        :param limit: optional, limits the number of jobs returned,
+                      if none, a default of 100 jobs is returned, max limit if 1000
+        """
+
+        url = self.base_url
+        if limit:
+            url += '?limit={}'.format(limit)
+
+        response = self._make_http_request("GET", url)
         return response.json()
 
     def delete_custom_vocabulary(self, id):
@@ -74,11 +83,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
         :raises: HTTPError
         """
 
-        self._make_http_request(
-            "DELETE",
-            urljoin(self.base_url, id)
-        )
-
+        self._make_http_request("DELETE", urljoin(self.base_url, id))
         return
 
     def _create_custom_vocabularies_options_payload(

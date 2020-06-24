@@ -176,17 +176,18 @@ streaming_client.end()
 
 Otherwise, the connection will end when the server obtains an "EOS" message.
 
-### Submitting Custom Vocabularies
+### Submitting custom vocabularies
 
-In addition to passing custom vocabularies as parameters in the async api client, you can create and submit your custom vocabularies independently and directly to the custom vocabularies api, as well as check on their progress.
+In addition to passing custom vocabularies as parameters in the async API client, you can create and submit your custom vocabularies independently and directly to the custom vocabularies API, as well as check on their progress.
 
 Primarily, the custom vocabularies client allows you to submit and preprocess vocabularies for use with the streaming client, in order to have streaming jobs with custom vocabularies!
 
-In this example you see how to construct custom vocabulary objects, submit them to the api, and check on their progress - and metadata!
+In this example you see how to construct custom vocabulary objects, submit them to the API, and check on their progress and metadata!
 
 ```python
 from rev_ai import custom_vocabularies_client
 from rev_ai.models import CustomVocabulary
+
 # Create a client
 client = custom_vocabularies_client.RevAiCustomVocabulariesClient("ACCESS TOKEN")
 
@@ -198,6 +199,9 @@ custom_vocabularies_job = client.submit_custom_vocabularies([custom_vocabulary])
 
 # View the job's progress
 job_state = client.get_custom_vocabularies_information(custom_vocabularies_job['id'])
+
+# Get list of previously submitted custom vocabularies
+custom_vocabularies_jobs = client.get_list_of_custom_vocabularies()
 
 # Delete the CustomVocabulary
 client.delete_custom_vocabulary(custom_vocabularies_job['id'])
