@@ -39,12 +39,10 @@ class TestCustomVocabulary():
 
 class TestCustomVocabularyEndpoints():
     def test_get_custom_vocabularies_information_success(self, mock_session, make_mock_response):
-        status = 'complete'
-        created_on = '2018-05-05T23:23:22.29Z'
         data = {
             'id': CV_ID,
-            'status': status,
-            'created_on': created_on
+            'status': 'complete',
+            'created_on': '2018-05-05T23:23:22.29Z'
         }
         client = RevAiCustomVocabulariesClient(TOKEN)
         url = urljoin(client.base_url, CV_ID)
@@ -54,8 +52,41 @@ class TestCustomVocabularyEndpoints():
         res = client.get_custom_vocabularies_information(CV_ID)
 
         assert res == data
-        mock_session.request.assert_called_once_with("GET",
-                                                     url,
+        mock_session.request.assert_called_once_with("GET", url,
+                                                     headers=client.default_headers)
+
+    def test_get_list_of_custom_vocabularies_success(self, mock_session, make_mock_response):
+        data = {
+            'id': CV_ID,
+            'status': 'complete',
+            'created_on': '2018-05-05T23:23:22.29Z'
+        }
+        client = RevAiCustomVocabulariesClient(TOKEN)
+        response = make_mock_response(url=client.base_url, json_data=[data])
+        mock_session.request.return_value = response
+
+        res = client.get_list_of_custom_vocabularies()
+
+        assert res == [data]
+        mock_session.request.assert_called_once_with("GET", client.base_url,
+                                                     headers=client.default_headers)
+
+    def test_get_list_of_custom_vocabularies_with_limit(self, mock_session, make_mock_response):
+        data = {
+            'id': CV_ID,
+            'status': 'complete',
+            'created_on': '2018-05-05T23:23:22.29Z'
+        }
+        limit = 5
+        client = RevAiCustomVocabulariesClient(TOKEN)
+        url = '{}?limit={}'.format(client.base_url, limit)
+        response = make_mock_response(url=client.base_url, json_data=[data])
+        mock_session.request.return_value = response
+
+        res = client.get_list_of_custom_vocabularies(limit)
+
+        assert res == [data]
+        mock_session.request.assert_called_once_with("GET", url,
                                                      headers=client.default_headers)
 
     def test_delete_custom_vocabulary_success(self, mock_session, make_mock_response):
@@ -67,6 +98,5 @@ class TestCustomVocabularyEndpoints():
         res = client.delete_custom_vocabulary(CV_ID)
 
         assert res is None
-        mock_session.request.assert_called_once_with("DELETE",
-                                                     url,
+        mock_session.request.assert_called_once_with("DELETE", url,
                                                      headers=client.default_headers)

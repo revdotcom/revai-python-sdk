@@ -11,7 +11,9 @@ except ImportError:
 
 
 class RevAiCustomVocabulariesClient(BaseClient):
-    """Client which implements Rev.ai CustomVocabulary API"""
+    """Client which implements Rev.ai CustomVocabulary API
+    See https://www.rev.ai/docs/streaming#section/WebSocket-Endpoint/Custom-Vocabulary
+    """
 
     def __init__(self, access_token):
         """Constructor
@@ -31,6 +33,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
             callback_url=None,
             metadata=None):
         """Submit custom vocabularies.
+        See https://www.rev.ai/docs/streaming#operation/SubmitCustomVocabulary
 
         :param custom_vocabularies: List of CustomVocabulary objects
         :param callback_url: callback url to invoke on job completion as a
@@ -57,28 +60,38 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
     def get_custom_vocabularies_information(self, id):
         """ Get the custom vocabulary status
+        See https://www.rev.ai/docs/streaming#operation/GetCustomVocabulary
+
         :param id: string id of custom vocabulary submission
         """
 
-        response = self._make_http_request(
-            "GET",
-            urljoin(self.base_url, id)
-        )
+        response = self._make_http_request("GET", urljoin(self.base_url, id))
+        return response.json()
 
+    def get_list_of_custom_vocabularies(self, limit=None):
+        """ Get a list of custom vocabularies
+        See https://www.rev.ai/docs/streaming#operation/GetCustomVocabularies
+
+        :param limit: optional, limits the number of jobs returned
+        """
+
+        url = self.base_url
+        if limit:
+            url += '?limit={}'.format(limit)
+
+        response = self._make_http_request("GET", url)
         return response.json()
 
     def delete_custom_vocabulary(self, id):
         """ Delete a custom vocabulary
+        See https://www.rev.ai/docs/streaming#operation/DeleteCustomVocabulary
+
         :param id: string id of custom vocabulary to be deleted
         :returns: None if job was successfully deleted
         :raises: HTTPError
         """
 
-        self._make_http_request(
-            "DELETE",
-            urljoin(self.base_url, id)
-        )
-
+        self._make_http_request("DELETE", urljoin(self.base_url, id))
         return
 
     def _create_custom_vocabularies_options_payload(

@@ -49,5 +49,8 @@ while True:
         print("SUCCESS: {}".format(custom_vocabularies))
         break
 
+print("Getting list of submitted custom vocabularies")
+list_custom_vocabularies = client.get_list_of_custom_vocabularies()
+
 # print("Deleting custom vocabulary")
 # client.delete_custom_vocabulary(job_id)
