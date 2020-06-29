@@ -57,13 +57,15 @@ class TestStreamingClient():
         custom_vocabulary_id = 'mycustomvocabid'
         metadata = "my metadata"
         filter_profanity = 'true'
+        remove_disfluencies = 'true'
         query_dict = {
             'access_token': mock_streaming_client.access_token,
             'content_type': mock_streaming_client.config.get_content_type_string(),
             'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
             'custom_vocabulary_id': custom_vocabulary_id,
             'metadata': metadata,
-            'filter_profanity': filter_profanity
+            'filter_profanity': filter_profanity,
+            'remove_disfluencies': remove_disfluencies
         }
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
