@@ -33,7 +33,6 @@ class RevAiStreamingClient():
                  on_close=on_close,
                  on_connected=on_connected):
         """Constructor for Streaming Client
-
         :param access_token: access token which authorizes all requests and
             links them to your account. Generated on the settings page of your
             account dashboard on Rev.ai.
@@ -66,10 +65,10 @@ class RevAiStreamingClient():
               generator,
               metadata=None,
               custom_vocabulary_id=None,
-              filter_profanity=None):
+              filter_profanity=None,
+              remove_disfluencies=None):
         """Function to connect the websocket to the URL and start the response
             thread
-
         :param generator: generator object that yields binary audio data
         :param metadata: metadata to be attached to streaming job
         """
@@ -88,6 +87,9 @@ class RevAiStreamingClient():
         if filter_profanity:
             url += '&' + urlencode({'filter_profanity': 'true'})
 
+        if remove_disfluencies:
+            url += '&' + urlencode({'remove_disfluencies': 'true'})
+
         try:
             self.client.connect(url)
         except Exception as e:
@@ -104,7 +106,6 @@ class RevAiStreamingClient():
 
     def _start_send_data_thread(self, generator):
         """Function to send binary audio data from a generator with threading
-
         :param generator: generator object that yields binary audio data
         """
         if not generator:
@@ -123,7 +124,6 @@ class RevAiStreamingClient():
 
     def _send_data(self, generator):
         """Function used in a thread to send requests to the server.
-
         :param generator: enerator object that yields binary audio data
         """
         if not generator:
