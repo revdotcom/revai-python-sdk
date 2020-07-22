@@ -11,7 +11,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh '''
-                    rm -r dist
+                    rm -rf dist
                     python -m venv ./sdk-deploy
                     . ./sdk-deploy/bin/activate
                     python setup.py sdist bdist_wheel
