@@ -21,6 +21,11 @@ import os
 
 
 def get_requirements(parsed_requirements):
+    """Return strings of requirements from pip's ParsedRequirement objects
+
+    In pip <= 19.3.1, requirements are in ParsedRequirement.req
+    In pip > 19.3.1, requirements are in ParsedRequirement.requirement
+    """
     return [
         str(ir.req if hasattr(ir, "req") else ir.requirement)
         for ir in parsed_requirements
