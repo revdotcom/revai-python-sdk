@@ -59,7 +59,7 @@ setup(
     py_modules=[os.path.splitext(os.path.basename(path))[0]
                 for path in glob('src/*.py')],
     include_package_data=True,
-    install_requires=parsed_requirements(parsed_requirements),
+    install_requires=get_requirements(parsed_requirements),
     zip_safe=False,
     license='MIT license',
     keywords='rev_ai',
@@ -78,6 +78,6 @@ setup(
     ],
     setup_requires=['pytest-runner==4.2'],
     test_suite='tests',
-    tests_require=parsed_requirements(parsed_test_requirements),
+    tests_require=get_requirements(parsed_test_requirements),
     url='https://github.com/revdotcom/revai-python-sdk',
 )
