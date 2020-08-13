@@ -2,34 +2,27 @@
 # -*- coding: utf-8 -*-
 from glob import glob
 from setuptools import setup, find_packages
-try:
-    # pip >=20
-    from pip._internal.network.session import PipSession
-    from pip._internal.req import parse_requirements
-except ImportError:
-    try:
-        # 10.0.0 <= pip <= 19.3.1
-        from pip._internal.download import PipSession
-        from pip._internal.req import parse_requirements
-    except ImportError:
-        # pip <= 9.0.3
-        from pip.download import PipSession
-        from pip.req import parse_requirements
 import re
 import ast
 import os
 
 
-def get_requirements(parsed_requirements):
-    """Return strings of requirements from pip's ParsedRequirement objects
-
-    In pip <= 19.3.1, requirements are in ParsedRequirement.req
-    In pip > 19.3.1, requirements are in ParsedRequirement.requirement
-    """
-    return [
-        str(ir.req if hasattr(ir, "req") else ir.requirement)
-        for ir in parsed_requirements
-    ]
+def parse_requirements(filehandle):
+    for line in filehandle:
+        line = line.strip()
+        if line == '':
+            continue
+        # Comments are lines that start with # only.
+        elif not line or line.startswith('#'):
+            continue
+        elif (line.startswith('-r') or line.startswith('--requirement') or
+              line.startswith('-f') or line.startswith('--find-links') or
+              line.startswith('-i') or line.startswith('--index-url') or
+              line.startswith('--extra-index-url') or line.startswith('--no-index') or
+              line.startswith('-Z') or line.startswith('--always-unzip')):
+            continue
+        else:
+            yield line
 
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
@@ -44,8 +37,11 @@ with open('README.md') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-parsed_requirements = parse_requirements('requirements.txt', session=PipSession())
-parsed_test_requirements = parse_requirements('requirements_dev.txt', session=PipSession())
+with open('requirements.txt', 'r') as req_file:
+    requirements = list(parse_requirements(req_file))
+
+with open('requirements_dev.txt', 'r') as req_dev_file:
+    test_requirements = list(parse_requirements(req_dev_file))
 
 setup(
     name='rev_ai',
@@ -56,10 +52,9 @@ setup(
     author="Rev Ai",
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    py_modules=[os.path.splitext(os.path.basename(path))[0]
-                for path in glob('src/*.py')],
+    py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
-    install_requires=get_requirements(parsed_requirements),
+    install_requires=requirements,
     zip_safe=False,
     license='MIT license',
     keywords='rev_ai',
@@ -78,6 +73,6 @@ setup(
     ],
     setup_requires=['pytest-runner==4.2'],
     test_suite='tests',
-    tests_require=get_requirements(parsed_test_requirements),
+    tests_require=test_requirements,
     url='https://github.com/revdotcom/revai-python-sdk',
 )
