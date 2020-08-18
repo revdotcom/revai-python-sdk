@@ -14,3 +14,10 @@ install: pip install -r requirements.txt -r requirements_dev.txt
 script: 
   - make test
   - make lint
+
+notifications:
+  slack:
+    secure: aZgSQDJHiWcdE6OAuDRruTZMIHp4lzvU+1SkQcxMdQ/5UDtFaFCUOTQXLqgGhEAkmwFX00Z16u0Nf4zu8RVC8do/5yeEg3Gs11q/E8R9BEDMGqANGEpqcUTmEHdu29DKoSW7MWrNR1wpigzNYV2Tb0jcXHefIIGtezmczP5aje4Bxv9mJq2+xtIYIr0+WnByg9vFcLvh+zIatlB2se3KboQKFeZ7M8Ptvx8bzD9Qsy0W0HOdLGdccUYxM+AuK1OM0acBObNQ/I9iorjFeJ1Y2UGCXaxhhKkHtbnEbnK38lVIkQRSl8plMIn7kVT1+r/buzcFSPDflXPwYWBHsWdEaMMQet+psbTd5I0iYzoo3eE9ed1610xDyKbVnNeRiPJ+UT1bsHI4UdhhsdwfVHcn9RG2dEuChEWFmvRucl1KxUQoaTXwIiondykXzj0VqJoEtpRvoaCjtwhzhUP6ovwQiX8nRv0V8d78jTn9QNcVC1yWashQRHCTf8eeu955IQYUUk1/iyt4e/J1h9siDwA7qkOuWudvPwkvmYpkXrjeyh2xT0pcGpR6a6mIy8uqN81qU0xmiYtByj8chivsNSQi+w4IixrAD/lCipfqPwUsBp3Mec62P4sXW0LU8iQRbtUSa900+Ch450lJOMnyKL5zxmW7UIb2mpH8uOp+sPf/qVM=
+    template: "%{repository_name} build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) by %{author} %{result} after %{duration}"
+    on_success: always
+    on_failure: always
