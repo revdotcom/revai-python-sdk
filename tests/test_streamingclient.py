@@ -58,14 +58,16 @@ class TestStreamingClient():
         metadata = "my metadata"
         filter_profanity = 'true'
         remove_disfluencies = 'true'
-        query_dict = {
+        delete_after_seconds = '0'
+        expected_query_dict = {
             'access_token': mock_streaming_client.access_token,
             'content_type': mock_streaming_client.config.get_content_type_string(),
             'user_agent': 'RevAi-PythonSDK/{}'.format(__version__),
             'custom_vocabulary_id': custom_vocabulary_id,
             'metadata': metadata,
             'filter_profanity': filter_profanity,
-            'remove_disfluencies': remove_disfluencies
+            'remove_disfluencies': remove_disfluencies,
+            'delete_after_seconds': delete_after_seconds
         }
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -81,11 +83,11 @@ class TestStreamingClient():
         mock_streaming_client.client.recv_data.side_effect = data
 
         response_gen = mock_streaming_client.start(mock_generator(), metadata,
-                                                   custom_vocabulary_id, True)
+                                                   custom_vocabulary_id, True, True, 0)
 
         assert mock_streaming_client.client.connect.call_count == 1
-        called_url = mock_streaming_client.client.connect.call_args_list[0].args[0]
-        validate_query_parameters(called_url, query_dict)
+        called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
+        validate_query_parameters(called_url, expected_query_dict)
         mock_streaming_client.client.send_binary.assert_any_call(0)
         mock_streaming_client.client.send_binary.assert_any_call(1)
         mock_streaming_client.client.send_binary.assert_any_call(2)
@@ -107,8 +109,8 @@ class TestStreamingClient():
         mock_streaming_client.client.abort.assert_called_once_with()
 
 
-def validate_query_parameters(called_url, query_dict):
+def validate_query_parameters(called_url, expected_query_dict):
     called_query_string = urlparse(called_url).query
     called_query_parameters = parse_qs(called_query_string)
-    for key in called_query_parameters:
-        assert called_query_parameters[key][0] == query_dict[key]
+    for key in expected_query_dict:
+        assert called_query_parameters[key][0] == expected_query_dict[key]
