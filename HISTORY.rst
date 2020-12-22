@@ -68,3 +68,8 @@ History
 * Add custom vocabulary to async example
 * Add filter_profanity to async and streaming clients, examples, and documentation
 * Add remove_disfluencies to async client
+
+2.7.2
+------------------
+
+* Add language to async client

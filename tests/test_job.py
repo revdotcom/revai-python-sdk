@@ -21,6 +21,7 @@ FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
+LANG = 'en'
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -108,6 +109,7 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
+            'language': LANG,
             'delete_after_seconds': 0
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
@@ -136,6 +138,7 @@ class TestJobEndpoints():
                 'custom_vocabularies': CUSTOM_VOCAB,
                 'filter_profanity': True,
                 'remove_disfluencies': True,
+                'language' = LANG,
                 'delete_after_seconds': 0
             },
             headers=client.default_headers)
@@ -158,6 +161,7 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
+            'language' = LANG,
             'delete_after_seconds': 0
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
@@ -190,6 +194,7 @@ class TestJobEndpoints():
                             'custom_vocabularies': CUSTOM_VOCAB,
                             'filter_profanity': True,
                             'remove_disfluencies': True,
+                            'language' = LANG,
                             'delete_after_seconds': 0
                         }, sort_keys=True)
                     )
