@@ -109,8 +109,8 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
-            'language': LANG,
-            'delete_after_seconds': 0
+            'delete_after_seconds': 0,
+            'language': LANG
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -138,8 +138,8 @@ class TestJobEndpoints():
                 'custom_vocabularies': CUSTOM_VOCAB,
                 'filter_profanity': True,
                 'remove_disfluencies': True,
-                'language' = LANG,
-                'delete_after_seconds': 0
+                'delete_after_seconds': 0,
+                'language' = LANG
             },
             headers=client.default_headers)
 
@@ -161,8 +161,8 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
-            'language' = LANG,
-            'delete_after_seconds': 0
+            'delete_after_seconds': 0,
+            'language' = LANG
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -194,8 +194,8 @@ class TestJobEndpoints():
                             'custom_vocabularies': CUSTOM_VOCAB,
                             'filter_profanity': True,
                             'remove_disfluencies': True,
-                            'language' = LANG,
-                            'delete_after_seconds': 0
+                            'delete_after_seconds': 0,
+                            'language' = LANG
                         }, sort_keys=True)
                     )
                 },

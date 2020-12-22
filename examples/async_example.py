@@ -43,8 +43,9 @@ custom_vocabularies = [mit_professors, other_scientists]
 #                                    custom_vocabularies=None,
 #                                    filter_profanity=False,
 #                                    remove_disfluencies=False,
-#                                    language=None,
-#                                    delete_after_seconds=None)
+#                                    delete_after_seconds=None,
+#                                    language=None)
+
 
 
 # Submitting a job with a link to the file you want transcribed
@@ -57,8 +58,8 @@ job = client.submit_job_url(url,
                             custom_vocabularies=custom_vocabularies,
                             filter_profanity=False,
                             remove_disfluencies=False,
-                            language=None,
-                            delete_after_seconds=None)
+                            delete_after_seconds=None,
+                            language=None)
 
 print("Submitted Job")
 
