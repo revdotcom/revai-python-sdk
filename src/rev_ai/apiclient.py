@@ -381,8 +381,8 @@ class RevAiAPIClient(BaseClient):
             custom_vocabularies=None,
             filter_profanity=None,
             remove_disfluencies=None,
-            language=None,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            language=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
