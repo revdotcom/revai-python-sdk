@@ -212,3 +212,13 @@ For more details, check out the custom vocabularies example in our [examples](ht
 # For Rev.ai Python SDK Developers
 
 Remember in your development to follow the PEP8 style guide. Your code editor likely has Python PEP8 linting packages which can assist you in your development.
+
+# Local testing instructions
+
+Prequisites: virtualenv, tox
+To test locally use the following commands from the repo root
+    virtualenv ./sdk-test
+    . ./sdk-test/bin/activate
+    tox
+This will locally run the test suite, and saves significant dev time over
+waiting for the CI tool to pick it up.
