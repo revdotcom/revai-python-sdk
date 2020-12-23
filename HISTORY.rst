@@ -72,4 +72,4 @@ History
 2.7.2
 ------------------
 
-* Add language to async client
+* Add language selection option for multi-lingual ASR jobs to async client
