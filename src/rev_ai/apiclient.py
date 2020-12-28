@@ -46,7 +46,8 @@ class RevAiAPIClient(BaseClient):
             custom_vocabularies=None,
             filter_profanity=False,
             remove_disfluencies=False,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            language=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -71,6 +72,8 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
+        :param language: specify language using ISO 639-1 2-letter language
+                         code
         :returns: raw response data
         :raises: HTTPError
         """
@@ -81,7 +84,8 @@ class RevAiAPIClient(BaseClient):
                                                    callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
-                                                   remove_disfluencies, delete_after_seconds)
+                                                   remove_disfluencies, delete_after_seconds,
+                                                   language)
 
         response = self._make_http_request(
             "POST",
@@ -101,7 +105,8 @@ class RevAiAPIClient(BaseClient):
             custom_vocabularies=None,
             filter_profanity=False,
             remove_disfluencies=False,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            language=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -125,6 +130,8 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
+        :param language: specify language using ISO 639-1 2-letter language
+                         code
         :returns: raw response data
         :raises: HTTPError
         """
@@ -134,7 +141,8 @@ class RevAiAPIClient(BaseClient):
         payload = self._create_job_options_payload(None, metadata, callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
-                                                   remove_disfluencies, delete_after_seconds)
+                                                   remove_disfluencies, delete_after_seconds,
+                                                   language)
 
         with open(filename, 'rb') as f:
             files = {
@@ -373,7 +381,8 @@ class RevAiAPIClient(BaseClient):
             custom_vocabularies=None,
             filter_profanity=None,
             remove_disfluencies=None,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            language=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -396,6 +405,8 @@ class RevAiAPIClient(BaseClient):
             payload['remove_disfluencies'] = remove_disfluencies
         if delete_after_seconds is not None:
             payload['delete_after_seconds'] = delete_after_seconds
+        if language:
+            payload['language'] = language
         return payload
 
     def _create_captions_query(self, speaker_channel):

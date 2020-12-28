@@ -51,7 +51,7 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 If you want to get fancy, both send job methods take `metadata`, `callback_url`,
-`skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, and `delete_after_seconds` as optional parameters, these are described in the request body of
+`skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, and `language` as optional parameters, these are described in the request body of
 the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
 ### Checking your file's status
@@ -212,3 +212,13 @@ For more details, check out the custom vocabularies example in our [examples](ht
 # For Rev.ai Python SDK Developers
 
 Remember in your development to follow the PEP8 style guide. Your code editor likely has Python PEP8 linting packages which can assist you in your development.
+
+# Local testing instructions
+
+Prequisites: virtualenv, tox
+To test locally use the following commands from the repo root
+    virtualenv ./sdk-test
+    . ./sdk-test/bin/activate
+    tox
+This will locally run the test suite, and saves significant dev time over
+waiting for the CI tool to pick it up.

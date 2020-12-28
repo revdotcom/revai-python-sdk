@@ -21,6 +21,7 @@ FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
+LANGUAGE = 'en'
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -108,7 +109,8 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
-            'delete_after_seconds': 0
+            'delete_after_seconds': 0,
+            'language': LANGUAGE
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -116,7 +118,8 @@ class TestJobEndpoints():
 
         res = client.submit_job_url(MEDIA_URL, METADATA,
                                     CALLBACK_URL, True,
-                                    True, 1, CUSTOM_VOCAB, True, True, 0)
+                                    True, 1, CUSTOM_VOCAB, True,
+                                    True, 0, LANGUAGE)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -136,7 +139,8 @@ class TestJobEndpoints():
                 'custom_vocabularies': CUSTOM_VOCAB,
                 'filter_profanity': True,
                 'remove_disfluencies': True,
-                'delete_after_seconds': 0
+                'delete_after_seconds': 0,
+                'language': LANGUAGE
             },
             headers=client.default_headers)
 
@@ -158,7 +162,8 @@ class TestJobEndpoints():
             'speaker_channels_count': 1,
             'filter_profanity': True,
             'remove_disfluencies': True,
-            'delete_after_seconds': 0
+            'delete_after_seconds': 0,
+            'language': LANGUAGE
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -167,7 +172,8 @@ class TestJobEndpoints():
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, True,
-                                               True, 1, CUSTOM_VOCAB, True, True, 0)
+                                               True, 1, CUSTOM_VOCAB, True,
+                                               True, 0, LANGUAGE)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -190,7 +196,8 @@ class TestJobEndpoints():
                             'custom_vocabularies': CUSTOM_VOCAB,
                             'filter_profanity': True,
                             'remove_disfluencies': True,
-                            'delete_after_seconds': 0
+                            'delete_after_seconds': 0,
+                            'language': LANGUAGE
                         }, sort_keys=True)
                     )
                 },
