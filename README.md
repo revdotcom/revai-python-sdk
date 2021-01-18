@@ -25,8 +25,8 @@ Install from source with:
 ## Usage
 
 All you need to get started is your Access Token, which can be generated on
-your [Settings Page](https://www.rev.ai/settings). Create a client with the
-given Access Token:
+your [AccessToken Settings Page](https://www.rev.ai/access_token). Create a client with the
+generated Access Token:
 
 ```python
 from rev_ai import apiclient
