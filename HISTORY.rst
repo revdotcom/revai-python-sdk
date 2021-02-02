@@ -73,3 +73,8 @@ History
 ------------------
 
 * Add language selection option for multi-lingual ASR jobs to async client
+
+2.12.0
+------------------
+
+* Add custom_vocabulary_id to async client

@@ -47,7 +47,8 @@ class RevAiAPIClient(BaseClient):
             filter_profanity=False,
             remove_disfluencies=False,
             delete_after_seconds=None,
-            language=None):
+            language=None,
+            custom_vocabulary_id=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -72,8 +73,9 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using ISO 639-1 2-letter language
-                         code
+        :param language: specify language using ISO 639-1 2-letter language code
+        :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
+            submitted through the custom vocabularies. Exclusive with custom_vocabularies.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -85,7 +87,7 @@ class RevAiAPIClient(BaseClient):
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
-                                                   language)
+                                                   language, custom_vocabulary_id)
 
         response = self._make_http_request(
             "POST",
@@ -106,7 +108,8 @@ class RevAiAPIClient(BaseClient):
             filter_profanity=False,
             remove_disfluencies=False,
             delete_after_seconds=None,
-            language=None):
+            language=None,
+            custom_vocabulary_id=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -130,8 +133,9 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using ISO 639-1 2-letter language
-                         code
+        :param language: specify language using ISO 639-1 2-letter language code
+        :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
+            submitted through the custom vocabularies. Exclusive with custom_vocabularies.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -142,7 +146,7 @@ class RevAiAPIClient(BaseClient):
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
-                                                   language)
+                                                   language, custom_vocabulary_id)
 
         with open(filename, 'rb') as f:
             files = {
@@ -382,7 +386,8 @@ class RevAiAPIClient(BaseClient):
             filter_profanity=None,
             remove_disfluencies=None,
             delete_after_seconds=None,
-            language=None):
+            language=None,
+            custom_vocabulary_id=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -407,6 +412,8 @@ class RevAiAPIClient(BaseClient):
             payload['delete_after_seconds'] = delete_after_seconds
         if language:
             payload['language'] = language
+        if custom_vocabulary_id:
+            payload['custom_vocabulary_id'] = custom_vocabulary_id
         return payload
 
     def _create_captions_query(self, speaker_channel):
