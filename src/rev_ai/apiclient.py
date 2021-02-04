@@ -69,13 +69,14 @@ class RevAiAPIClient(BaseClient):
             recognition to find those phrases. Each dictionary should consist
             of a key "phrases" which maps to a list of strings, each of which
             represents a phrase you would like the speech recognition to bias
-            itself toward.
+            itself toward. Cannot be used with the custom_vocabulary_id parameter.
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using ISO 639-1 2-letter language code
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
-            submitted through the custom vocabularies. Exclusive with custom_vocabularies.
+            submitted through the custom vocabularies api. Cannot be used with the
+            custom_vocabularies parameter.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -130,12 +131,14 @@ class RevAiAPIClient(BaseClient):
             recognition to find those phrases. Each dictionary has the key
             "phrases" which maps to a list of strings, each of which represents
             a phrase you would like the speech recognition to bias itself toward.
+            Cannot be used with the custom_vocabulary_id parameter
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using ISO 639-1 2-letter language code
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
-            submitted through the custom vocabularies. Exclusive with custom_vocabularies.
+            submitted through the custom vocabularies api. Cannot be used with the
+            custom_vocabulaies parameter.
         :returns: raw response data
         :raises: HTTPError
         """
