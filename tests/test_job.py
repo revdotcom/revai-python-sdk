@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 """Unit tests for job endpoints"""
 
 import json
@@ -21,6 +21,7 @@ FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
+CUSTOM_VOCAB_ID = "vid"
 LANGUAGE = 'en'
 
 
@@ -119,7 +120,7 @@ class TestJobEndpoints():
         res = client.submit_job_url(MEDIA_URL, METADATA,
                                     CALLBACK_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
-                                    True, 0, LANGUAGE)
+                                    True, 0, LANGUAGE, CUSTOM_VOCAB_ID)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -140,7 +141,8 @@ class TestJobEndpoints():
                 'filter_profanity': True,
                 'remove_disfluencies': True,
                 'delete_after_seconds': 0,
-                'language': LANGUAGE
+                'language': LANGUAGE,
+                'custom_vocabulary_id': CUSTOM_VOCAB_ID
             },
             headers=client.default_headers)
 
@@ -173,7 +175,7 @@ class TestJobEndpoints():
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
-                                               True, 0, LANGUAGE)
+                                               True, 0, LANGUAGE, CUSTOM_VOCAB_ID)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -197,7 +199,8 @@ class TestJobEndpoints():
                             'filter_profanity': True,
                             'remove_disfluencies': True,
                             'delete_after_seconds': 0,
-                            'language': LANGUAGE
+                            'language': LANGUAGE,
+                            'custom_vocabulary_id': CUSTOM_VOCAB_ID
                         }, sort_keys=True)
                     )
                 },
