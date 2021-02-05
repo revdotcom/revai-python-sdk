@@ -44,7 +44,8 @@ custom_vocabularies = [mit_professors, other_scientists]
 #                                    filter_profanity=False,
 #                                    remove_disfluencies=False,
 #                                    delete_after_seconds=None,
-#                                    language=None)
+#                                    language=None,
+#                                    custom_vocabulary_id=None)
 
 
 
@@ -59,7 +60,8 @@ job = client.submit_job_url(url,
                             filter_profanity=False,
                             remove_disfluencies=False,
                             delete_after_seconds=None,
-                            language=None)
+                            language=None,
+                            custom_vocabulary_id=None)
 
 print("Submitted Job")
 
