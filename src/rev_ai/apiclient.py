@@ -73,7 +73,7 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using the one of the supported ISO 639-1 (2-letter) or 
+        :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
             submitted through the custom vocabularies api. Cannot be used with the
@@ -135,7 +135,7 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using the one of the supported ISO 639-1 (2-letter) or 
+        :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
             submitted through the custom vocabularies api. Cannot be used with the
