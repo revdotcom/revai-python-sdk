@@ -73,7 +73,8 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using ISO 639-1 2-letter language code
+        :param language: specify language using ISO 639-1 2-letter language code with the exception 
+            of Mandarin ("cmn") which uses a ISO 639-3 language code
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
             submitted through the custom vocabularies api. Cannot be used with the
             custom_vocabularies parameter.
@@ -82,7 +83,6 @@ class RevAiAPIClient(BaseClient):
         """
         if not media_url:
             raise ValueError('media_url must be provided')
-
         payload = self._create_job_options_payload(media_url, metadata,
                                                    callback_url, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
@@ -135,7 +135,8 @@ class RevAiAPIClient(BaseClient):
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using ISO 639-1 2-letter language code
+        :param language: specify language using ISO 639-1 2-letter language code with the exception 
+            of Mandarin ("cmn") which uses a ISO 639-3 language code
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
             submitted through the custom vocabularies api. Cannot be used with the
             custom_vocabularies parameter.
