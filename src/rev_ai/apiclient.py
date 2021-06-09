@@ -138,7 +138,7 @@ class RevAiAPIClient(BaseClient):
         :param language: specify language using ISO 639-1 2-letter language code
         :param custom_vocabulary_id: The id of a pre-completed custom vocabulary
             submitted through the custom vocabularies api. Cannot be used with the
-            custom_vocabulaies parameter.
+            custom_vocabularies parameter.
         :returns: raw response data
         :raises: HTTPError
         """
