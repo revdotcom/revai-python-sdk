@@ -59,6 +59,8 @@ class TestStreamingClient():
         filter_profanity = 'true'
         remove_disfluencies = 'true'
         delete_after_seconds = '0'
+        detailed_partials = 'true'
+
         expected_query_dict = {
             'access_token': mock_streaming_client.access_token,
             'content_type': mock_streaming_client.config.get_content_type_string(),
@@ -67,7 +69,8 @@ class TestStreamingClient():
             'metadata': metadata,
             'filter_profanity': filter_profanity,
             'remove_disfluencies': remove_disfluencies,
-            'delete_after_seconds': delete_after_seconds
+            'delete_after_seconds': delete_after_seconds,
+            'detailed_partials': detailed_partials
         }
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -83,7 +86,7 @@ class TestStreamingClient():
         mock_streaming_client.client.recv_data.side_effect = data
 
         response_gen = mock_streaming_client.start(mock_generator(), metadata,
-                                                   custom_vocabulary_id, True, True, 0)
+                                                   custom_vocabulary_id, True, True, 0, True)
 
         assert mock_streaming_client.client.connect.call_count == 1
         called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
