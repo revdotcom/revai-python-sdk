@@ -80,12 +80,12 @@ class TestStreamingClient():
             assert exp_responses[ind + 1] == response
         assert capsys.readouterr().out == exp_responses[2]
 
-    @pytest.mark.parametrize("metadata", [None, "my metadata"])
-    @pytest.mark.parametrize("custom_vocabulary_id", [None, "customvocabid"])
-    @pytest.mark.parametrize("filter_profanity", [None, True])
-    @pytest.mark.parametrize("remove_disfluencies", [None, True])
-    @pytest.mark.parametrize("delete_after_seconds", [None, 0])
-    @pytest.mark.parametrize("detailed_partials", [None, True])
+    @pytest.mark.parametrize("metadata", ["my metadata"])
+    @pytest.mark.parametrize("custom_vocabulary_id", ["customvocabid"])
+    @pytest.mark.parametrize("filter_profanity", [True])
+    @pytest.mark.parametrize("remove_disfluencies", [True])
+    @pytest.mark.parametrize("delete_after_seconds", [0])
+    @pytest.mark.parametrize("detailed_partials", [True])
     def test_start_allparams_success(self, mock_streaming_client, mock_generator, capsys,
         metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials):
 
@@ -132,7 +132,6 @@ class TestStreamingClient():
         mock_streaming_client.end()
 
         mock_streaming_client.client.abort.assert_called_once_with()
-
 
 def build_expected_query_dict(mock_streaming_client, 
     metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials):
