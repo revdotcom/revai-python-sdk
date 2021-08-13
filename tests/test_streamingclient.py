@@ -74,7 +74,11 @@ class TestStreamingClient():
 
         called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
         validate_query_parameters(called_url, expected_query_dict)
-        validate_stream_client(mock_streaming_client)
+        assert mock_streaming_client.client.connect.call_count == 1
+        mock_streaming_client.client.send_binary.assert_any_call(0)
+        mock_streaming_client.client.send_binary.assert_any_call(1)
+        mock_streaming_client.client.send_binary.assert_any_call(2)
+        assert hasattr(mock_streaming_client, 'request_thread')
         for ind, response in enumerate(response_gen):
             assert capsys.readouterr().out == exp_responses[ind]
             assert exp_responses[ind + 1] == response
@@ -116,7 +120,11 @@ class TestStreamingClient():
 
         called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
         validate_query_parameters(called_url, expected_query_dict)
-        validate_stream_client(mock_streaming_client)
+        assert mock_streaming_client.client.connect.call_count == 1
+        mock_streaming_client.client.send_binary.assert_any_call(0)
+        mock_streaming_client.client.send_binary.assert_any_call(1)
+        mock_streaming_client.client.send_binary.assert_any_call(2)
+        assert hasattr(mock_streaming_client, 'request_thread')
         for ind, response in enumerate(response_gen):
             assert capsys.readouterr().out == exp_responses[ind]
             assert exp_responses[ind + 1] == response
@@ -161,10 +169,3 @@ def validate_query_parameters(called_url, expected_query_dict):
     called_query_parameters = parse_qs(called_query_string)
     for key in expected_query_dict:
         assert called_query_parameters[key][0] == expected_query_dict[key]
-
-def validate_stream_client(mock_streaming_client):
-    assert mock_streaming_client.client.connect.call_count == 1
-    mock_streaming_client.client.send_binary.assert_any_call(0)
-    mock_streaming_client.client.send_binary.assert_any_call(1)
-    mock_streaming_client.client.send_binary.assert_any_call(2)
-    assert hasattr(mock_streaming_client, 'request_thread')
