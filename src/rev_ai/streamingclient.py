@@ -67,7 +67,8 @@ class RevAiStreamingClient():
               custom_vocabulary_id=None,
               filter_profanity=None,
               remove_disfluencies=None,
-              delete_after_seconds=None):
+              delete_after_seconds=None,
+              detailed_partials=None):
         """Function to connect the websocket to the URL and start the response
             thread
         :param generator: generator object that yields binary audio data
@@ -76,6 +77,7 @@ class RevAiStreamingClient():
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
+        :param detailed_partials: whether to receive timestamps and confidence scores 
         """
         url = self.base_url + '?' + urlencode({
             'access_token': self.access_token,
@@ -97,6 +99,9 @@ class RevAiStreamingClient():
 
         if delete_after_seconds is not None:
             url += '&' + urlencode({'delete_after_seconds': delete_after_seconds})
+            
+        if detailed_partials:
+            url += '&' + urlencode({'detailed_partials': 'true'})
 
         try:
             self.client.connect(url)
