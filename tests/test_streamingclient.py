@@ -53,7 +53,6 @@ class TestStreamingClient():
         with pytest.raises(ValueError):
             RevAiStreamingClient(None, example_config)
 
-
     def test_start_noparams_success(self, mock_streaming_client, mock_generator, capsys):
         expected_query_dict = build_expected_query_dict(mock_streaming_client, None, None, None, None, None, None)
 
@@ -95,11 +94,11 @@ class TestStreamingClient():
 
         expected_query_dict = build_expected_query_dict(
             mock_streaming_client,
-            metadata, 
-            custom_vocabulary_id, 
-            filter_profanity, 
-            remove_disfluencies, 
-            delete_after_seconds, 
+            metadata,
+            custom_vocabulary_id,
+            filter_profanity,
+            remove_disfluencies,
+            delete_after_seconds,
             detailed_partials
         )
         example_data = '{"type":"partial","transcript":"Test"}'
@@ -115,7 +114,7 @@ class TestStreamingClient():
                          'Connection Closed. Code : 1000; Reason : End of input. Closing\n']
         mock_streaming_client.client.recv_data.side_effect = data
 
-        response_gen = mock_streaming_client.start(mock_generator(), 
+        response_gen = mock_streaming_client.start(mock_generator(),
             metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials)
 
         called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
@@ -141,7 +140,8 @@ class TestStreamingClient():
 
         mock_streaming_client.client.abort.assert_called_once_with()
 
-def build_expected_query_dict(mock_streaming_client, 
+
+def build_expected_query_dict(mock_streaming_client,
     metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials):
     expected_query_dict = {
         'access_token': mock_streaming_client.access_token,
@@ -158,11 +158,12 @@ def build_expected_query_dict(mock_streaming_client,
     if remove_disfluencies:
         expected_query_dict["remove_disfluencies"] = "true"
     if delete_after_seconds:
-        expected_query_dict["delete_after_seconds"] = str(delete_after_seconds)   
+        expected_query_dict["delete_after_seconds"] = str(delete_after_seconds)
     if detailed_partials:
-        expected_query_dict["detailed_partials"] = "true"  
+        expected_query_dict["detailed_partials"] = "true"
 
     return expected_query_dict
+
 
 def validate_query_parameters(called_url, expected_query_dict):
     called_query_string = urlparse(called_url).query

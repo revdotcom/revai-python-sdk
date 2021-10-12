@@ -77,7 +77,7 @@ class RevAiStreamingClient():
         :param filter_profanity: whether to mask profane words
         :param remove_disfluencies: whether to exclude filler words like "uh"
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param detailed_partials: whether to receive timestamps and confidence scores 
+        :param detailed_partials: whether to receive timestamps and confidence scores
         """
         url = self.base_url + '?' + urlencode({
             'access_token': self.access_token,
@@ -99,7 +99,7 @@ class RevAiStreamingClient():
 
         if delete_after_seconds is not None:
             url += '&' + urlencode({'delete_after_seconds': delete_after_seconds})
-            
+
         if detailed_partials:
             url += '&' + urlencode({'detailed_partials': 'true'})
 

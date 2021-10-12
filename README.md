@@ -1,6 +1,6 @@
 # Rev.ai Python SDK
 
-[![Build Status](https://travis-ci.org/revdotcom/revai-python-sdk.svg?branch=develop)](https://travis-ci.org/revdotcom/revai-python-sdk)
+[![CI](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml/badge.svg)](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml)
 
 ## Documentation
 
