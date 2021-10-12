@@ -78,3 +78,8 @@ History
 ------------------
 
 * Add custom_vocabulary_id to async client
+
+2.13.0
+------------------
+* Add detailed_partials to streaming client
+* Switch to Github Actions for automated testing
