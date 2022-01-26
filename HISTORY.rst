@@ -83,3 +83,8 @@ History
 ------------------
 * Add detailed_partials to streaming client
 * Switch to Github Actions for automated testing
+
+2.14.0
+------------------
+* Add transcriber to async client
+* Add start_ts and transcriber to streaming client
