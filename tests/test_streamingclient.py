@@ -91,7 +91,7 @@ class TestStreamingClient():
     @pytest.mark.parametrize("delete_after_seconds", [0])
     @pytest.mark.parametrize("detailed_partials", [True])
     @pytest.mark.parametrize("start_ts", [10])
-    @pytest.mark.parametrize("transcriber", ["machine_v2"])
+    @pytest.mark.parametrize("transcriber", ["machine"])
     def test_start_allparams_success(self, mock_streaming_client, mock_generator, capsys,
         metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials,
         start_ts, transcriber):
