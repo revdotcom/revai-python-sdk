@@ -170,7 +170,7 @@ def build_expected_query_dict(mock_streaming_client,
     if detailed_partials:
         expected_query_dict["detailed_partials"] = "true"
     if start_ts:
-        expected_query_dict["start_ts"] = start_ts
+        expected_query_dict["start_ts"] = str(start_ts)
     if transcriber:
         expected_query_dict["transcriber"] = transcriber
 
