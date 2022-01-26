@@ -23,6 +23,7 @@ JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 CUSTOM_VOCAB_ID = "vid"
 LANGUAGE = 'en'
+TRANSCRIBER = 'machine_v2'
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -111,7 +112,8 @@ class TestJobEndpoints():
             'filter_profanity': True,
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
-            'language': LANGUAGE
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -120,7 +122,8 @@ class TestJobEndpoints():
         res = client.submit_job_url(MEDIA_URL, METADATA,
                                     CALLBACK_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
-                                    True, 0, LANGUAGE, CUSTOM_VOCAB_ID)
+                                    True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
+                                    TRANSCRIBER)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -142,7 +145,8 @@ class TestJobEndpoints():
                 'remove_disfluencies': True,
                 'delete_after_seconds': 0,
                 'language': LANGUAGE,
-                'custom_vocabulary_id': CUSTOM_VOCAB_ID
+                'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                'transcriber': TRANSCRIBER
             },
             headers=client.default_headers)
 
@@ -165,7 +169,8 @@ class TestJobEndpoints():
             'filter_profanity': True,
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
-            'language': LANGUAGE
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -175,7 +180,8 @@ class TestJobEndpoints():
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
-                                               True, 0, LANGUAGE, CUSTOM_VOCAB_ID)
+                                               True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
+                                               TRANSCRIBER)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -200,7 +206,8 @@ class TestJobEndpoints():
                             'remove_disfluencies': True,
                             'delete_after_seconds': 0,
                             'language': LANGUAGE,
-                            'custom_vocabulary_id': CUSTOM_VOCAB_ID
+                            'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                            'transcriber': TRANSCRIBER
                         }, sort_keys=True)
                     )
                 },
