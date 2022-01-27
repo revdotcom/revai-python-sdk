@@ -14,7 +14,16 @@ class Job:
             media_url=None,
             failure=None,
             failure_detail=None,
-            duration_seconds=None):
+            duration_seconds=None,
+            delete_after_seconds=None,
+            skip_diarization=None,
+            skip_punctuation=None,
+            remove_disfluencies=None,
+            filter_profanity=None,
+            custom_vocabulary_id=None,
+            speakers_channel_count=None,
+            language=None,
+            transcriber=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
@@ -42,6 +51,15 @@ class Job:
         self.failure = failure
         self.failure_detail = failure_detail
         self.duration_seconds = duration_seconds
+        self.delete_after_seconds = delete_after_seconds
+        self.skip_diarization = skip_diarization
+        self.skip_punctuation = skip_punctuation
+        self.remove_disfluencies = remove_disfluencies
+        self.filter_profanity = filter_profanity
+        self.custom_vocabulary_id = custom_vocabulary_id
+        self.speakers_channel_count = speakers_channel_count
+        self.language = language
+        self.transcriber = transcriber
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -56,12 +74,21 @@ class Job:
             json['id'],
             json['created_on'],
             JobStatus.from_string(json['status']),
-            json.get('completed_on'),
-            json.get('name'),
-            json.get('callback_url'),
-            json.get('metadata'),
-            json.get('media_url'),
-            json.get('failure'),
-            json.get('failure_detail'),
-            json.get('duration_seconds')
+            completed_on=json.get('completed_on'),
+            name=json.get('name'),
+            callback_url=json.get('callback_url'),
+            metadata=json.get('metadata'),
+            media_url=json.get('media_url'),
+            failure=json.get('failure'),
+            failure_detail=json.get('failure_detail'),
+            duration_seconds=json.get('duration_seconds'),
+            delete_after_seconds=json.get('delete_after_seconds'),
+            skip_diarization=json.get('skip_diarization'),
+            skip_punctuation=json.get('skip_punctuation'),
+            remove_disfluencies=json.get('remove_disfluencies'),
+            filter_profanity=json.get('filter_profanity'),
+            custom_vocabulary_id=json.get('custom_vocabulary_id'),
+            speakers_channel_count=json.get('speakers_channel_count'),
+            language=json.get('language'),
+            transcriber=json.get('transcriber')
         )
