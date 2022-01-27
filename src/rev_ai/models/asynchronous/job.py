@@ -102,6 +102,6 @@ class Job:
             custom_vocabulary_id=json.get('custom_vocabulary_id'),
             speaker_channels_count=json.get('speaker_channels_count'),
             language=json.get('language'),
-            transcriber=json.get('transcriber')
+            transcriber=json.get('transcriber'),
             segments_to_transcribe=json.get('segments_to_transcribe')
         )
