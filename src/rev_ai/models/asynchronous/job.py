@@ -21,7 +21,7 @@ class Job:
             remove_disfluencies=None,
             filter_profanity=None,
             custom_vocabulary_id=None,
-            speakers_channel_count=None,
+            speaker_channels_count=None,
             language=None,
             transcriber=None):
         """
@@ -45,7 +45,7 @@ class Job:
         :param remove_disfluencies: whether to remove disfluencies if provided
         :param filter_profanity: whether to filter profanity if provided
         :param custom_vocabulary_id: custom vocabulary id if provided
-        :param speakers_channel_count: speaker channel count if provided
+        :param speaker_channels_count: speaker channels count if provided
         :param language: language of job
         :param transcriber: transcriber to use for job
         """
@@ -66,7 +66,7 @@ class Job:
         self.remove_disfluencies = remove_disfluencies
         self.filter_profanity = filter_profanity
         self.custom_vocabulary_id = custom_vocabulary_id
-        self.speakers_channel_count = speakers_channel_count
+        self.speaker_channels_count = speaker_channels_count
         self.language = language
         self.transcriber = transcriber
 
@@ -97,7 +97,7 @@ class Job:
             remove_disfluencies=json.get('remove_disfluencies'),
             filter_profanity=json.get('filter_profanity'),
             custom_vocabulary_id=json.get('custom_vocabulary_id'),
-            speakers_channel_count=json.get('speakers_channel_count'),
+            speaker_channels_count=json.get('speaker_channels_count'),
             language=json.get('language'),
             transcriber=json.get('transcriber')
         )
