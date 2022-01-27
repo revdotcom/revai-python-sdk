@@ -54,7 +54,8 @@ class TestStreamingClient():
             RevAiStreamingClient(None, example_config)
 
     def test_start_noparams_success(self, mock_streaming_client, mock_generator, capsys):
-        expected_query_dict = build_expected_query_dict(mock_streaming_client, None, None, None, None, None, None)
+        expected_query_dict = build_expected_query_dict(mock_streaming_client, None, None, None, None, None, None, None,
+            None)
 
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -89,8 +90,11 @@ class TestStreamingClient():
     @pytest.mark.parametrize("remove_disfluencies", [True])
     @pytest.mark.parametrize("delete_after_seconds", [0])
     @pytest.mark.parametrize("detailed_partials", [True])
+    @pytest.mark.parametrize("start_ts", [10])
+    @pytest.mark.parametrize("transcriber", ["machine"])
     def test_start_allparams_success(self, mock_streaming_client, mock_generator, capsys,
-        metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials):
+        metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials,
+        start_ts, transcriber):
 
         expected_query_dict = build_expected_query_dict(
             mock_streaming_client,
@@ -99,7 +103,9 @@ class TestStreamingClient():
             filter_profanity,
             remove_disfluencies,
             delete_after_seconds,
-            detailed_partials
+            detailed_partials,
+            start_ts,
+            transcriber
         )
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -115,7 +121,8 @@ class TestStreamingClient():
         mock_streaming_client.client.recv_data.side_effect = data
 
         response_gen = mock_streaming_client.start(mock_generator(),
-            metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials)
+            metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds,
+            detailed_partials, start_ts, transcriber)
 
         called_url = mock_streaming_client.client.connect.call_args_list[0][0][0]
         validate_query_parameters(called_url, expected_query_dict)
@@ -142,7 +149,8 @@ class TestStreamingClient():
 
 
 def build_expected_query_dict(mock_streaming_client,
-    metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials):
+    metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials,
+    start_ts, transcriber):
     expected_query_dict = {
         'access_token': mock_streaming_client.access_token,
         'content_type': mock_streaming_client.config.get_content_type_string(),
@@ -161,6 +169,10 @@ def build_expected_query_dict(mock_streaming_client,
         expected_query_dict["delete_after_seconds"] = str(delete_after_seconds)
     if detailed_partials:
         expected_query_dict["detailed_partials"] = "true"
+    if start_ts:
+        expected_query_dict["start_ts"] = str(start_ts)
+    if transcriber:
+        expected_query_dict["transcriber"] = transcriber
 
     return expected_query_dict
 
