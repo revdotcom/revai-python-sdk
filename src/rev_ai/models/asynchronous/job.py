@@ -23,7 +23,8 @@ class Job:
             custom_vocabulary_id=None,
             speaker_channels_count=None,
             language=None,
-            transcriber=None):
+            transcriber=None,
+            segments_to_transcribe=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
@@ -48,6 +49,7 @@ class Job:
         :param speaker_channels_count: speaker channels count if provided
         :param language: language of job
         :param transcriber: transcriber to use for job
+        :param segments_to_transcribe: segments to transcribe if provided for human transcription
         """
         self.id = id_
         self.created_on = created_on
@@ -69,6 +71,7 @@ class Job:
         self.speaker_channels_count = speaker_channels_count
         self.language = language
         self.transcriber = transcriber
+        self.segments_to_transcribe = segments_to_transcribe
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -100,4 +103,5 @@ class Job:
             speaker_channels_count=json.get('speaker_channels_count'),
             language=json.get('language'),
             transcriber=json.get('transcriber')
+            segments_to_transcribe=json.get('segments_to_transcribe')
         )
