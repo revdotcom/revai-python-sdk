@@ -39,6 +39,15 @@ class Job:
         :param failure: type of failure if job has failed
         :param failure_detail: more detailed failure message if job has failed
         :param duration_seconds: duration of submitted file in seconds
+        :param delete_after_seconds: seconds before deletion if provided
+        :param skip_diarization: whether to skip diarization if provided
+        :param skip_punctuation: whether to skip punctuation if provided
+        :param remove_disfluencies: whether to remove disfluencies if provided
+        :param filter_profanity: whether to filter profanity if provided
+        :param custom_vocabulary_id: custom vocabulary id if provided
+        :param speakers_channel_count: speaker channel count if provided
+        :param language: language of job
+        :param transcriber: transcriber to use for job
         """
         self.id = id_
         self.created_on = created_on
