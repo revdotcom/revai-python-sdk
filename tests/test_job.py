@@ -180,6 +180,7 @@ class TestJobEndpoints():
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           transcriber='human',
+                          verbatim=True,
                           segments_to_transcribe=segments)
         mock_session.request.assert_called_once_with(
             'POST',
