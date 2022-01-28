@@ -168,6 +168,7 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'transcriber': 'human',
+            'verbatim': True,
             'segments_to_transcribe': segments
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
