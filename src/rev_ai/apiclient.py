@@ -104,7 +104,8 @@ class RevAiAPIClient(BaseClient):
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
-                                                   verbatim, rush, segments_to_transcribe, test_mode)
+                                                   verbatim, rush, segments_to_transcribe,
+                                                   test_mode)
 
         response = self._make_http_request(
             "POST",
@@ -182,7 +183,8 @@ class RevAiAPIClient(BaseClient):
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
-                                                   verbatim, rush, segments_to_transcribe, test_mode)
+                                                   verbatim, rush, segments_to_transcribe,
+                                                   test_mode)
 
         with open(filename, 'rb') as f:
             files = {
