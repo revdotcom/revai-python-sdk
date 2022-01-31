@@ -54,6 +54,23 @@ If you want to get fancy, both send job methods take `metadata`, `callback_url`,
 `skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, `language`, and `custom_vocabulary_id` as optional parameters, these are described in the request body of
 the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
 
+If you want transcription to be performed by a human, both methods allow you to submit human transcription jobs
+using `transcriber=human` with `verbatim`, `rush`, `segments_to_transcribe` and `test_mode` as optional parameters.
+Check out our documentation for [Human Transcription](https://www.rev.ai/docs#section/Human-Transcription-(Labs)) for more details.
+
+```python
+# submitting a human transcription jobs
+job = client.submit_job_url("https://example.com/file-to-transcribe.mp3",
+    transcriber='human',
+    verbatim=False,
+    rush=False,
+    test_mode=True
+    segments_to_transcribe=[{
+        start: 2.0,
+        end: 4.5
+    }])
+```
+
 ### Checking your file's status
 
 You can check the status of your transcription job using its `id`

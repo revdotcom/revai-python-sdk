@@ -87,4 +87,5 @@ History
 2.14.0
 ------------------
 * Add transcriber to async client
+* Add verbatim, rush, segments_to_transcribe, test_mode to async client for human transcription
 * Add start_ts and transcriber to streaming client

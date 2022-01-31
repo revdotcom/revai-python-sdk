@@ -129,7 +129,15 @@ class TestJobEndpoints():
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           metadata=METADATA,
-                          callback_url=CALLBACK_URL)
+                          callback_url=CALLBACK_URL,
+                          skip_punctuation=True,
+                          skip_diarization=True,
+                          speaker_channels_count=1,
+                          filter_profanity=True,
+                          remove_disfluencies=True,
+                          delete_after_seconds=0,
+                          language=LANGUAGE,
+                          transcriber=TRANSCRIBER)
         mock_session.request.assert_called_once_with(
             "POST",
             JOBS_URL,
@@ -147,6 +155,42 @@ class TestJobEndpoints():
                 'language': LANGUAGE,
                 'custom_vocabulary_id': CUSTOM_VOCAB_ID,
                 'transcriber': TRANSCRIBER
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_url_with_human_transcription_and_success(self, mock_session, make_mock_response):
+        segments = [{
+            'start': 1.0,
+            'end': 2.0
+        }]
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+            'transcriber': 'human',
+            'verbatim': True,
+            'segments_to_transcribe': segments
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        res = client.submit_job_url(MEDIA_URL, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
+
+        assert res == Job(JOB_ID,
+                          CREATED_ON,
+                          JobStatus.IN_PROGRESS,
+                          transcriber='human',
+                          verbatim=True,
+                          segments_to_transcribe=segments)
+        mock_session.request.assert_called_once_with(
+            'POST',
+            JOBS_URL,
+            json={
+                'media_url': MEDIA_URL,
+                'transcriber': 'human',
+                'verbatim': True,
+                'segments_to_transcribe': segments
             },
             headers=client.default_headers)
 
@@ -187,7 +231,15 @@ class TestJobEndpoints():
                               CREATED_ON,
                               JobStatus.IN_PROGRESS,
                               metadata=METADATA,
-                              callback_url=CALLBACK_URL)
+                              callback_url=CALLBACK_URL,
+                              skip_punctuation=True,
+                              skip_diarization=True,
+                              speaker_channels_count=1,
+                              filter_profanity=True,
+                              remove_disfluencies=True,
+                              delete_after_seconds=0,
+                              language=LANGUAGE,
+                              transcriber=TRANSCRIBER)
             mock_session.request.assert_called_once_with(
                 "POST",
                 JOBS_URL,

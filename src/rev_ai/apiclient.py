@@ -37,7 +37,8 @@ class RevAiAPIClient(BaseClient):
         BaseClient.__init__(self, access_token)
 
     def submit_job_url(
-            self, media_url,
+            self,
+            media_url,
             metadata=None,
             callback_url=None,
             skip_diarization=False,
@@ -49,7 +50,11 @@ class RevAiAPIClient(BaseClient):
             delete_after_seconds=None,
             language=None,
             custom_vocabulary_id=None,
-            transcriber=None):
+            transcriber=None,
+            verbatim=None,
+            rush=None,
+            test_mode=None,
+            segments_to_transcribe=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -80,6 +85,14 @@ class RevAiAPIClient(BaseClient):
             submitted through the custom vocabularies api. Cannot be used with the
             custom_vocabularies parameter.
         :param transcriber: type of transcriber to use to transcribe the media file
+        :param verbatim: Only available with "human" transcriber.
+            Whether human transcriber transcribes every syllable.
+        :param rush: Only available with "human" transcriber.
+            Whether job is given higher priority to be worked on sooner for higher pricing.
+        :param test_mode: Only available with "human" transcriber.
+            Whether human transcription job is mocked and no transcription actually happens.
+        :param segments_to_transcribe: Only available with "human" transcriber.
+            Sections of transcript needed to be transcribed.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -90,7 +103,9 @@ class RevAiAPIClient(BaseClient):
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
-                                                   language, custom_vocabulary_id, transcriber)
+                                                   language, custom_vocabulary_id, transcriber,
+                                                   verbatim, rush, test_mode,
+                                                   segments_to_transcribe)
 
         response = self._make_http_request(
             "POST",
@@ -101,7 +116,8 @@ class RevAiAPIClient(BaseClient):
         return Job.from_json(response.json())
 
     def submit_job_local_file(
-            self, filename,
+            self,
+            filename,
             metadata=None,
             callback_url=None,
             skip_diarization=False,
@@ -113,7 +129,11 @@ class RevAiAPIClient(BaseClient):
             delete_after_seconds=None,
             language=None,
             custom_vocabulary_id=None,
-            transcriber=None):
+            transcriber=None,
+            verbatim=None,
+            rush=None,
+            test_mode=None,
+            segments_to_transcribe=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -144,6 +164,14 @@ class RevAiAPIClient(BaseClient):
             submitted through the custom vocabularies api. Cannot be used with the
             custom_vocabularies parameter.
         :param transcriber: type of transcriber to use to transcribe the media file
+        :param verbatim: Only available with "human" transcriber.
+            Whether human transcriber transcribes every syllable.
+        :param rush: Only available with "human" transcriber.
+            Whether job is given higher priority to be worked on sooner for higher pricing.
+        :param test_mode: Only available with "human" transcriber.
+            Whether human transcription job is mocked and no transcription actually happens.
+        :param segments_to_transcribe: Only available with "human" transcriber.
+            Sections of transcript needed to be transcribed.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -154,7 +182,9 @@ class RevAiAPIClient(BaseClient):
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
-                                                   language, custom_vocabulary_id, transcriber)
+                                                   language, custom_vocabulary_id, transcriber,
+                                                   verbatim, rush, test_mode,
+                                                   segments_to_transcribe)
 
         with open(filename, 'rb') as f:
             files = {
@@ -396,7 +426,11 @@ class RevAiAPIClient(BaseClient):
             delete_after_seconds=None,
             language=None,
             custom_vocabulary_id=None,
-            transcriber=None):
+            transcriber=None,
+            verbatim=None,
+            rush=None,
+            test_mode=None,
+            segments_to_transcribe=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -425,6 +459,14 @@ class RevAiAPIClient(BaseClient):
             payload['custom_vocabulary_id'] = custom_vocabulary_id
         if transcriber:
             payload['transcriber'] = transcriber
+        if verbatim:
+            payload['verbatim'] = verbatim
+        if rush:
+            payload['rush'] = rush
+        if test_mode:
+            payload['test_mode'] = test_mode
+        if segments_to_transcribe:
+            payload['segments_to_transcribe'] = segments_to_transcribe
         return payload
 
     def _create_captions_query(self, speaker_channel):
