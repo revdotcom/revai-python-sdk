@@ -4,7 +4,7 @@
 
 ## Documentation
 
-See the [API docs](https://www.rev.ai/docs) for more information about the API and
+See the [API docs](https://docs.rev.ai/sdk/python/) for more information about the API and
 more python examples.
 
 ## Installation
@@ -48,15 +48,15 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 ```
 
 `job` will contain all the information normally found in a successful response from our
-[Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
+[Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
 If you want to get fancy, both send job methods take `metadata`, `callback_url`,
 `skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, `language`, and `custom_vocabulary_id` as optional parameters, these are described in the request body of
-the [Submit Job](https://www.rev.ai/docs#operation/SubmitTranscriptionJob) endpoint.
+the [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
 If you want transcription to be performed by a human, both methods allow you to submit human transcription jobs
 using `transcriber=human` with `verbatim`, `rush`, `segments_to_transcribe` and `test_mode` as optional parameters.
-Check out our documentation for [Human Transcription](https://www.rev.ai/docs#section/Human-Transcription-(Labs)) for more details.
+Check out our documentation for [Human Transcription](https://docs.rev.ai/api/asynchronous/transcribers/#human-transcription) for more details.
 
 ```python
 # submitting a human transcription jobs
@@ -80,7 +80,7 @@ job_details = client.get_job_details(job.id)
 ```
 
 `job_details` will contain all information normally found in a successful response from
-our [Get Job](https://www.rev.ai/docs#operation/GetJobById) endpoint
+our [Get Job](https://docs.rev.ai/api/asynchronous/reference/#operation/GetJobById) endpoint
 
 ### Checking multiple files
 
@@ -97,7 +97,7 @@ jobs = client.get_list_of_jobs(starting_after='Umx5c6F7pH7r')
 ```
 
 `jobs` will contain a list of job details having all information normally found in a successful response
-from our [Get List of Jobs](https://www.rev.ai/docs#operation/GetListOfJobs) endpoint
+from our [Get List of Jobs](https://docs.rev.ai/api/asynchronous/reference/#operation/GetListOfJobs) endpoint
 
 ### Deleting a job
 
@@ -126,7 +126,7 @@ transcript_object = client.get_transcript_object(job.id)
 ```
 
 Both the json and object forms contain all the formation outlined in the response
-of the [Get Transcript](https://www.rev.ai/docs#operation/GetTranscriptById) endpoint
+of the [Get Transcript](https://docs.rev.ai/api/asynchronous/reference/#operation/GetTranscriptById) endpoint
 when using the json response schema. While the text output is a string containing
 just the text of your transcript
 
@@ -176,7 +176,7 @@ If passing in custom functions, make sure you provide the right parameters. See 
 
 Once you have a streaming client setup with a `MediaConfig` and access token, you can obtain a transcription generator of your audio. You can also use a custom vocabulary with your streaming job by supplying the optional `custom_vocabulary_id` when starting a connection!
 
-More optional parameters can be supplied when starting a connection, these are `metadata`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, and `detailed_partials`. For a description of these optional parameters look at our [streaming documentation](https://www.rev.ai/docs/streaming#section/WebSocket-Endpoint).
+More optional parameters can be supplied when starting a connection, these are `metadata`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, and `detailed_partials`. For a description of these optional parameters look at our [streaming documentation](https://docs.rev.ai/api/streaming/requests/#request-parameters).
 
 ```python
 response_generator = streaming_client.start(AUDIO_GENERATOR, custom_vocabulary_id="CUSTOM VOCAB ID")
