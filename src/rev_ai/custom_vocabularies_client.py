@@ -12,7 +12,7 @@ except ImportError:
 
 class RevAiCustomVocabulariesClient(BaseClient):
     """Client which implements Rev.ai CustomVocabulary API
-    See https://www.rev.ai/docs/streaming#section/WebSocket-Endpoint/Custom-Vocabulary
+    See https://docs.rev.ai/api/custom-vocabulary/reference/
     """
 
     def __init__(self, access_token):
@@ -33,7 +33,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
             callback_url=None,
             metadata=None):
         """Submit custom vocabularies.
-        See https://www.rev.ai/docs/streaming#operation/SubmitCustomVocabulary
+        See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
 
         :param custom_vocabularies: List of CustomVocabulary objects
         :param callback_url: callback url to invoke on job completion as a
@@ -60,7 +60,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
     def get_custom_vocabularies_information(self, id):
         """ Get the custom vocabulary status
-        See https://www.rev.ai/docs/streaming#operation/GetCustomVocabulary
+        See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/GetCustomVocabulary
 
         :param id: string id of custom vocabulary submission
         """
@@ -70,7 +70,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
     def get_list_of_custom_vocabularies(self, limit=None):
         """ Get a list of custom vocabularies
-        See https://www.rev.ai/docs/streaming#operation/GetCustomVocabularies
+        See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/GetCustomVocabularies
 
         :param limit: optional, limits the number of jobs returned
         """
@@ -84,7 +84,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
     def delete_custom_vocabulary(self, id):
         """ Delete a custom vocabulary
-        See https://www.rev.ai/docs/streaming#operation/DeleteCustomVocabulary
+        See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/DeleteCustomVocabulary
 
         :param id: string id of custom vocabulary to be deleted
         :returns: None if job was successfully deleted
