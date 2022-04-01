@@ -62,9 +62,9 @@ class RevAiAPIClient(BaseClient):
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
-        :param skip_diarization: should rev.ai skip diaization when
+        :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when
+        :param skip_punctuation: should Rev AI skip punctuation when
                                  transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
             audio. If provided the given audio will have each channel
@@ -141,9 +141,9 @@ class RevAiAPIClient(BaseClient):
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a
                              webhook
-        :param skip_diarization: should rev.ai skip diaization when
+        :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when
+        :param skip_punctuation: should Rev AI skip punctuation when
                                  transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
             audio. If provided the given audio will have each channel
