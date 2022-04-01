@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using Rev.ai"""
+"""Speech recognition tools for using Rev AI"""
 
 import requests
 from requests.exceptions import HTTPError
@@ -10,7 +10,7 @@ from . import CustomVocabulary
 class BaseClient:
     """Base for clients that communicate with RevAI Apis"""
 
-    # Default version of Rev.ai
+    # Default version of Rev AI
     version = 'v1'
 
     # Default address of the API
@@ -22,7 +22,7 @@ class BaseClient:
         :param access_token: access token which authorizes all requests and
                              links them to your account. Generated on the
                              settings page of your account dashboard
-                             on Rev.ai
+                             on Rev AI
         """
         if not access_token:
             raise ValueError('access_token must be provided')

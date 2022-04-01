@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using Rev.ai"""
+"""Speech recognition tools for using Rev AI"""
 
 import json
 from .models import Account, CaptionType, Job, Transcript
@@ -13,7 +13,7 @@ except ImportError:
 
 
 class RevAiAPIClient(BaseClient):
-    """Client which implements Rev.ai API
+    """Client which implements Rev AI API
 
     Note that HTTPErrors can be thrown by methods of the API client. The HTTP
     response payload attached to these error is a problem details. The problem
@@ -23,7 +23,7 @@ class RevAiAPIClient(BaseClient):
     Problem details are defined at https://tools.ietf.org/html/rfc7807.
     """
 
-    # Rev.ai transcript format
+    # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
     def __init__(self, access_token):
@@ -31,7 +31,7 @@ class RevAiAPIClient(BaseClient):
 
         :param access_token: access token which authorizes all requests and links them to your
                              account. Generated on the settings page of your account dashboard
-                             on Rev.ai.
+                             on Rev AI.
         """
 
         BaseClient.__init__(self, access_token)
