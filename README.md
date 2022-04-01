@@ -1,4 +1,4 @@
-# Rev.ai Python SDK
+# Rev AI Python SDK
 
 [![CI](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml/badge.svg)](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml)
 
@@ -226,7 +226,7 @@ client.delete_custom_vocabulary(custom_vocabularies_job['id'])
 
 For more details, check out the custom vocabularies example in our [examples](https://github.com/revdotcom/revai-python-sdk/tree/develop/examples).
 
-# For Rev.ai Python SDK Developers
+# For Rev AI Python SDK Developers
 
 Remember in your development to follow the PEP8 style guide. Your code editor likely has Python PEP8 linting packages which can assist you in your development.
 

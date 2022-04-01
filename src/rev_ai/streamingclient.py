@@ -35,7 +35,7 @@ class RevAiStreamingClient():
         """Constructor for Streaming Client
         :param access_token: access token which authorizes all requests and
             links them to your account. Generated on the settings page of your
-            account dashboard on Rev.ai.
+            account dashboard on Rev AI.
         :param config: a MediaConfig object containing audio information.
             See MediaConfig.py for more information
         :param version (optional): version of the streaming api to be used

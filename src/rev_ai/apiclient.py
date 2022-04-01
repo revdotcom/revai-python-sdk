@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using Rev.ai"""
+"""Speech recognition tools for using Rev AI"""
 
 import json
 from .models import Account, CaptionType, Job, Transcript
@@ -13,7 +13,7 @@ except ImportError:
 
 
 class RevAiAPIClient(BaseClient):
-    """Client which implements Rev.ai API
+    """Client which implements Rev AI API
 
     Note that HTTPErrors can be thrown by methods of the API client. The HTTP
     response payload attached to these error is a problem details. The problem
@@ -23,7 +23,7 @@ class RevAiAPIClient(BaseClient):
     Problem details are defined at https://tools.ietf.org/html/rfc7807.
     """
 
-    # Rev.ai transcript format
+    # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
     def __init__(self, access_token):
@@ -31,7 +31,7 @@ class RevAiAPIClient(BaseClient):
 
         :param access_token: access token which authorizes all requests and links them to your
                              account. Generated on the settings page of your account dashboard
-                             on Rev.ai.
+                             on Rev AI.
         """
 
         BaseClient.__init__(self, access_token)
@@ -62,9 +62,9 @@ class RevAiAPIClient(BaseClient):
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
-        :param skip_diarization: should rev.ai skip diaization when
+        :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when
+        :param skip_punctuation: should Rev AI skip punctuation when
                                  transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
             audio. If provided the given audio will have each channel
@@ -141,9 +141,9 @@ class RevAiAPIClient(BaseClient):
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a
                              webhook
-        :param skip_diarization: should rev.ai skip diaization when
+        :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
-        :param skip_punctuation: should rev.ai skip punctuation when
+        :param skip_punctuation: should Rev AI skip punctuation when
                                  transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
             audio. If provided the given audio will have each channel

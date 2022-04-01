@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using Rev.ai"""
+"""Speech recognition tools for using Rev AI"""
 
 from .baseclient import BaseClient
 from . import utils
@@ -11,7 +11,7 @@ except ImportError:
 
 
 class RevAiCustomVocabulariesClient(BaseClient):
-    """Client which implements Rev.ai CustomVocabulary API
+    """Client which implements Rev AI CustomVocabulary API
     See https://docs.rev.ai/api/custom-vocabulary/reference/
     """
 
@@ -21,7 +21,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
         :param access_token: access token which authorizes all requests and
                              links them to your account. Generated on the
                              settings page of your account dashboard
-                             on Rev.ai
+                             on Rev AI
         """
         BaseClient.__init__(self, access_token)
 

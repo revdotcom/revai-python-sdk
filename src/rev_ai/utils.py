@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Speech recognition tools for using Rev.ai"""
+"""Speech recognition tools for using Rev AI"""
 
 from . import CustomVocabulary
 

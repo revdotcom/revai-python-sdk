@@ -46,7 +46,7 @@ with open('requirements_dev.txt', 'r') as req_dev_file:
 setup(
     name='rev_ai',
     version=version,
-    description='Rev.ai makes speech applications easy to build!',
+    description='Rev AI makes speech applications easy to build!',
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/markdown',
     author="Rev Ai",
