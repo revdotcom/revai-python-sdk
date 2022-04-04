@@ -23,6 +23,12 @@ class RevAiAPIClient(BaseClient):
     Problem details are defined at https://tools.ietf.org/html/rfc7807.
     """
 
+    # Default version of Rev AI
+    version = 'v1'
+
+    # Default base url for Rev AI
+    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
+
     # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
@@ -205,7 +211,7 @@ class RevAiAPIClient(BaseClient):
         The server will respond with the status and creation date.
 
         :param id_: id of the job to be requested
-        :returns: raw response data
+        :returns: Job object if available
         :raises: HTTPError
         """
         if not id_:

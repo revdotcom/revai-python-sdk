@@ -4,3 +4,4 @@
 from .customvocabulary import CustomVocabulary
 from .streaming import MediaConfig
 from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Element, CaptionType
+from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informant

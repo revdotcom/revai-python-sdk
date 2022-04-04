@@ -15,6 +15,11 @@ class Transcript:
             return all(a == b for a, b in zip(self.monologues, other.monologues))
         return False
 
+    def to_dict(self):
+        """Returns the raw form of the transcript as the api
+        returns them"""
+        return {'monologues': [monologue.to_dict() for monologue in self.monologues]}
+
     @classmethod
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
@@ -36,6 +41,11 @@ class Monologue:
             return all(a == b for a, b in zip(self.elements, other.elements)) \
                 and self.speaker == other.speaker
         return False
+
+    def to_dict(self):
+        """Returns the raw form of the monologue as the api
+        returns them"""
+        return {'speaker': self.speaker, 'elements': [element.to_dict() for element in self.elements]}
 
     @classmethod
     def from_json(cls, json):
@@ -65,6 +75,12 @@ class Element:
         if isinstance(other, self.__class__):
             return self.__dict__ == other.__dict__
         return False
+
+    def to_dict(self):
+        """Returns the raw form of the element as the api
+        returns them"""
+        return {'type': self.type_, 'value': self.value, 'ts': self.timestamp, 'end_ts': self.end_timestamp,
+                'confidence': self.confidence}
 
     @classmethod
     def from_json(cls, json):
