@@ -8,7 +8,7 @@ from . import CustomVocabulary
 
 
 class BaseClient:
-    """Base for clients that communicate with RevAI Apis"""
+    """Base for clients that communicate with Rev AI Apis"""
 
     # Default version of Rev AI
     version = 'v1'

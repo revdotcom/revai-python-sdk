@@ -1,0 +1,5 @@
+# API Domain stubs used as url partials in the api clients
+api.rev.ai
+
+# example domains used in unit tests
+www.example.com
