@@ -29,9 +29,9 @@ class TopicExtractionJob(BaseJob):
         :param word_count: count of words in job
         :param delete_after_seconds: seconds before deletion if provided
         """
-        
-        BaseJob.__init__(self, id_, created_on, status, completed_on, callback_url, metadata, failure, failure_detail,
-                         delete_after_seconds)
+
+        BaseJob.__init__(self, id_, created_on, status, completed_on, callback_url, metadata,
+                         failure, failure_detail, delete_after_seconds)
         self.word_count = word_count
 
     def __eq__(self, other):

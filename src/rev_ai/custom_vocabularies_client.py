@@ -20,7 +20,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
     # Default base url for Rev AI
     base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
-    
+
     def __init__(self, access_token):
         """Constructor
 

@@ -7,8 +7,8 @@ except ImportError:
 
 
 class GenericApiClient(BaseClient):
-    """Generic client which handles logic for making requests to almost any Rev AI Api. Intended to be inherited and
-    extended by a specific client per API"""
+    """Generic client which handles logic for making requests to almost any Rev AI Api.
+    Intended to be inherited and extended by a specific client per API"""
 
     def __init__(self, access_token, api_name, api_version, parse_job_info, parse_job_result):
         """Constructor
@@ -32,9 +32,9 @@ class GenericApiClient(BaseClient):
                     callback_url=None,
                     delete_after_seconds=None,
                     language=None):
-        """Submit a job to the api. This method is special in that it is intended to be hidden by the implementation
-        this is done because python standard is to pass options individually instead of as an object and our true
-        clients should match this standard
+        """Submit a job to the api. This method is special in that it is intended to be hidden by
+        the implementation this is done because python standard is to pass options individually
+        instead of as an object and our true clients should match this standard
 
         :param payload: special options for the specific api being used
         :param metadata: info to associate with the transcription job

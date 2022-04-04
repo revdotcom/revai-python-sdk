@@ -45,7 +45,8 @@ class Monologue:
     def to_dict(self):
         """Returns the raw form of the monologue as the api
         returns them"""
-        return {'speaker': self.speaker, 'elements': [element.to_dict() for element in self.elements]}
+        return {'speaker': self.speaker,
+                'elements': [element.to_dict() for element in self.elements]}
 
     @classmethod
     def from_json(cls, json):
@@ -79,8 +80,8 @@ class Element:
     def to_dict(self):
         """Returns the raw form of the element as the api
         returns them"""
-        return {'type': self.type_, 'value': self.value, 'ts': self.timestamp, 'end_ts': self.end_timestamp,
-                'confidence': self.confidence}
+        return {'type': self.type_, 'value': self.value, 'ts': self.timestamp,
+                'end_ts': self.end_timestamp, 'confidence': self.confidence}
 
     @classmethod
     def from_json(cls, json):

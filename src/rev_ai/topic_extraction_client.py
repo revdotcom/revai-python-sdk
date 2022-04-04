@@ -19,8 +19,8 @@ class TopicExtractionClient(GenericApiClient):
                              on Rev AI.
         """
 
-        GenericApiClient.__init__(self, access_token, self.api_name, self.api_version, TopicExtractionJob.from_json,
-                                  TopicExtractionResult.from_json)
+        GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
+                                  TopicExtractionJob.from_json, TopicExtractionResult.from_json)
 
     def submit_job(self,
                    text=None,
@@ -29,10 +29,12 @@ class TopicExtractionClient(GenericApiClient):
                    callback_url=None,
                    delete_after_seconds=None,
                    language=None):
-        """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or Transcript object
+        """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
+        Transcript object
 
         :param text: Plain text string to be run through topic extraction
-        :param json: Transcript object from the Rev AI async transcription client to be run through topic extraction
+        :param json: Transcript object from the Rev AI async transcription client to be run through
+                     topic extraction
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook

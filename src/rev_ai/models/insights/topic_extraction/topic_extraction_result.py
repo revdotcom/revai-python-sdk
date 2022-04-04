@@ -25,7 +25,8 @@ class Topic:
     def __init__(self, topic_name, score, informants):
         """
         :param topic_name: name of the topic, pulled directly from somewhere in the input text
-        :param score: score of the topic, between 0 and 1. Higher means it is more likely that this is truly a topic
+        :param score: score of the topic, between 0 and 1. Higher means it is more likely that this
+                      is truly a topic
         :param informants: pieces of the input text which informed this choice of topic
         """
         self.topic_name = topic_name
@@ -36,8 +37,8 @@ class Topic:
         """Override default equality operator"""
         if isinstance(other, self.__class__):
             return all(a == b for a, b in zip(self.informants, other.informants)) \
-                   and self.topic_name == other.topic_name \
-                   and self.score == other.score
+                and self.topic_name == other.topic_name \
+                and self.score == other.score
         return False
 
     @classmethod
