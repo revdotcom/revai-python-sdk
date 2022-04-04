@@ -15,6 +15,12 @@ class RevAiCustomVocabulariesClient(BaseClient):
     See https://docs.rev.ai/api/custom-vocabulary/reference/
     """
 
+    # Default version of Rev AI
+    version = 'v1'
+
+    # Default base url for Rev AI
+    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
+    
     def __init__(self, access_token):
         """Constructor
 
