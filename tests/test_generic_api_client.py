@@ -129,7 +129,7 @@ class TestGenericApiClient:
 
     def test_submit_job_empty_payload_with_success(self, mock_session, make_mock_response):
         client = _create_client()
-        url = urljoin(client.base_url, 'jobs/{}'.format(JOB_ID))
+        url = urljoin(client.base_url, 'jobs')
         data = {
             'id': JOB_ID,
             'status': 'in_progress',
@@ -158,7 +158,7 @@ class TestGenericApiClient:
 
     def test_submit_job_nonempty_payload_with_success(self, mock_session, make_mock_response):
         client = _create_client()
-        url = urljoin(client.base_url, 'jobs/{}'.format(JOB_ID))
+        url = urljoin(client.base_url, 'jobs')
         data = {
             'id': JOB_ID,
             'status': 'in_progress',
