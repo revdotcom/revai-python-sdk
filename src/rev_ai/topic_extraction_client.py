@@ -49,4 +49,4 @@ class TopicExtractionClient(GenericApiClient):
             options['text'] = text
         if json:
             options['json'] = json.to_dict()
-        return self._submit_job(options, metadata, callback_url, delete_after_seconds, language)
+        return self._submit_job(metadata, callback_url, delete_after_seconds, language, **options)

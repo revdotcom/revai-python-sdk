@@ -28,7 +28,7 @@ def remove_none_elements(dictionary):
 
 
 # String containing your access token
-access_token = ""
+access_token = "your_access_token"
 
 # Submit a job with whatever text you want by changing this input
 text = "input text"

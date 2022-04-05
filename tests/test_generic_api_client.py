@@ -138,8 +138,7 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._submit_job(payload={},
-                                 metadata=METADATA,
+        res = client._submit_job(metadata=METADATA,
                                  callback_url=CALLBACK_URL,
                                  delete_after_seconds=0,
                                  language=LANGUAGE)
@@ -167,11 +166,12 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._submit_job(payload={'random': True},
-                                 metadata=METADATA,
+        res = client._submit_job(metadata=METADATA,
                                  callback_url=CALLBACK_URL,
                                  delete_after_seconds=0,
-                                 language=LANGUAGE)
+                                 language=LANGUAGE,
+                                 random=True,
+                                 fake=None)
 
         assert res == data
         mock_session.request.assert_called_once_with(

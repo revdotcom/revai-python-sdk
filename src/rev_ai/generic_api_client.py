@@ -27,16 +27,16 @@ class GenericApiClient(BaseClient):
         self.parse_job_info = parse_job_info
         self.parse_job_result = parse_job_result
 
-    def _submit_job(self, payload,
+    def _submit_job(self,
                     metadata=None,
                     callback_url=None,
                     delete_after_seconds=None,
-                    language=None):
+                    language=None,
+                    **kwargs):
         """Submit a job to the api. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
 
-        :param payload: special options for the specific api being used
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
@@ -46,6 +46,11 @@ class GenericApiClient(BaseClient):
         :returns: Job info object
         :raises: HTTPError
         """
+        payload = {}
+        for key, value in kwargs.items():
+            if value:
+                payload[key] = value
+
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
