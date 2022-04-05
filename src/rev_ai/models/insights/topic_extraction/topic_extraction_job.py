@@ -2,10 +2,9 @@
 """Job model"""
 
 from ...asynchronous.job_status import JobStatus
-from ...basejob import BaseJob
 
 
-class TopicExtractionJob(BaseJob):
+class TopicExtractionJob:
     def __init__(
             self, id_, created_on, status,
             completed_on=None,
@@ -30,8 +29,15 @@ class TopicExtractionJob(BaseJob):
         :param delete_after_seconds: seconds before deletion if provided
         """
 
-        BaseJob.__init__(self, id_, created_on, status, completed_on, callback_url, metadata,
-                         failure, failure_detail, delete_after_seconds)
+        self.id = id_
+        self.created_on = created_on
+        self.status = status
+        self.completed_on = completed_on
+        self.callback_url = callback_url,
+        self.metadata = metadata
+        self.failure = failure
+        self.failure_detail = failure_detail
+        self.delete_after_seconds = delete_after_seconds
         self.word_count = word_count
 
     def __eq__(self, other):
