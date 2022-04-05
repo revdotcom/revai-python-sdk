@@ -58,7 +58,10 @@ while True:
 
     print("Job Status : {}".format(status))
 
-    # Checks if the job has been transcribed
+    # Checks if the job has been completed. Please note that this is not the recommended way
+    # of getting job status in a real application. For recommended methods of getting job status
+    # please see our documentation on callback_urls here:
+    # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
     if status == "IN_PROGRESS":
         time.sleep(2)
         continue
