@@ -51,7 +51,7 @@ class Topic:
 
 
 class Informant:
-    def __init__(self, content, timestamp, end_timestamp, offset, length):
+    def __init__(self, content, timestamp=None, end_timestamp=None, offset=None, length=None):
         """
         :param content: content of the informant, pulled from input
         :param timestamp: time at which this element starts if input was json

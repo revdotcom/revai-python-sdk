@@ -50,3 +50,25 @@ class TopicExtractionClient(GenericApiClient):
         if json:
             options['json'] = json.to_dict()
         return self._submit_job(metadata, callback_url, delete_after_seconds, language, **options)
+
+    def get_result_json(self, id_, threshold=None):
+        """Get result of a topic extraction job as json.
+
+        :param id_: id of job to be requested
+        :param threshold: score threshold for topics. No topics with scores under this threshold
+                          will be returned
+        :returns: job result data as raw json
+        :raises: HTTPError
+        """
+        return self._get_result_json(id_, threshold=threshold)
+
+    def get_result_object(self, id_, threshold=None):
+        """Get result of a topic extraction job as TopicExtractionResult object.
+
+        :param id_: id of job to be requested
+        :param threshold: score threshold for topics. No topics with scores under this threshold
+                          will be returned
+        :returns: job result data as TopicExtractionResult object
+        :raises: HTTPError
+        """
+        return self._get_result_object(id_, threshold=threshold)

@@ -112,25 +112,10 @@ class GenericApiClient(BaseClient):
 
         return [self.parse_job_info(job) for job in response.json()]
 
-    def get_result_object(self, id_):
-        """Get the result of a specific job
-
-        :param id_: id of job to be requested
-        :returns: job result data as object
-        :raises: HTTPError
-        """
-        if not id_:
-            raise ValueError('id_ must be provided')
-
-        response = self._make_http_request(
-            "GET",
-            urljoin(self.base_url, 'jobs/{}/result'.format(id_))
-        )
-
-        return self.parse_job_result(response.json())
-
-    def get_result_json(self, id_):
-        """Get the result of a specific job
+    def _get_result_json(self, id_, **kwargs):
+        """Get the result of a job. This method is special in that it is intended to be hidden by
+        the implementation this is done because python standard is to pass options individually
+        instead of as an object and our true clients should match this standard
 
         :param id_: id of job to be requested
         :returns: job result data as raw json
@@ -139,12 +124,28 @@ class GenericApiClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
+        params = []
+        for key, value in kwargs.items():
+            if value:
+                params.append('{0}={1}'.format(key, value))
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/result'.format(id_))
+            urljoin(self.base_url, 'jobs/{0}/result?{1}'.format(id_, '&'.join(params)))
         )
 
         return response.json()
+
+    def _get_result_object(self, id_, **kwargs):
+        """Get the result of a job. This method is special in that it is intended to be hidden by
+        the implementation this is done because python standard is to pass options individually
+        instead of as an object and our true clients should match this standard
+
+        :param id_: id of job to be requested
+        :returns: job result data as object
+        :raises: HTTPError
+        """
+        return self.parse_job_result(self._get_result_json(id_, **kwargs))
 
     def delete_job(self, id_):
         """Delete a specific job

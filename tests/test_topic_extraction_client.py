@@ -4,7 +4,8 @@
 import pytest
 from src.rev_ai.topic_extraction_client import TopicExtractionClient
 from src.rev_ai import __version__
-from src.rev_ai import Transcript, Monologue, Element, TopicExtractionJob, JobStatus
+from src.rev_ai import Transcript, Monologue, Element, TopicExtractionJob, JobStatus, \
+    TopicExtractionResult, Topic, Informant
 
 try:
     from urllib.parse import urljoin
@@ -19,6 +20,12 @@ METADATA = 'test'
 CALLBACK_URL = 'https://example.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 LANGUAGE = 'en'
+TOPIC_NAME = 'random'
+SCORE = 1
+INFORMANT_CONTENT = 'random words'
+INFORMANT_OFFSET = 0
+INFORMANT_LENGTH = 12
+THRESHOLD = .3
 
 
 class TestTopicExtractionClient:
@@ -112,4 +119,132 @@ class TestTopicExtractionClient:
                 'delete_after_seconds': 0,
                 'language': LANGUAGE
             },
+            headers=client.default_headers)
+
+    def test_get_result_json_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs/{}/result?'.format(JOB_ID))
+        data = {
+            'topics': [
+                {
+                    'topic_name': TOPIC_NAME,
+                    'score': SCORE,
+                    'informants': [
+                        {
+                            'content': INFORMANT_CONTENT,
+                            'offset': INFORMANT_OFFSET,
+                            'length': INFORMANT_LENGTH
+                        }
+                    ]
+                }
+            ]
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.get_result_json(JOB_ID)
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_json_with_threshold_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs/{0}/result?threshold={1}'.format(JOB_ID, THRESHOLD))
+        data = {
+            'topics': [
+                {
+                    'topic_name': TOPIC_NAME,
+                    'score': SCORE,
+                    'informants': [
+                        {
+                            'content': INFORMANT_CONTENT,
+                            'offset': INFORMANT_OFFSET,
+                            'length': INFORMANT_LENGTH
+                        }
+                    ]
+                }
+            ]
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.get_result_json(JOB_ID, THRESHOLD)
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_object_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs/{}/result?'.format(JOB_ID))
+        data = {
+            'topics': [
+                {
+                    'topic_name': TOPIC_NAME,
+                    'score': SCORE,
+                    'informants': [
+                        {
+                            'content': INFORMANT_CONTENT,
+                            'offset': INFORMANT_OFFSET,
+                            'length': INFORMANT_LENGTH
+                        }
+                    ]
+                }
+            ]
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.get_result_object(JOB_ID)
+
+        assert res == TopicExtractionResult(
+            [Topic(
+                TOPIC_NAME,
+                SCORE,
+                [Informant(INFORMANT_CONTENT, offset=INFORMANT_OFFSET, length=INFORMANT_LENGTH)]
+            )]
+        )
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_object_with_threshold_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs/{0}/result?threshold={1}'.format(JOB_ID, THRESHOLD))
+        data = {
+            'topics': [
+                {
+                    'topic_name': TOPIC_NAME,
+                    'score': SCORE,
+                    'informants': [
+                        {
+                            'content': INFORMANT_CONTENT,
+                            'offset': INFORMANT_OFFSET,
+                            'length': INFORMANT_LENGTH
+                        }
+                    ]
+                }
+            ]
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.get_result_object(JOB_ID, THRESHOLD)
+
+        assert res == TopicExtractionResult(
+            [Topic(
+                TOPIC_NAME,
+                SCORE,
+                [Informant(INFORMANT_CONTENT, offset=INFORMANT_OFFSET, length=INFORMANT_LENGTH)]
+            )]
+        )
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
             headers=client.default_headers)

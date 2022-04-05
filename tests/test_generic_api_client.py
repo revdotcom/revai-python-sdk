@@ -186,6 +186,96 @@ class TestGenericApiClient:
             },
             headers=client.default_headers)
 
+    def test_get_result_json_with_success(self, mock_session, make_mock_response):
+        client = _create_client()
+        url = urljoin(client.base_url, 'jobs/{}/result?'.format(JOB_ID))
+        data = {
+            'random': 'data'
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client._get_result_json(JOB_ID)
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_json_with_kwargs_with_success(self, mock_session, make_mock_response):
+        client = _create_client()
+        kwarg_name_1 = 'name1'
+        kwarg_value_1 = 1
+        kwarg_name_2 = 'name2'
+        kwarg_value_2 = 2
+        url = urljoin(client.base_url,
+                      'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                               kwarg_name_1,
+                                                               kwarg_value_1,
+                                                               kwarg_name_2,
+                                                               kwarg_value_2))
+        data = {
+            'random': 'data'
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client._get_result_json(JOB_ID, **{kwarg_name_1: kwarg_value_1,
+                                                 kwarg_name_2: kwarg_value_2,
+                                                 'invisible': None})
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_object_with_success(self, mock_session, make_mock_response):
+        client = _create_client()
+        url = urljoin(client.base_url, 'jobs/{}/result?'.format(JOB_ID))
+        data = {
+            'random': 'data'
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client._get_result_object(JOB_ID)
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
+    def test_get_result_object_with_kwargs_with_success(self, mock_session, make_mock_response):
+        client = _create_client()
+        kwarg_name_1 = 'name1'
+        kwarg_value_1 = 1
+        kwarg_name_2 = 'name2'
+        kwarg_value_2 = 2
+        url = urljoin(client.base_url,
+                      'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                               kwarg_name_1,
+                                                               kwarg_value_1,
+                                                               kwarg_name_2,
+                                                               kwarg_value_2))
+        data = {
+            'random': 'data'
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client._get_result_object(JOB_ID, **{kwarg_name_1: kwarg_value_1,
+                                                   kwarg_name_2: kwarg_value_2,
+                                                   'invisible': None})
+
+        assert res == data
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=client.default_headers)
+
 
 def _create_client():
     return GenericApiClient(TOKEN, API, VERSION, _pass_through_parse, _pass_through_parse)
