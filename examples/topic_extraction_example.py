@@ -14,20 +14,40 @@ limitations under the License.
 """
 
 import time
-from rev_ai import topic_extraction_client, apiclient
+
+from rev_ai import topic_extraction_client
+
+
+# helper function for printing nice results, can be ignored
+def remove_none_elements(dictionary):
+    none_less = {}
+    for key in dictionary:
+        if dictionary[key]:
+            none_less[key] = dictionary[key]
+    return none_less
+
 
 # String containing your access token
 access_token = ""
 
+# Submit a job with whatever text you want by changing this input
+text = "input text"
+transcript_json = None
+
 # Create your api client
 client = topic_extraction_client.TopicExtractionClient(access_token)
-api_client = apiclient.RevAiAPIClient(access_token)
 
-async_job_id = ""
+# If you'd like to submit the transcript of an existing transcription job you can do so by
+# uncommenting the lines below
+#
+# async_job_id = "your_job_id"
+# async_api_client = apiclient.RevAiAPIClient(access_token)
+# transcript = api_client.get_transcript_object(async_job_id)
+# transcript_json = transcript
+# text = None
 
-transcript = api_client.get_transcript_object(async_job_id)
-job = client.submit_job(json=transcript)
-
+# Submitting a job with either text or json. Only one can be provided per submission
+job = client.submit_job(text=text, json=transcript_json)
 print("Submitted Job")
 
 while True:
@@ -48,15 +68,21 @@ while True:
         break
 
     if status == "COMPLETED":
-        # Getting a list of current jobs connected with your account
+        # Getting a list of current topic extraction jobs connected with your account
         # The optional parameters limits the length of the list.
         # starting_after is a job id which causes the removal of
         # all jobs from the list which were created before that job
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
-        # obtain transcript text as a string for the job.
+        # obtain a list of topics and their scores for the job
         result = client.get_result_object(job.id)
-        print([topic.topic_name for topic in result.topics])
+        print([{
+            'topic': topic.topic_name,
+            'score': topic.score,
+            'informants': [
+                remove_none_elements(informant.__dict__) for informant in topic.informants
+            ]
+        } for topic in result.topics])
 
         break
 
