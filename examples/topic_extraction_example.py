@@ -78,7 +78,7 @@ while True:
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
         # obtain a list of topics and their scores for the job
-        result = client.get_result_object(job.id)
+        result = client.get_result_object(job.id, threshold=None)
         print([{
             'topic': topic.topic_name,
             'score': topic.score,
