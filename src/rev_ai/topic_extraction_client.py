@@ -64,7 +64,7 @@ class TopicExtractionClient(GenericApiClient):
         :raises: HTTPError
         """
         return self._submit_job(metadata, callback_url, delete_after_seconds, language,
-                                json=transcript)
+                                json=transcript.to_dict())
 
     def get_result_json(self, id_, threshold=None):
         """Get result of a topic extraction job as json.
