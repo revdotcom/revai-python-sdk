@@ -58,11 +58,11 @@ class TestTopicExtractionClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client.submit_job(text=TEXT,
-                                metadata=METADATA,
-                                callback_url=CALLBACK_URL,
-                                delete_after_seconds=0,
-                                language=LANGUAGE)
+        res = client.submit_job_from_text(text=TEXT,
+                                          metadata=METADATA,
+                                          callback_url=CALLBACK_URL,
+                                          delete_after_seconds=0,
+                                          language=LANGUAGE)
 
         assert res == TopicExtractionJob(JOB_ID,
                                          CREATED_ON,
@@ -97,11 +97,11 @@ class TestTopicExtractionClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client.submit_job(json=JSON,
-                                metadata=METADATA,
-                                callback_url=CALLBACK_URL,
-                                delete_after_seconds=0,
-                                language=LANGUAGE)
+        res = client.submit_job_from_transcript(transcript=JSON,
+                                                metadata=METADATA,
+                                                callback_url=CALLBACK_URL,
+                                                delete_after_seconds=0,
+                                                language=LANGUAGE)
 
         assert res == TopicExtractionJob(JOB_ID,
                                          CREATED_ON,

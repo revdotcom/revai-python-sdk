@@ -18,7 +18,7 @@ from rev_ai import apiclient
 from rev_ai.models import CustomVocabulary
 
 # String containing your access token
-access_token = "your_access_token"
+access_token = "<your_access_token>"
 
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)

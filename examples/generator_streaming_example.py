@@ -19,7 +19,7 @@ import io
 filename = "english_test.raw"
 
 # String of your access token
-access_token = "your_access_token"
+access_token = "<your_access_token>"
 
 # Media configuration of audio file.
 # This includes the content type, layout, rate, format, and # of channels

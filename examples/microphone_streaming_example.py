@@ -87,7 +87,7 @@ rate = 44100
 chunk = int(rate/10)
 
 # Insert your access token here
-access_token = "your_access_token"
+access_token = "<your_access_token>"
 
 # Creates a media config with the settings set for a raw microphone input
 example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1)

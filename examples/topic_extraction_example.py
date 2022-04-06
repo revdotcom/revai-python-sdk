@@ -19,14 +19,18 @@ from rev_ai import topic_extraction_client
 
 
 """String containing your access token"""
-access_token = "your_access_token"
-
-"""Submit a job with whatever text you want by changing this input"""
-text = "input text"
-transcript_json = None
+access_token = "<your_access_token>"
 
 """Create your api client"""
 client = topic_extraction_client.TopicExtractionClient(access_token)
+
+"""Submit a job with whatever text you want by changing this input"""
+text = "<input_text>"
+job = client.submit_job_from_text(text,
+                                  metadata=None,
+                                  callback_url=None,
+                                  delete_after_seconds=None,
+                                  language=None)
 
 """If you'd like to submit the transcript of an existing transcription job you can do so by
 uncommenting the lines below
@@ -35,11 +39,12 @@ async_job_id = "your_job_id"
 async_api_client = apiclient.RevAiAPIClient(access_token)
 transcript = api_client.get_transcript_object(async_job_id)
 transcript_json = transcript
-text = None
+job = client.submit_job_from_transcript(transcript_json,
+                                        metadata=None,
+                                        callback_url=None,
+                                        delete_after_seconds=None,
+                                        language=None)
 """
-
-"""Submitting a job with either text or json. Only one can be provided per submission"""
-job = client.submit_job(text=text, json=transcript_json)
 print("Submitted Job")
 
 while True:
