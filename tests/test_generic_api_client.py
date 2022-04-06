@@ -2,9 +2,9 @@
 """Unit tests for RevAiApiClient"""
 
 import pytest
+import sys
 from src.rev_ai.generic_api_client import GenericApiClient
 from src.rev_ai import __version__
-from src.rev_ai import JobStatus
 
 try:
     from urllib.parse import urljoin
@@ -209,12 +209,20 @@ class TestGenericApiClient:
         kwarg_value_1 = 1
         kwarg_name_2 = 'name2'
         kwarg_value_2 = 2
-        url = urljoin(client.base_url,
-                      'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
-                                                               kwarg_name_1,
-                                                               kwarg_value_1,
-                                                               kwarg_name_2,
-                                                               kwarg_value_2))
+        if get_python_major_minor_version() < 35:
+            url = urljoin(client.base_url,
+                          'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                                   kwarg_name_2,
+                                                                   kwarg_value_2,
+                                                                   kwarg_name_1,
+                                                                   kwarg_value_1))
+        else:
+            url = urljoin(client.base_url,
+                          'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                                   kwarg_name_1,
+                                                                   kwarg_value_1,
+                                                                   kwarg_name_2,
+                                                                   kwarg_value_2))
         data = {
             'random': 'data'
         }
@@ -254,12 +262,20 @@ class TestGenericApiClient:
         kwarg_value_1 = 1
         kwarg_name_2 = 'name2'
         kwarg_value_2 = 2
-        url = urljoin(client.base_url,
-                      'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
-                                                               kwarg_name_1,
-                                                               kwarg_value_1,
-                                                               kwarg_name_2,
-                                                               kwarg_value_2))
+        if get_python_major_minor_version() < 35:
+            url = urljoin(client.base_url,
+                          'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                                   kwarg_name_2,
+                                                                   kwarg_value_2,
+                                                                   kwarg_name_1,
+                                                                   kwarg_value_1))
+        else:
+            url = urljoin(client.base_url,
+                          'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
+                                                                   kwarg_name_1,
+                                                                   kwarg_value_1,
+                                                                   kwarg_name_2,
+                                                                   kwarg_value_2))
         data = {
             'random': 'data'
         }
@@ -283,3 +299,7 @@ def _create_client():
 
 def _pass_through_parse(x):
     return x
+
+
+def get_python_major_minor_version():
+    return sys.version_info.major * 10 + sys.version_info.minor
