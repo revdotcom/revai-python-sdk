@@ -52,8 +52,8 @@ class TopicExtractionClient(GenericApiClient):
         """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
         Transcript object
 
-        :param transcript: Transcript object from the Rev AI async transcription client to be run through
-                     topic extraction
+        :param transcript: Transcript object from the Rev AI async transcription client to be run 
+                           through topic extraction
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
