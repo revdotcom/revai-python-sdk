@@ -138,21 +138,13 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._submit_job(metadata=METADATA,
-                                 callback_url=CALLBACK_URL,
-                                 delete_after_seconds=0,
-                                 language=LANGUAGE)
+        res = client._submit_job({})
 
         assert res == data
         mock_session.request.assert_called_once_with(
             "POST",
             url,
-            json={
-                'callback_url': CALLBACK_URL,
-                'metadata': METADATA,
-                'delete_after_seconds': 0,
-                'language': LANGUAGE
-            },
+            json={},
             headers=client.default_headers)
 
     def test_submit_job_nonempty_payload_with_success(self, mock_session, make_mock_response):
@@ -165,25 +157,15 @@ class TestGenericApiClient:
         }
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
+        payload = client._enhance_payload({'random': True}, METADATA, CALLBACK_URL, 0)
 
-        res = client._submit_job(metadata=METADATA,
-                                 callback_url=CALLBACK_URL,
-                                 delete_after_seconds=0,
-                                 language=LANGUAGE,
-                                 random=True,
-                                 fake=None)
+        res = client._submit_job(payload)
 
         assert res == data
         mock_session.request.assert_called_once_with(
             "POST",
             url,
-            json={
-                'random': True,
-                'callback_url': CALLBACK_URL,
-                'metadata': METADATA,
-                'delete_after_seconds': 0,
-                'language': LANGUAGE
-            },
+            json=payload,
             headers=client.default_headers)
 
     def test_get_result_json_with_success(self, mock_session, make_mock_response):
@@ -229,9 +211,9 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._get_result_json(JOB_ID, **{kwarg_name_1: kwarg_value_1,
-                                                 kwarg_name_2: kwarg_value_2,
-                                                 'invisible': None})
+        res = client._get_result_json(JOB_ID, {kwarg_name_1: kwarg_value_1,
+                                               kwarg_name_2: kwarg_value_2,
+                                               'invisible': None})
 
         assert res == data
         mock_session.request.assert_called_once_with(
@@ -282,9 +264,9 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._get_result_object(JOB_ID, **{kwarg_name_1: kwarg_value_1,
-                                                   kwarg_name_2: kwarg_value_2,
-                                                   'invisible': None})
+        res = client._get_result_object(JOB_ID, {kwarg_name_1: kwarg_value_1,
+                                                 kwarg_name_2: kwarg_value_2,
+                                                 'invisible': None})
 
         assert res == data
         mock_session.request.assert_called_once_with(

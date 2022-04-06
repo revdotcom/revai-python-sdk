@@ -41,7 +41,9 @@ class TopicExtractionClient(GenericApiClient):
         :returns: TopicExtractionJob object
         :raises: HTTPError
         """
-        return self._submit_job(metadata, callback_url, delete_after_seconds, language, text=text)
+        payload = self._enhance_payload({'text': text, 'language': language},
+                                        metadata, callback_url, delete_after_seconds)
+        return self._submit_job(payload)
 
     def submit_job_from_transcript(self,
                                    transcript=None,
@@ -63,8 +65,9 @@ class TopicExtractionClient(GenericApiClient):
         :returns: TopicExtractionJob object
         :raises: HTTPError
         """
-        return self._submit_job(metadata, callback_url, delete_after_seconds, language,
-                                json=transcript.to_dict())
+        payload = self._enhance_payload({'json': transcript.to_dict(), 'language': language},
+                                        metadata, callback_url, delete_after_seconds)
+        return self._submit_job(payload)
 
     def get_result_json(self, id_, threshold=None):
         """Get result of a topic extraction job as json.
@@ -75,7 +78,7 @@ class TopicExtractionClient(GenericApiClient):
         :returns: job result data as raw json
         :raises: HTTPError
         """
-        return self._get_result_json(id_, threshold=threshold)
+        return self._get_result_json(id_, {'threshold': threshold})
 
     def get_result_object(self, id_, threshold=None):
         """Get result of a topic extraction job as TopicExtractionResult object.
@@ -86,4 +89,4 @@ class TopicExtractionClient(GenericApiClient):
         :returns: job result data as TopicExtractionResult object
         :raises: HTTPError
         """
-        return self._get_result_object(id_, threshold=threshold)
+        return self._get_result_object(id_, {'threshold': threshold})

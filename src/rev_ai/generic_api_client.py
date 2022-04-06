@@ -27,39 +27,14 @@ class GenericApiClient(BaseClient):
         self.parse_job_info = parse_job_info
         self.parse_job_result = parse_job_result
 
-    def _submit_job(self,
-                    metadata=None,
-                    callback_url=None,
-                    delete_after_seconds=None,
-                    language=None,
-                    **kwargs):
+    def _submit_job(self, payload):
         """Submit a job to the api. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
 
-        :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as
-                             a webhook
-        :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
-        :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
-            ISO 639-3 (3-letter) language codes as defined in the API Reference
-        :returns: Job info object
+        :param payload: payload to be sent with job request
         :raises: HTTPError
         """
-        payload = {}
-        for key, value in kwargs.items():
-            if value is not None:
-                payload[key] = value
-
-        if metadata:
-            payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
-        if delete_after_seconds is not None:
-            payload['delete_after_seconds'] = delete_after_seconds
-        if language:
-            payload['language'] = language
-
         response = self._make_http_request(
             "POST",
             urljoin(self.base_url, 'jobs'),
@@ -112,7 +87,7 @@ class GenericApiClient(BaseClient):
 
         return [self.parse_job_info(job) for job in response.json()]
 
-    def _get_result_json(self, id_, **kwargs):
+    def _get_result_json(self, id_, params):
         """Get the result of a job. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
@@ -124,8 +99,7 @@ class GenericApiClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
-        params = []
-        for key, value in kwargs.items():
+        for key, value in params.items():
             if value is not None:
                 params.append('{0}={1}'.format(key, value))
 
@@ -136,7 +110,7 @@ class GenericApiClient(BaseClient):
 
         return response.json()
 
-    def _get_result_object(self, id_, **kwargs):
+    def _get_result_object(self, id_, params):
         """Get the result of a job. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
@@ -145,7 +119,7 @@ class GenericApiClient(BaseClient):
         :returns: job result data as object
         :raises: HTTPError
         """
-        return self.parse_job_result(self._get_result_json(id_, **kwargs))
+        return self.parse_job_result(self._get_result_json(id_, params))
 
     def delete_job(self, id_):
         """Delete a specific job
@@ -165,3 +139,13 @@ class GenericApiClient(BaseClient):
         )
 
         return
+
+    def _enhance_payload(self, payload, metadata, callback_url, delete_after_seconds):
+        enhanced = payload
+        if metadata:
+            enhanced['metadata'] = metadata
+        if callback_url:
+            enhanced['callback_url'] = callback_url
+        if delete_after_seconds is not None:
+            enhanced['delete_after_seconds'] = delete_after_seconds
+        return enhanced
