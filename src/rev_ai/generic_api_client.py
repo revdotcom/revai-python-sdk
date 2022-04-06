@@ -48,7 +48,7 @@ class GenericApiClient(BaseClient):
         """
         payload = {}
         for key, value in kwargs.items():
-            if value:
+            if value is not None:
                 payload[key] = value
 
         if metadata:
@@ -126,7 +126,7 @@ class GenericApiClient(BaseClient):
 
         params = []
         for key, value in kwargs.items():
-            if value:
+            if value is not None:
                 params.append('{0}={1}'.format(key, value))
 
         response = self._make_http_request(
