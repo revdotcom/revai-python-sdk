@@ -177,7 +177,7 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._get_result_json(JOB_ID)
+        res = client._get_result_json(JOB_ID, {})
 
         assert res == data
         mock_session.request.assert_called_once_with(
@@ -230,7 +230,7 @@ class TestGenericApiClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client._get_result_object(JOB_ID)
+        res = client._get_result_object(JOB_ID, {})
 
         assert res == data
         mock_session.request.assert_called_once_with(
