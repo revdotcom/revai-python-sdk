@@ -99,13 +99,14 @@ class GenericApiClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
+        query_params = []
         for key, value in params.items():
             if value is not None:
-                params.append('{0}={1}'.format(key, value))
+                query_params.append('{0}={1}'.format(key, value))
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{0}/result?{1}'.format(id_, '&'.join(params)))
+            urljoin(self.base_url, 'jobs/{0}/result?{1}'.format(id_, '&'.join(query_params)))
         )
 
         return response.json()
