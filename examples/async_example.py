@@ -18,7 +18,7 @@ from rev_ai import apiclient
 from rev_ai.models import CustomVocabulary
 
 # String containing your access token
-access_token = "your_access_token"
+access_token = "<your_access_token>"
 
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)
@@ -48,7 +48,6 @@ custom_vocabularies = [mit_professors, other_scientists]
 #                                    custom_vocabulary_id=None)
 
 
-
 # Submitting a job with a link to the file you want transcribed
 # Change url to your url, custom_vocabularies is optional like above
 url = "https://www.rev.ai/FTC_Sample_1.mp3"
@@ -66,14 +65,16 @@ job = client.submit_job_url(url,
 print("Submitted Job")
 
 while True:
-
     # Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
     status = job_details.status.name
 
     print("Job Status : {}".format(status))
 
-    # Checks if the job has been transcribed
+    # Checks if the job has been transcribed. Please note that this is not the recommended way
+    # of getting job status in a real application. For recommended methods of getting job status
+    # please see our documentation on callback_urls here:
+    # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
     if status == "IN_PROGRESS":
         time.sleep(5)
         continue

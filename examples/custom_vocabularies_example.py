@@ -17,7 +17,7 @@ import time
 from rev_ai import custom_vocabularies_client
 from rev_ai.models import CustomVocabulary
 
-access_token = "your_access_token"
+access_token = "<your_access_token>"
 
 print("Creating Custom Vocab Client")
 client = custom_vocabularies_client.RevAiCustomVocabulariesClient(access_token)

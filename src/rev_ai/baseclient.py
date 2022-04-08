@@ -8,13 +8,7 @@ from . import CustomVocabulary
 
 
 class BaseClient:
-    """Base for clients that communicate with Rev AI Apis"""
-
-    # Default version of Rev AI
-    version = 'v1'
-
-    # Default address of the API
-    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
+    """Base for client's making HTTP Requests to Rev AI Apis"""
 
     def __init__(self, access_token):
         """Constructor
