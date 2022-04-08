@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """StreamingClient tool used for streaming services"""
+
 import websocket
 import threading
 import six

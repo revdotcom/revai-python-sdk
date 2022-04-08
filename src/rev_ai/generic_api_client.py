@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Generic client used to interact with our newer style apis"""
+
 from .baseclient import BaseClient
 
 try:
@@ -142,7 +145,7 @@ class GenericApiClient(BaseClient):
         return
 
     def _enhance_payload(self, payload, metadata, callback_url, delete_after_seconds):
-        enhanced = payload
+        enhanced = payload.copy()
         if metadata:
             enhanced['metadata'] = metadata
         if callback_url:

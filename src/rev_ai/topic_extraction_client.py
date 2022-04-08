@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Client used or interacting with out sentiment analysis api"""
+
 from .generic_api_client import GenericApiClient
 from .models import TopicExtractionJob, TopicExtractionResult
 

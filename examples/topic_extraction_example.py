@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import time
 from rev_ai import topic_extraction_client, apiclient
 
@@ -48,7 +47,6 @@ job = client.submit_job_from_text(text,
 print("Submitted Job")
 
 while True:
-
     # Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
     status = job_details.status.name
@@ -76,8 +74,7 @@ while True:
 
         # obtain a list of topics and their scores for the job
         result = client.get_result_object(job.id, threshold=None)
-        remove_none_elements = lambda dictionary: {
-            key: value for key, value in dictionary.items() if value}
+        remove_none_elements = lambda dictionary: {k: v for k, v in dictionary.items() if v}
         print([{
             'topic': topic.topic_name,
             'score': topic.score,

@@ -48,7 +48,6 @@ custom_vocabularies = [mit_professors, other_scientists]
 #                                    custom_vocabulary_id=None)
 
 
-
 # Submitting a job with a link to the file you want transcribed
 # Change url to your url, custom_vocabularies is optional like above
 url = "https://www.rev.ai/FTC_Sample_1.mp3"
@@ -66,7 +65,6 @@ job = client.submit_job_url(url,
 print("Submitted Job")
 
 while True:
-
     # Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
     status = job_details.status.name
