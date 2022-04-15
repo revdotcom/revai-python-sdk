@@ -3,6 +3,7 @@
 
 from .baseclient import BaseClient
 from . import utils
+from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -36,15 +37,15 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def submit_custom_vocabularies(
             self,
             custom_vocabularies,
-            notification_config=None,
+            notification_url=None,
+            notification_auth=None,
             metadata=None):
         """Submit custom vocabularies.
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
 
         :param custom_vocabularies: List of CustomVocabulary objects
-        :param notification_config: object including:
-         1. callback url to invoke on job completion as a webhook
-         2. optional authentication headers to use when calling the callback url
+        :param notification_url: callback url to invoke on job completion as a webhook
+        :param notification_auth: optional authentication headers to use when calling the notification url
         :param metadata: info to associate with the transcription job
         """
 
@@ -53,7 +54,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
-            notification_config,
+            notification_url,
+            notification_auth,
             metadata
         )
 
@@ -104,11 +106,12 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def _create_custom_vocabularies_options_payload(
             self,
             custom_vocabularies,
-            notification_config=None,
+            notification_url=None,
+            notification_auth=None,
             metadata=None):
         payload = {}
-        if notification_config:
-            payload['notification_config'] = notification_config
+        if notification_url:
+            payload['notification_config'] = CustomerUrlData(notification_url, notification_auth).to_dict()
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:

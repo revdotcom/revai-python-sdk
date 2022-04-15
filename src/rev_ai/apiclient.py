@@ -5,6 +5,7 @@ import json
 from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
+from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -44,9 +45,11 @@ class RevAiAPIClient(BaseClient):
 
     def submit_job_url(
             self,
-            source_config,
+            source_url,
+            source_auth=None,
             metadata=None,
-            notification_config=None,
+            notification_url=None,
+            notification_auth=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -63,13 +66,11 @@ class RevAiAPIClient(BaseClient):
             segments_to_transcribe=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
-        :param source_config: object containing:
-         1. url of the source media
-         2. optional authentication headers to use when accessing the source url
+        :param source_url: url of the source media
+        :param source_auth: optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
-        :param notification_config: object including:
-         1. callback url to invoke on job completion as a webhook
-         2. optional authentication headers to use when calling the callback url
+        :param notification_url: callback url to invoke on job completion as a webhook
+        :param notification_auth: optional authentication headers to use when calling the notification url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
@@ -104,12 +105,10 @@ class RevAiAPIClient(BaseClient):
         :returns: raw response data
         :raises: HTTPError
         """
-        if not source_config:
-            raise ValueError('source_config must be provided')
-        if not source_config.get('url'):
-            raise ValueError('source_config url must be provided')
-        payload = self._create_job_options_payload(source_config, metadata,
-                                                   notification_config, skip_diarization,
+        if not source_url:
+            raise ValueError('source_url must be provided')
+        payload = self._create_job_options_payload(source_url, source_auth, metadata,
+                                                   notification_url, notification_auth, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
@@ -129,7 +128,8 @@ class RevAiAPIClient(BaseClient):
             self,
             filename,
             metadata=None,
-            notification_config=None,
+            notification_url=None,
+            notification_auth=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -149,9 +149,8 @@ class RevAiAPIClient(BaseClient):
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param notification_config: object including:
-         1. callback url to invoke on job completion as a webhook
-         2. optional authentication headers to use when calling the callback url
+        :param notification_url: callback url to invoke on job completion as a webhook
+        :param notification_auth: optional authentication headers to use when calling the notification url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
@@ -189,8 +188,8 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(None, metadata, notification_config, skip_diarization,
-                                                   skip_punctuation, speaker_channels_count,
+        payload = self._create_job_options_payload(None, metadata, notification_url, notification_auth,
+                                                   skip_diarization, skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
@@ -425,9 +424,12 @@ class RevAiAPIClient(BaseClient):
         return Account.from_json(response.json())
 
     def _create_job_options_payload(
-            self, source_config,
+            self,
+            source_url,
+            source_auth=None,
             metadata=None,
-            notification_config=None,
+            notification_url=None,
+            notification_auth=None,
             skip_diarization=None,
             skip_punctuation=None,
             speaker_channels_count=None,
@@ -443,16 +445,16 @@ class RevAiAPIClient(BaseClient):
             test_mode=None,
             segments_to_transcribe=None):
         payload = {}
-        if source_config:
-            payload['source_config'] = source_config
+        if source_url:
+            payload['source_config'] = CustomerUrlData(source_url, source_auth).to_dict()
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
         if skip_punctuation:
             payload['skip_punctuation'] = skip_punctuation
         if metadata:
             payload['metadata'] = metadata
-        if notification_config:
-            payload['notification_config'] = notification_config
+        if notification_url:
+            payload['notification_config'] = CustomerUrlData(notification_url, notification_auth).to_dict()
         if custom_vocabularies:
             payload['custom_vocabularies'] =\
                 utils._process_vocabularies(custom_vocabularies)

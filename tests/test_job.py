@@ -14,9 +14,11 @@ except ImportError:
 JOB_ID = '1'
 TOKEN = "token"
 METADATA = 'test'
-NOTIFICATION_CONFIG = {'url': 'https://example.com/', 'auth_headers': 'headers'}
+NOTIFICATION_URL = 'https://example.com/'
+NOTIFICATION_AUTH = 'notification auth headers'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-SOURCE_CONFIG = {'url': 'https://example.com/test.mp3', 'auth_headers': 'headers'}
+SOURCE_URL = 'https://example.com/test.mp3'
+SOURCE_AUTH = 'source auth headers'
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
@@ -105,7 +107,6 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'metadata': METADATA,
-            'notification_config': NOTIFICATION_CONFIG,
             'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channels_count': 1,
@@ -119,8 +120,8 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(SOURCE_CONFIG, METADATA,
-                                    NOTIFICATION_CONFIG, True,
+        res = client.submit_job_url(SOURCE_URL, SOURCE_AUTH, METADATA,
+                                    NOTIFICATION_URL, NOTIFICATION_AUTH, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                     TRANSCRIBER)
@@ -129,7 +130,6 @@ class TestJobEndpoints():
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           metadata=METADATA,
-                          notification_config=NOTIFICATION_CONFIG,
                           skip_punctuation=True,
                           skip_diarization=True,
                           speaker_channels_count=1,
@@ -142,8 +142,8 @@ class TestJobEndpoints():
             "POST",
             JOBS_URL,
             json={
-                'source_config': SOURCE_CONFIG,
-                'notification_config': NOTIFICATION_CONFIG,
+                'source_config': {'url': SOURCE_URL, 'auth_headers': SOURCE_AUTH},
+                'notification_config': {'url': NOTIFICATION_URL, 'auth_headers': NOTIFICATION_AUTH},
                 'metadata': METADATA,
                 'skip_diarization': True,
                 'skip_punctuation': True,
@@ -175,7 +175,7 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(SOURCE_CONFIG, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
+        res = client.submit_job_url(SOURCE_URL, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -187,22 +187,17 @@ class TestJobEndpoints():
             'POST',
             JOBS_URL,
             json={
-                'source_config': SOURCE_CONFIG,
+                'source_config': {'url': SOURCE_URL},
                 'transcriber': 'human',
                 'verbatim': True,
                 'segments_to_transcribe': segments
             },
             headers=client.default_headers)
 
-    @pytest.mark.parametrize('source_config', [None, ''])
-    def test_submit_job_url_with_no_source_config(self, source_config, mock_session):
-        with pytest.raises(ValueError, match='source_config must be provided'):
-            RevAiAPIClient(TOKEN).submit_job_url(source_config)
-
-    @pytest.mark.parametrize('source_config', [{'url': None}, {'url': ''}])
-    def test_submit_job_url_with_no_source_config(self, source_config, mock_session):
-        with pytest.raises(ValueError, match='source_config url must be provided'):
-            RevAiAPIClient(TOKEN).submit_job_url(source_config)
+    @pytest.mark.parametrize('source_url', [None, ''])
+    def test_submit_job_url_with_no_source_url(self, source_url, mock_session):
+        with pytest.raises(ValueError, match='source_url must be provided'):
+            RevAiAPIClient(TOKEN).submit_job_url(source_url)
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
@@ -211,7 +206,6 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': created_on,
             'metadata': METADATA,
-            'notification_config': NOTIFICATION_CONFIG,
             'skip_punctuation': True,
             'skip_diarization': True,
             'speaker_channels_count': 1,
@@ -227,7 +221,7 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
-                                               NOTIFICATION_CONFIG, True,
+                                               NOTIFICATION_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                                TRANSCRIBER)
@@ -236,7 +230,6 @@ class TestJobEndpoints():
                               CREATED_ON,
                               JobStatus.IN_PROGRESS,
                               metadata=METADATA,
-                              notification_config=NOTIFICATION_CONFIG,
                               skip_punctuation=True,
                               skip_diarization=True,
                               speaker_channels_count=1,
@@ -254,7 +247,7 @@ class TestJobEndpoints():
                         None,
                         json.dumps({
                             'metadata': METADATA,
-                            'notification_config': NOTIFICATION_CONFIG,
+                            'notification_config': {'url': NOTIFICATION_URL},
                             'skip_punctuation': True,
                             'skip_diarization': True,
                             'speaker_channels_count': 1,

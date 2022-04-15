@@ -16,7 +16,8 @@ VERSION = 'version'
 API = 'api'
 JOB_ID = '1'
 METADATA = 'test'
-NOTIFICATION_CONFIG = {'url': 'https://example.com/', 'auth_headers': 'headers'}
+NOTIFICATION_URL = 'https://example.com/'
+NOTIFICATION_AUTH = 'headers'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 LANGUAGE = 'en'
 
@@ -157,7 +158,7 @@ class TestGenericApiClient:
         }
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
-        payload = client._enhance_payload({'random': True}, METADATA, NOTIFICATION_CONFIG, 0)
+        payload = client._enhance_payload({'random': True}, METADATA, NOTIFICATION_URL, NOTIFICATION_AUTH, 0)
 
         res = client._submit_job(payload)
 

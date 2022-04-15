@@ -2,6 +2,7 @@
 """Generic client used to interact with our newer style apis"""
 
 from .baseclient import BaseClient
+from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -144,12 +145,12 @@ class GenericApiClient(BaseClient):
 
         return
 
-    def _enhance_payload(self, payload, metadata, notification_config, delete_after_seconds):
+    def _enhance_payload(self, payload, metadata, notification_url, notification_auth, delete_after_seconds):
         enhanced = payload.copy()
         if metadata:
             enhanced['metadata'] = metadata
-        if notification_config:
-            enhanced['notification_config'] = notification_config
+        if notification_url:
+            enhanced['notification_config'] = CustomerUrlData(notification_url, notification_auth).to_dict()
         if delete_after_seconds is not None:
             enhanced['delete_after_seconds'] = delete_after_seconds
         return enhanced
