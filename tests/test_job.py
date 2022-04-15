@@ -16,7 +16,7 @@ TOKEN = "token"
 METADATA = 'test'
 NOTIFICATION_CONFIG = {'url': 'https://example.com/', 'auth_headers': 'headers'}
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-MEDIA_URL = 'https://example.com/test.mp3'
+SOURCE_CONFIG = {'url': 'https://example.com/test.mp3', 'auth_headers': 'headers'}
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
@@ -119,7 +119,7 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(MEDIA_URL, METADATA,
+        res = client.submit_job_url(SOURCE_CONFIG, METADATA,
                                     NOTIFICATION_CONFIG, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
@@ -142,7 +142,7 @@ class TestJobEndpoints():
             "POST",
             JOBS_URL,
             json={
-                'media_url': MEDIA_URL,
+                'source_config': SOURCE_CONFIG,
                 'notification_config': NOTIFICATION_CONFIG,
                 'metadata': METADATA,
                 'skip_diarization': True,
@@ -175,7 +175,7 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(MEDIA_URL, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
+        res = client.submit_job_url(SOURCE_CONFIG, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -187,17 +187,22 @@ class TestJobEndpoints():
             'POST',
             JOBS_URL,
             json={
-                'media_url': MEDIA_URL,
+                'source_config': SOURCE_CONFIG,
                 'transcriber': 'human',
                 'verbatim': True,
                 'segments_to_transcribe': segments
             },
             headers=client.default_headers)
 
-    @pytest.mark.parametrize('url', [None, ''])
-    def test_submit_job_url_with_no_media_url(self, url, mock_session):
-        with pytest.raises(ValueError, match='media_url must be provided'):
-            RevAiAPIClient(TOKEN).submit_job_url(url)
+    @pytest.mark.parametrize('source_config', [None, ''])
+    def test_submit_job_url_with_no_source_config(self, source_config, mock_session):
+        with pytest.raises(ValueError, match='source_config must be provided'):
+            RevAiAPIClient(TOKEN).submit_job_url(source_config)
+
+    @pytest.mark.parametrize('source_config', [{'url': None}, {'url': ''}])
+    def test_submit_job_url_with_no_source_config(self, source_config, mock_session):
+        with pytest.raises(ValueError, match='source_config url must be provided'):
+            RevAiAPIClient(TOKEN).submit_job_url(source_config)
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'

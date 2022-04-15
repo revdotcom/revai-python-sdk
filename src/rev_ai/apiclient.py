@@ -44,7 +44,7 @@ class RevAiAPIClient(BaseClient):
 
     def submit_job_url(
             self,
-            media_url,
+            source_config,
             metadata=None,
             notification_config=None,
             skip_diarization=False,
@@ -62,9 +62,10 @@ class RevAiAPIClient(BaseClient):
             test_mode=None,
             segments_to_transcribe=None):
         """Submit media given a URL for transcription.
-        The audio data is downloaded from the URL.
-
-        :param media_url: web location of the media file
+        The audio data is downloaded from the URL
+        :param source_config: object containing:
+         1. url of the source media
+         2. optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
         :param notification_config: object including:
          1. callback url to invoke on job completion as a webhook
@@ -103,9 +104,11 @@ class RevAiAPIClient(BaseClient):
         :returns: raw response data
         :raises: HTTPError
         """
-        if not media_url:
-            raise ValueError('media_url must be provided')
-        payload = self._create_job_options_payload(media_url, metadata,
+        if not source_config:
+            raise ValueError('source_config must be provided')
+        if not source_config.get('url'):
+            raise ValueError('source_config url must be provided')
+        payload = self._create_job_options_payload(source_config, metadata,
                                                    notification_config, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
@@ -422,7 +425,7 @@ class RevAiAPIClient(BaseClient):
         return Account.from_json(response.json())
 
     def _create_job_options_payload(
-            self, media_url,
+            self, source_config,
             metadata=None,
             notification_config=None,
             skip_diarization=None,
@@ -440,8 +443,8 @@ class RevAiAPIClient(BaseClient):
             test_mode=None,
             segments_to_transcribe=None):
         payload = {}
-        if media_url:
-            payload['media_url'] = media_url
+        if source_config:
+            payload['source_config'] = source_config
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
         if skip_punctuation:

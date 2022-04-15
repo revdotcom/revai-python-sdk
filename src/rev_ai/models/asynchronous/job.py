@@ -11,7 +11,7 @@ class Job:
             name=None,
             notification_config=None,
             metadata=None,
-            media_url=None,
+            source_config=None,
             failure=None,
             failure_detail=None,
             duration_seconds=None,
@@ -39,8 +39,9 @@ class Job:
          1. callback url to invoke on job completion as a webhook
          2. optional authentication headers to use when calling the callback url
         :param metadata: metadata if provided
-        :param media_url: url of transcribed media if job was submitted
-                          this way
+        :param source_config: object containing:
+         1. url of transcribed media if job was submitted this way
+         2. optional authentication headers to use when accessing the source url
         :param failure: type of failure if job has failed
         :param failure_detail: more detailed failure message if job has failed
         :param duration_seconds: duration of submitted file in seconds
@@ -64,7 +65,7 @@ class Job:
         self.name = name
         self.notification_config = notification_config,
         self.metadata = metadata
-        self.media_url = media_url
+        self.source_config = source_config
         self.failure = failure
         self.failure_detail = failure_detail
         self.duration_seconds = duration_seconds
@@ -98,7 +99,7 @@ class Job:
             name=json.get('name'),
             notification_config=json.get('notification_config'),
             metadata=json.get('metadata'),
-            media_url=json.get('media_url'),
+            source_config=json.get('source_config'),
             failure=json.get('failure'),
             failure_detail=json.get('failure_detail'),
             duration_seconds=json.get('duration_seconds'),
