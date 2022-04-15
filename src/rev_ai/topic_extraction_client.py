@@ -28,7 +28,7 @@ class TopicExtractionClient(GenericApiClient):
     def submit_job_from_text(self,
                              text=None,
                              metadata=None,
-                             callback_url=None,
+                             notification_config=None,
                              delete_after_seconds=None,
                              language=None):
         """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
@@ -36,8 +36,9 @@ class TopicExtractionClient(GenericApiClient):
 
         :param text: Plain text string to be run through topic extraction
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as
-                             a webhook
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
@@ -45,13 +46,13 @@ class TopicExtractionClient(GenericApiClient):
         :raises: HTTPError
         """
         payload = self._enhance_payload({'text': text, 'language': language},
-                                        metadata, callback_url, delete_after_seconds)
+                                        metadata, notification_config, delete_after_seconds)
         return self._submit_job(payload)
 
     def submit_job_from_transcript(self,
                                    transcript=None,
                                    metadata=None,
-                                   callback_url=None,
+                                   notification_config=None,
                                    delete_after_seconds=None,
                                    language=None):
         """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
@@ -60,8 +61,9 @@ class TopicExtractionClient(GenericApiClient):
         :param transcript: Transcript object from the Rev AI async transcription client to be run
                            through topic extraction
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as
-                             a webhook
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
@@ -69,7 +71,7 @@ class TopicExtractionClient(GenericApiClient):
         :raises: HTTPError
         """
         payload = self._enhance_payload({'json': transcript.to_dict(), 'language': language},
-                                        metadata, callback_url, delete_after_seconds)
+                                        metadata, notification_config, delete_after_seconds)
         return self._submit_job(payload)
 
     def get_result_json(self, id_, threshold=None):

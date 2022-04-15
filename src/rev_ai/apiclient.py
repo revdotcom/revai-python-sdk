@@ -46,7 +46,7 @@ class RevAiAPIClient(BaseClient):
             self,
             media_url,
             metadata=None,
-            callback_url=None,
+            notification_config=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -66,8 +66,9 @@ class RevAiAPIClient(BaseClient):
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as
-                             a webhook
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
@@ -105,7 +106,7 @@ class RevAiAPIClient(BaseClient):
         if not media_url:
             raise ValueError('media_url must be provided')
         payload = self._create_job_options_payload(media_url, metadata,
-                                                   callback_url, skip_diarization,
+                                                   notification_config, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
@@ -125,7 +126,7 @@ class RevAiAPIClient(BaseClient):
             self,
             filename,
             metadata=None,
-            callback_url=None,
+            notification_config=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -145,8 +146,9 @@ class RevAiAPIClient(BaseClient):
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
@@ -184,7 +186,7 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(None, metadata, callback_url, skip_diarization,
+        payload = self._create_job_options_payload(None, metadata, notification_config, skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
@@ -422,7 +424,7 @@ class RevAiAPIClient(BaseClient):
     def _create_job_options_payload(
             self, media_url,
             metadata=None,
-            callback_url=None,
+            notification_config=None,
             skip_diarization=None,
             skip_punctuation=None,
             speaker_channels_count=None,
@@ -446,8 +448,8 @@ class RevAiAPIClient(BaseClient):
             payload['skip_punctuation'] = skip_punctuation
         if metadata:
             payload['metadata'] = metadata
-        if callback_url:
-            payload['callback_url'] = callback_url
+        if notification_config:
+            payload['notification_config'] = notification_config
         if custom_vocabularies:
             payload['custom_vocabularies'] =\
                 utils._process_vocabularies(custom_vocabularies)

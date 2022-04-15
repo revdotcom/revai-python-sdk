@@ -38,7 +38,7 @@ custom_vocabularies = [mit_professors, other_scientists]
 #
 # job = client.submit_job_local_file("your_local_file_path",
 #                                    metadata=None,
-#                                    callback_url=None,
+#                                    notification_config=None,
 #                                    skip_diarization=False,
 #                                    custom_vocabularies=None,
 #                                    filter_profanity=False,
@@ -53,7 +53,7 @@ custom_vocabularies = [mit_professors, other_scientists]
 url = "https://www.rev.ai/FTC_Sample_1.mp3"
 job = client.submit_job_url(url,
                             metadata=None,
-                            callback_url=None,
+                            notification_config=None,
                             skip_diarization=False,
                             custom_vocabularies=custom_vocabularies,
                             filter_profanity=False,
@@ -73,7 +73,7 @@ while True:
 
     # Checks if the job has been transcribed. Please note that this is not the recommended way
     # of getting job status in a real application. For recommended methods of getting job status
-    # please see our documentation on callback_urls here:
+    # please see our documentation on setting a callback url here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
     if status == "IN_PROGRESS":
         time.sleep(5)

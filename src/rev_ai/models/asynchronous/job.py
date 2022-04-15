@@ -9,7 +9,7 @@ class Job:
             self, id_, created_on, status,
             completed_on=None,
             name=None,
-            callback_url=None,
+            notification_config=None,
             metadata=None,
             media_url=None,
             failure=None,
@@ -35,7 +35,9 @@ class Job:
         :param completed_on: date and time at which this job finished
                              being transcribed
         :param name: name of submitted file if local file was used
-        :param callback_url: callback_url if provided
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param metadata: metadata if provided
         :param media_url: url of transcribed media if job was submitted
                           this way
@@ -60,7 +62,7 @@ class Job:
         self.status = status
         self.completed_on = completed_on
         self.name = name
-        self.callback_url = callback_url,
+        self.notification_config = notification_config,
         self.metadata = metadata
         self.media_url = media_url
         self.failure = failure
@@ -94,7 +96,7 @@ class Job:
             JobStatus.from_string(json['status']),
             completed_on=json.get('completed_on'),
             name=json.get('name'),
-            callback_url=json.get('callback_url'),
+            notification_config=json.get('notification_config'),
             metadata=json.get('metadata'),
             media_url=json.get('media_url'),
             failure=json.get('failure'),

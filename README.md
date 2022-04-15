@@ -50,7 +50,7 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 `job` will contain all the information normally found in a successful response from our
 [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
-If you want to get fancy, both send job methods take `metadata`, `callback_url`,
+If you want to get fancy, both send job methods take `metadata`, `notification_config`,
 `skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, `language`, and `custom_vocabulary_id` as optional parameters, these are described in the request body of
 the [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 

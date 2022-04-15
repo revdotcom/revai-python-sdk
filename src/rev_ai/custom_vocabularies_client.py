@@ -36,14 +36,15 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def submit_custom_vocabularies(
             self,
             custom_vocabularies,
-            callback_url=None,
+            notification_config=None,
             metadata=None):
         """Submit custom vocabularies.
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
 
         :param custom_vocabularies: List of CustomVocabulary objects
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param metadata: info to associate with the transcription job
         """
 
@@ -52,7 +53,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
-            callback_url,
+            notification_config,
             metadata
         )
 
@@ -103,11 +104,11 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def _create_custom_vocabularies_options_payload(
             self,
             custom_vocabularies,
-            callback_url=None,
+            notification_config=None,
             metadata=None):
         payload = {}
-        if callback_url:
-            payload['callback_url'] = callback_url
+        if notification_config:
+            payload['notification_config'] = notification_config
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:

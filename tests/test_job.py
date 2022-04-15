@@ -14,7 +14,7 @@ except ImportError:
 JOB_ID = '1'
 TOKEN = "token"
 METADATA = 'test'
-CALLBACK_URL = 'https://callback.com/'
+NOTIFICATION_CONFIG = {'url': 'https://example.com/', 'auth_headers': 'headers'}
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 MEDIA_URL = 'https://example.com/test.mp3'
 FILENAME = 'test.mp3'
@@ -105,7 +105,7 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
+            'notification_config': NOTIFICATION_CONFIG,
             'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channels_count': 1,
@@ -120,7 +120,7 @@ class TestJobEndpoints():
         client = RevAiAPIClient(TOKEN)
 
         res = client.submit_job_url(MEDIA_URL, METADATA,
-                                    CALLBACK_URL, True,
+                                    NOTIFICATION_CONFIG, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                     TRANSCRIBER)
@@ -129,7 +129,7 @@ class TestJobEndpoints():
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           metadata=METADATA,
-                          callback_url=CALLBACK_URL,
+                          notification_config=NOTIFICATION_CONFIG,
                           skip_punctuation=True,
                           skip_diarization=True,
                           speaker_channels_count=1,
@@ -143,7 +143,7 @@ class TestJobEndpoints():
             JOBS_URL,
             json={
                 'media_url': MEDIA_URL,
-                'callback_url': CALLBACK_URL,
+                'notification_config': NOTIFICATION_CONFIG,
                 'metadata': METADATA,
                 'skip_diarization': True,
                 'skip_punctuation': True,
@@ -206,7 +206,7 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': created_on,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
+            'notification_config': NOTIFICATION_CONFIG,
             'skip_punctuation': True,
             'skip_diarization': True,
             'speaker_channels_count': 1,
@@ -222,7 +222,7 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
-                                               CALLBACK_URL, True,
+                                               NOTIFICATION_CONFIG, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                                TRANSCRIBER)
@@ -231,7 +231,7 @@ class TestJobEndpoints():
                               CREATED_ON,
                               JobStatus.IN_PROGRESS,
                               metadata=METADATA,
-                              callback_url=CALLBACK_URL,
+                              notification_config=NOTIFICATION_CONFIG,
                               skip_punctuation=True,
                               skip_diarization=True,
                               speaker_channels_count=1,
@@ -249,7 +249,7 @@ class TestJobEndpoints():
                         None,
                         json.dumps({
                             'metadata': METADATA,
-                            'callback_url': CALLBACK_URL,
+                            'notification_config': NOTIFICATION_CONFIG,
                             'skip_punctuation': True,
                             'skip_diarization': True,
                             'speaker_channels_count': 1,

@@ -17,7 +17,7 @@ TEXT = 'Input'
 JSON = Transcript([Monologue(0, [Element('text', 'hello', 0.0, 0.1, 100)])])
 JOB_ID = '1'
 METADATA = 'test'
-CALLBACK_URL = 'https://example.com/'
+NOTIFICATION_CONFIG = {'url': 'https://example.com/', 'auth_headers': 'headers'}
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 LANGUAGE = 'en'
 TOPIC_NAME = 'random'
@@ -51,7 +51,7 @@ class TestTopicExtractionClient:
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
+            'notification_config': NOTIFICATION_CONFIG,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
         }
@@ -60,7 +60,7 @@ class TestTopicExtractionClient:
 
         res = client.submit_job_from_text(text=TEXT,
                                           metadata=METADATA,
-                                          callback_url=CALLBACK_URL,
+                                          notification_config=NOTIFICATION_CONFIG,
                                           delete_after_seconds=0,
                                           language=LANGUAGE)
 
@@ -68,14 +68,14 @@ class TestTopicExtractionClient:
                                          CREATED_ON,
                                          JobStatus.IN_PROGRESS,
                                          metadata=METADATA,
-                                         callback_url=CALLBACK_URL,
+                                         notification_config=NOTIFICATION_CONFIG,
                                          delete_after_seconds=0)
         mock_session.request.assert_called_once_with(
             "POST",
             url,
             json={
                 'text': TEXT,
-                'callback_url': CALLBACK_URL,
+                'notification_config': NOTIFICATION_CONFIG,
                 'metadata': METADATA,
                 'delete_after_seconds': 0,
                 'language': LANGUAGE
@@ -90,7 +90,7 @@ class TestTopicExtractionClient:
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
+            'notification_config': NOTIFICATION_CONFIG,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
         }
@@ -99,7 +99,7 @@ class TestTopicExtractionClient:
 
         res = client.submit_job_from_transcript(transcript=JSON,
                                                 metadata=METADATA,
-                                                callback_url=CALLBACK_URL,
+                                                notification_config=NOTIFICATION_CONFIG,
                                                 delete_after_seconds=0,
                                                 language=LANGUAGE)
 
@@ -107,14 +107,14 @@ class TestTopicExtractionClient:
                                          CREATED_ON,
                                          JobStatus.IN_PROGRESS,
                                          metadata=METADATA,
-                                         callback_url=CALLBACK_URL,
+                                         notification_config=NOTIFICATION_CONFIG,
                                          delete_after_seconds=0)
         mock_session.request.assert_called_once_with(
             "POST",
             url,
             json={
                 'json': JSON.to_dict(),
-                'callback_url': CALLBACK_URL,
+                'notification_config': NOTIFICATION_CONFIG,
                 'metadata': METADATA,
                 'delete_after_seconds': 0,
                 'language': LANGUAGE

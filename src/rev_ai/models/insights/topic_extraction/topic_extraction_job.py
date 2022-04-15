@@ -8,7 +8,7 @@ class TopicExtractionJob:
     def __init__(
             self, id_, created_on, status,
             completed_on=None,
-            callback_url=None,
+            notification_config=None,
             metadata=None,
             failure=None,
             failure_detail=None,
@@ -21,7 +21,9 @@ class TopicExtractionJob:
                        or 'FAILED'
         :param completed_on: date and time at which this job finished
                              being processed
-        :param callback_url: callback_url if provided
+        :param notification_config: object including:
+         1. callback url to invoke on job completion as a webhook
+         2. optional authentication headers to use when calling the callback url
         :param metadata: metadata if provided
         :param failure: type of failure if job has failed
         :param failure_detail: more detailed failure message if job has failed
@@ -33,7 +35,7 @@ class TopicExtractionJob:
         self.created_on = created_on
         self.status = status
         self.completed_on = completed_on
-        self.callback_url = callback_url,
+        self.notification_config = notification_config,
         self.metadata = metadata
         self.failure = failure
         self.failure_detail = failure_detail
@@ -54,7 +56,7 @@ class TopicExtractionJob:
             json['created_on'],
             JobStatus.from_string(json['status']),
             completed_on=json.get('completed_on'),
-            callback_url=json.get('callback_url'),
+            notification_config=json.get('notification_config'),
             metadata=json.get('metadata'),
             failure=json.get('failure'),
             failure_detail=json.get('failure_detail'),
