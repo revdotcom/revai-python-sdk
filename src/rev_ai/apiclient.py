@@ -188,7 +188,7 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(None, metadata, notification_url, notification_auth,
+        payload = self._create_job_options_payload(None, None, metadata, notification_url, notification_auth,
                                                    skip_diarization, skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
