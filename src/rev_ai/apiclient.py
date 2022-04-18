@@ -108,7 +108,8 @@ class RevAiAPIClient(BaseClient):
         if not source_url:
             raise ValueError('source_url must be provided')
         payload = self._create_job_options_payload(source_url, source_auth, metadata,
-                                                   notification_url, notification_auth, skip_diarization,
+                                                   notification_url, notification_auth,
+                                                   skip_diarization,
                                                    skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
@@ -188,8 +189,9 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(None, None, metadata, notification_url, notification_auth,
-                                                   skip_diarization, skip_punctuation, speaker_channels_count,
+        payload = self._create_job_options_payload(None, None, metadata, notification_url,
+                                                   notification_auth, skip_diarization,
+                                                   skip_punctuation, speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
@@ -454,9 +456,10 @@ class RevAiAPIClient(BaseClient):
         if metadata:
             payload['metadata'] = metadata
         if notification_url:
-            payload['notification_config'] = CustomerUrlData(notification_url, notification_auth).to_dict()
+            payload['notification_config'] = CustomerUrlData(notification_url,
+                                                             notification_auth).to_dict()
         if custom_vocabularies:
-            payload['custom_vocabularies'] =\
+            payload['custom_vocabularies'] = \
                 utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
             payload['speaker_channels_count'] = speaker_channels_count

@@ -45,7 +45,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         :param custom_vocabularies: List of CustomVocabulary objects
         :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling the notification url
+        :param notification_auth: optional authentication headers to use when calling
+            the notification url
         :param metadata: info to associate with the transcription job
         """
 
@@ -111,7 +112,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
             metadata=None):
         payload = {}
         if notification_url:
-            payload['notification_config'] = CustomerUrlData(notification_url, notification_auth).to_dict()
+            payload['notification_config'] =\
+                CustomerUrlData(notification_url, notification_auth).to_dict()
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:

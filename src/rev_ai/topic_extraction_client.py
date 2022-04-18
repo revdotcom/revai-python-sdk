@@ -46,7 +46,8 @@ class TopicExtractionClient(GenericApiClient):
         :raises: HTTPError
         """
         payload = self._enhance_payload({'text': text, 'language': language},
-                                        metadata, notification_url, notification_auth, delete_after_seconds)
+                                        metadata, notification_url, notification_auth,
+                                        delete_after_seconds)
         return self._submit_job(payload)
 
     def submit_job_from_transcript(self,
@@ -71,7 +72,8 @@ class TopicExtractionClient(GenericApiClient):
         :raises: HTTPError
         """
         payload = self._enhance_payload({'json': transcript.to_dict(), 'language': language},
-                                        metadata, notification_url, notification_auth, delete_after_seconds)
+                                        metadata, notification_url, notification_auth,
+                                        delete_after_seconds)
         return self._submit_job(payload)
 
     def get_result_json(self, id_, threshold=None):
