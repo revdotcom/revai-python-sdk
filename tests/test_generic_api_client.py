@@ -192,7 +192,7 @@ class TestGenericApiClient:
         kwarg_value_1 = 1
         kwarg_name_2 = 'name2'
         kwarg_value_2 = 2
-        if get_python_major_minor_version() <= 35:
+        if get_python_major_minor_version() < 35:
             url = urljoin(client.base_url,
                           'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
                                                                    kwarg_name_2,
@@ -245,7 +245,8 @@ class TestGenericApiClient:
         kwarg_value_1 = 1
         kwarg_name_2 = 'name2'
         kwarg_value_2 = 2
-        if get_python_major_minor_version() <= 35:
+        print(get_python_major_minor_version())
+        if get_python_major_minor_version() < 35:
             url = urljoin(client.base_url,
                           'jobs/{0}/result?{1}={2}&{3}={4}'.format(JOB_ID,
                                                                    kwarg_name_2,
