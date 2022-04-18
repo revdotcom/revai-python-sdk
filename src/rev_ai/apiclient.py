@@ -70,7 +70,8 @@ class RevAiAPIClient(BaseClient):
         :param source_auth: optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
         :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling the notification url
+        :param notification_auth: optional authentication headers to use when calling
+            the notification url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
@@ -151,7 +152,8 @@ class RevAiAPIClient(BaseClient):
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
         :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling the notification url
+        :param notification_auth: optional authentication headers to use when calling
+            the notification url
         :param skip_diarization: should Rev AI skip diaization when
                                  transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when
