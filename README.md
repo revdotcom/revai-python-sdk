@@ -1,4 +1,3 @@
-
 # Rev AI Python SDK
 
 [![CI](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml/badge.svg)](https://github.com/revdotcom/revai-python-sdk/actions/workflows/build_test.yml)
