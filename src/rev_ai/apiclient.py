@@ -6,6 +6,7 @@ from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
 from .models.customer_url_data import CustomerUrlData
+from .utils import check_exclusive_options
 
 try:
     from urllib.parse import urljoin
@@ -108,10 +109,10 @@ class RevAiAPIClient(BaseClient):
         """
         if not (media_url or source_config):
             raise ValueError('media_url or source_config must be provided')
-        self.check_exclusive_options(media_url, 'media_url', source_config, 'source_config')
+        check_exclusive_options(media_url, 'media_url', source_config, 'source_config')
         if media_url:
             source_config = CustomerUrlData(media_url)
-        self.check_exclusive_options(callback_url, 'callback_url', notification_config,
+        check_exclusive_options(callback_url, 'callback_url', notification_config,
                                      'notification_config')
         if callback_url:
             notification_config = CustomerUrlData(callback_url)
@@ -489,9 +490,3 @@ class RevAiAPIClient(BaseClient):
 
     def _create_captions_query(self, speaker_channel):
         return '' if speaker_channel is None else '?speaker_channel={}'.format(speaker_channel)
-
-    @staticmethod
-    def check_exclusive_options(option1, option1_name, option2, option2_name):
-        if option1 and option2:
-            raise ValueError('Only one of {0} or {1} may be provided'
-                             .format(option1_name, option2_name))

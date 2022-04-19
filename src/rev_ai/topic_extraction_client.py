@@ -3,6 +3,8 @@
 
 from .generic_api_client import GenericApiClient
 from .models import TopicExtractionJob, TopicExtractionResult
+from .models.customer_url_data import CustomerUrlData
+from .utils import check_exclusive_options
 
 
 class TopicExtractionClient(GenericApiClient):
@@ -28,54 +30,61 @@ class TopicExtractionClient(GenericApiClient):
     def submit_job_from_text(self,
                              text=None,
                              metadata=None,
-                             notification_url=None,
-                             notification_auth=None,
+                             callback_url=None,
                              delete_after_seconds=None,
-                             language=None):
+                             language=None,
+                             notification_config=None):
         """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
         Transcript object
-
         :param text: Plain text string to be run through topic extraction
         :param metadata: info to associate with the transcription job
-        :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling
-            the notification url
+        :param callback_url: the callback url to invoke on job completion as a webhook
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: TopicExtractionJob object
-        :raises: HTTPError
+        :raises: HTTPError, ValueError
         """
-        payload = self._enhance_payload({'text': text, 'language': language},
-                                        metadata, notification_url, notification_auth,
-                                        delete_after_seconds)
+        check_exclusive_options(callback_url, 'callback_url', notification_config,
+                                'notification_config')
+        if callback_url:
+            notification_config = CustomerUrlData(callback_url)
+        payload = self._enhance_payload({'text': text, 'language': language}, metadata,
+                                        notification_config, delete_after_seconds)
         return self._submit_job(payload)
 
     def submit_job_from_transcript(self,
                                    transcript=None,
                                    metadata=None,
-                                   notification_url=None,
-                                   notification_auth=None,
+                                   callback_url=None,
                                    delete_after_seconds=None,
-                                   language=None):
+                                   language=None,
+                                   notification_config=None):
         """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
         Transcript object
 
         :param transcript: Transcript object from the Rev AI async transcription client to be run
                            through topic extraction
         :param metadata: info to associate with the transcription job
-        :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling
-            the notification url
+        :param callback_url: the callback url to invoke on job completion as a webhook
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: TopicExtractionJob object
-        :raises: HTTPError
+        :raises: HTTPError, ValueError
         """
+        check_exclusive_options(callback_url, 'callback_url', notification_config,
+                                'notification_config')
+        if callback_url:
+            notification_config = CustomerUrlData(callback_url)
         payload = self._enhance_payload({'json': transcript.to_dict(), 'language': language},
-                                        metadata, notification_url, notification_auth,
-                                        delete_after_seconds)
+                                        metadata, notification_config, delete_after_seconds)
         return self._submit_job(payload)
 
     def get_result_json(self, id_, threshold=None):
