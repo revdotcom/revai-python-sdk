@@ -260,7 +260,7 @@ class TestJobEndpoints():
 
     @pytest.mark.parametrize('source_url', [None, ''])
     def test_submit_job_url_with_no_source_url(self, source_url, mock_session):
-        with pytest.raises(ValueError, match='source_url must be provided'):
+        with pytest.raises(ValueError, match='media_url or source_config must be provided'):
             RevAiAPIClient(TOKEN).submit_job_url(source_url)
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
@@ -285,7 +285,7 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
-                                               NOTIFICATION_URL, None, True,
+                                               NOTIFICATION_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                                TRANSCRIBER)
@@ -326,6 +326,77 @@ class TestJobEndpoints():
                     )
                 },
                 headers=client.default_headers)
+
+    def test_submit_job_local_file_auth_options_with_success(self, mocker, mock_session,
+                                                             make_mock_response):
+        created_on = '2018-05-05T23:23:22.29Z'
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': created_on,
+            'metadata': METADATA,
+            'skip_punctuation': True,
+            'skip_diarization': True,
+            'speaker_channels_count': 1,
+            'filter_profanity': True,
+            'remove_disfluencies': True,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
+            res = client.submit_job_local_file(filename=FILENAME, metadata=METADATA,
+                                               callback_url=None, skip_diarization=True,
+                                               skip_punctuation=True, speaker_channels_count=1,
+                                               custom_vocabularies=CUSTOM_VOCAB,
+                                               filter_profanity=True, remove_disfluencies=True,
+                                               delete_after_seconds=0, language=LANGUAGE,
+                                               custom_vocabulary_id=CUSTOM_VOCAB_ID,
+                                               transcriber=TRANSCRIBER,
+                                               notification_config=NOTIFICATION_CONFIG)
+
+            assert res == Job(JOB_ID,
+                              CREATED_ON,
+                              JobStatus.IN_PROGRESS,
+                              metadata=METADATA,
+                              skip_punctuation=True,
+                              skip_diarization=True,
+                              speaker_channels_count=1,
+                              filter_profanity=True,
+                              remove_disfluencies=True,
+                              delete_after_seconds=0,
+                              language=LANGUAGE,
+                              transcriber=TRANSCRIBER)
+            mock_session.request.assert_called_once_with(
+                "POST",
+                JOBS_URL,
+                files={
+                    'media': (FILENAME, file),
+                    'options': (
+                        None,
+                        json.dumps({
+                            'metadata': METADATA,
+                            'notification_config': {'url': NOTIFICATION_URL,
+                                                    'auth_headers': NOTIFICATION_AUTH},
+                            'skip_punctuation': True,
+                            'skip_diarization': True,
+                            'speaker_channels_count': 1,
+                            'custom_vocabularies': CUSTOM_VOCAB,
+                            'filter_profanity': True,
+                            'remove_disfluencies': True,
+                            'delete_after_seconds': 0,
+                            'language': LANGUAGE,
+                            'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                            'transcriber': TRANSCRIBER
+                        }, sort_keys=True)
+                    )
+                },
+                headers=client.default_headers)
+
 
     @pytest.mark.parametrize('filename', [None, ''])
     def test_submit_job_url_with_no_filename(self, filename, mock_session):

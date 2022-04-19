@@ -2,7 +2,6 @@
 """Generic client used to interact with our newer style apis"""
 
 from .baseclient import BaseClient
-from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin

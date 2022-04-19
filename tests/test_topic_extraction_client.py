@@ -2,6 +2,8 @@
 """Unit tests for RevAiApiClient"""
 
 import pytest
+
+from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.topic_extraction_client import TopicExtractionClient
 from src.rev_ai import __version__
 from src.rev_ai import Transcript, Monologue, Element, TopicExtractionJob, JobStatus, \
@@ -27,6 +29,8 @@ INFORMANT_CONTENT = 'random words'
 INFORMANT_OFFSET = 0
 INFORMANT_LENGTH = 12
 THRESHOLD = .3
+
+NOTIFICATION_CONFIG = CustomerUrlData(NOTIFICATION_URL, NOTIFICATION_AUTH)
 
 
 class TestTopicExtractionClient:
@@ -60,8 +64,44 @@ class TestTopicExtractionClient:
 
         res = client.submit_job_from_text(text=TEXT,
                                           metadata=METADATA,
-                                          notification_url=NOTIFICATION_URL,
-                                          notification_auth=NOTIFICATION_AUTH,
+                                          callback_url=NOTIFICATION_URL,
+                                          delete_after_seconds=0,
+                                          language=LANGUAGE)
+
+        assert res == TopicExtractionJob(JOB_ID,
+                                         CREATED_ON,
+                                         JobStatus.IN_PROGRESS,
+                                         metadata=METADATA,
+                                         delete_after_seconds=0)
+        mock_session.request.assert_called_once_with(
+            "POST",
+            url,
+            json={
+                'text': TEXT,
+                'notification_config': {'url': NOTIFICATION_URL},
+                'metadata': METADATA,
+                'delete_after_seconds': 0,
+                'language': LANGUAGE
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_text_auth_options_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs')
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+            'metadata': METADATA,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.submit_job_from_text(text=TEXT,
+                                          metadata=METADATA,
+                                          notification_config=NOTIFICATION_CONFIG,
                                           delete_after_seconds=0,
                                           language=LANGUAGE)
 
@@ -98,8 +138,44 @@ class TestTopicExtractionClient:
 
         res = client.submit_job_from_transcript(transcript=JSON,
                                                 metadata=METADATA,
-                                                notification_url=NOTIFICATION_URL,
-                                                notification_auth=NOTIFICATION_AUTH,
+                                                callback_url=NOTIFICATION_URL,
+                                                delete_after_seconds=0,
+                                                language=LANGUAGE)
+
+        assert res == TopicExtractionJob(JOB_ID,
+                                         CREATED_ON,
+                                         JobStatus.IN_PROGRESS,
+                                         metadata=METADATA,
+                                         delete_after_seconds=0)
+        mock_session.request.assert_called_once_with(
+            "POST",
+            url,
+            json={
+                'json': JSON.to_dict(),
+                'notification_config': {'url': NOTIFICATION_URL},
+                'metadata': METADATA,
+                'delete_after_seconds': 0,
+                'language': LANGUAGE
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_json_auth_options_with_success(self, mock_session, make_mock_response):
+        client = TopicExtractionClient(TOKEN)
+        url = urljoin(client.base_url, 'jobs')
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+            'metadata': METADATA,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        res = client.submit_job_from_transcript(transcript=JSON,
+                                                metadata=METADATA,
+                                                notification_config=NOTIFICATION_CONFIG,
                                                 delete_after_seconds=0,
                                                 language=LANGUAGE)
 

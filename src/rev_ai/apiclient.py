@@ -72,9 +72,6 @@ class RevAiAPIClient(BaseClient):
             optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
         :param callback_url: Callback url to invoke on job completion as a webhook
-        :param notification_config: CustomerUrlData object containing the callback url to
-            invoke on job completion as a webhook and optional authentication headers to use when
-            calling the callback url
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
@@ -104,6 +101,9 @@ class RevAiAPIClient(BaseClient):
             Whether human transcription job is mocked and no transcription actually happens.
         :param segments_to_transcribe: Only available with "human" transcriber.
             Sections of transcript needed to be transcribed.
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: raw response data
         :raises: HTTPError
         """
@@ -138,7 +138,7 @@ class RevAiAPIClient(BaseClient):
             self,
             filename,
             metadata=None,
-            notification_config=None,
+            callback_url=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -152,15 +152,14 @@ class RevAiAPIClient(BaseClient):
             verbatim=None,
             rush=None,
             test_mode=None,
-            segments_to_transcribe=None):
+            segments_to_transcribe=None,
+            notification_config=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param notification_config: CustomerUrlData object containing the callback url to
-            invoke on job completion as a webhook and optional authentication headers to use when
-            calling the callback url
+        :param callback_url: Callback url to invoke on job completion as a webhook
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
@@ -190,11 +189,19 @@ class RevAiAPIClient(BaseClient):
             Whether human transcription job is mocked and no transcription actually happens.
         :param segments_to_transcribe: Only available with "human" transcriber.
             Sections of transcript needed to be transcribed.
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: raw response data
-        :raises: HTTPError
+        :raises: HTTPError, ValueError
         """
         if not filename:
             raise ValueError('filename must be provided')
+
+        check_exclusive_options(callback_url, 'callback_url', notification_config,
+                                'notification_config')
+        if callback_url:
+            notification_config = CustomerUrlData(callback_url)
 
         payload = self._create_job_options_payload(None, metadata, notification_config,
                                                    skip_diarization, skip_punctuation,
