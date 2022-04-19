@@ -397,7 +397,6 @@ class TestJobEndpoints():
                 },
                 headers=client.default_headers)
 
-
     @pytest.mark.parametrize('filename', [None, ''])
     def test_submit_job_url_with_no_filename(self, filename, mock_session):
         with pytest.raises(ValueError, match='filename must be provided'):
