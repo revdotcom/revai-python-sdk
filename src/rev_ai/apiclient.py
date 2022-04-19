@@ -46,10 +46,8 @@ class RevAiAPIClient(BaseClient):
     def submit_job_url(
             self,
             media_url=None,
-            source_config=None,
             metadata=None,
             callback_url=None,
-            notification_config=None,
             skip_diarization=False,
             skip_punctuation=False,
             speaker_channels_count=None,
@@ -63,7 +61,9 @@ class RevAiAPIClient(BaseClient):
             verbatim=None,
             rush=None,
             test_mode=None,
-            segments_to_transcribe=None):
+            segments_to_transcribe=None,
+            source_config=None,
+            notification_config=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: url of the source media
@@ -452,7 +452,7 @@ class RevAiAPIClient(BaseClient):
             segments_to_transcribe=None):
         payload = {}
         if source_config:
-            payload['source_config']: source_config.to_dict()
+            payload['source_config'] = source_config.to_dict()
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
         if skip_punctuation:

@@ -3,6 +3,8 @@
 
 import json
 import pytest
+
+from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous import Job, JobStatus
 
@@ -26,6 +28,9 @@ CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 CUSTOM_VOCAB_ID = "vid"
 LANGUAGE = 'en'
 TRANSCRIBER = 'machine_v2'
+
+SOURCE_CONFIG = CustomerUrlData(SOURCE_URL, SOURCE_AUTH)
+NOTIFICATION_CONFIG = CustomerUrlData(NOTIFICATION_URL, NOTIFICATION_AUTH)
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -120,11 +125,70 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(SOURCE_URL, SOURCE_AUTH, METADATA,
-                                    NOTIFICATION_URL, NOTIFICATION_AUTH, True,
+        res = client.submit_job_url(SOURCE_URL, METADATA,
+                                    NOTIFICATION_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                     TRANSCRIBER)
+
+        assert res == Job(JOB_ID,
+                          CREATED_ON,
+                          JobStatus.IN_PROGRESS,
+                          metadata=METADATA,
+                          skip_punctuation=True,
+                          skip_diarization=True,
+                          speaker_channels_count=1,
+                          filter_profanity=True,
+                          remove_disfluencies=True,
+                          delete_after_seconds=0,
+                          language=LANGUAGE,
+                          transcriber=TRANSCRIBER)
+        mock_session.request.assert_called_once_with(
+            "POST",
+            JOBS_URL,
+            json={
+                'source_config': {'url': SOURCE_URL},
+                'notification_config': {'url': NOTIFICATION_URL},
+                'metadata': METADATA,
+                'skip_diarization': True,
+                'skip_punctuation': True,
+                'speaker_channels_count': 1,
+                'custom_vocabularies': CUSTOM_VOCAB,
+                'filter_profanity': True,
+                'remove_disfluencies': True,
+                'delete_after_seconds': 0,
+                'language': LANGUAGE,
+                'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                'transcriber': TRANSCRIBER
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_url_with_auth_options(self, mock_session, make_mock_response):
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+            'metadata': METADATA,
+            'skip_diarization': True,
+            'skip_punctuation': True,
+            'speaker_channels_count': 1,
+            'filter_profanity': True,
+            'remove_disfluencies': True,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        res = client.submit_job_url(metadata=METADATA, skip_diarization=True, skip_punctuation=True,
+                                    speaker_channels_count=1, custom_vocabularies=CUSTOM_VOCAB,
+                                    filter_profanity=True, remove_disfluencies=True,
+                                    delete_after_seconds=0, language=LANGUAGE,
+                                    custom_vocabulary_id=CUSTOM_VOCAB_ID, transcriber=TRANSCRIBER,
+                                    source_config=SOURCE_CONFIG,
+                                    notification_config=NOTIFICATION_CONFIG)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
