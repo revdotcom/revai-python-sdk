@@ -175,8 +175,8 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(MEDIA_URL, transcriber='human', verbatim=True, rush=False, 
-                                    segments_to_transcribe=segments, 
+        res = client.submit_job_url(MEDIA_URL, transcriber='human', verbatim=True, rush=False,
+                                    segments_to_transcribe=segments,
                                     speaker_names=[SpeakerName('Kyle Bridburg')])
 
         assert res == Job(JOB_ID,
