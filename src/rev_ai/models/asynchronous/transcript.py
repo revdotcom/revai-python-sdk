@@ -27,33 +27,69 @@ class Transcript:
 
 
 class Monologue:
-    def __init__(self, speaker, elements):
+    def __init__(self, speaker, speaker_info, elements):
         """
         :param speaker: speaker identified for this monologue
         :param elements: list of elements spoken in this monologue
         """
         self.speaker = speaker
+        self.speaker_info = speaker_info
         self.elements = elements
 
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
             return all(a == b for a, b in zip(self.elements, other.elements)) \
-                and self.speaker == other.speaker
+                and self.speaker == other.speaker \
+                and self.speaker_info == other.speaker_info
         return False
 
     def to_dict(self):
         """Returns the raw form of the monologue as the api
         returns them"""
         return {'speaker': self.speaker,
+                'speaker_info': self.speaker_info.to_dict(),
                 'elements': [element.to_dict() for element in self.elements]}
 
     @classmethod
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
+        speaker_info = None
+        if json.get('speaker_info') is not None:
+            speaker_info = SpeakerInfo.from_json(json['speaker_info'])
         return cls(
             json['speaker'],
+            speaker_info,
             [Element.from_json(element) for element in json.get('elements', [])])
+
+
+class SpeakerInfo:
+    def __init__(self, id_, display_name):
+        """
+        :param id_: speaker id identified for this monologue
+        :param display_name: Human readable name of the speaker if available
+        """
+        self.id = id_
+        self.display_name = display_name
+
+    def __eq__(self, other):
+        """Override default equality operator"""
+        if isinstance(other, self.__class__):
+            return self.id == other.id and self.display_name == other.display_name
+        return False
+
+    def to_dict(self):
+        """Returns the raw form of the monologue as the api
+        returns them"""
+        return {'id': self.id,
+                'display_name': self.display_name}
+
+    @classmethod
+    def from_json(cls, json):
+        """Alternate constructor used for parsing json"""
+        return cls(
+            json['id'],
+            json['display_name'])
 
 
 class Element:
