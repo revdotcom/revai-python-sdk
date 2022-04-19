@@ -38,7 +38,7 @@ custom_vocabularies = [mit_professors, other_scientists]
 #
 # job = client.submit_job_local_file("your_local_file_path",
 #                                    metadata=None,
-#                                    callback_url=None
+#                                    callback_url=None,
 #                                    skip_diarization=False,
 #                                    custom_vocabularies=None,
 #                                    filter_profanity=False,
@@ -62,6 +62,7 @@ job = client.submit_job_url(media_url=url,
                             delete_after_seconds=None,
                             language=None,
                             custom_vocabulary_id=None,
+                            source_config=None,
                             notification_config=None)
 
 print("Submitted Job")

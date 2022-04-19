@@ -67,11 +67,11 @@ class RevAiAPIClient(BaseClient):
             notification_config=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
-        :param media_url: url of the source media
+        :param media_url: web location of the media file
         :param source_config: CustomerUrlData object containing url of the source media and
             optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
-        :param callback_url: Callback url to invoke on job completion as a webhook
+        :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
@@ -159,7 +159,7 @@ class RevAiAPIClient(BaseClient):
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the transcription job
-        :param callback_url: Callback url to invoke on job completion as a webhook
+        :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
