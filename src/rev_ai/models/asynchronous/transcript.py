@@ -48,9 +48,11 @@ class Monologue:
     def to_dict(self):
         """Returns the raw form of the monologue as the api
         returns them"""
-        return {'speaker': self.speaker,
-                'elements': [element.to_dict() for element in self.elements],
-                'speaker_info': self.speaker_info.to_dict()}
+        json = {'speaker': self.speaker,
+                'elements': [element.to_dict() for element in self.elements]}
+        if self.speaker_info:
+            json['speaker_info'] = self.speaker_info.to_dict()
+        return json
 
     @classmethod
     def from_json(cls, json):
