@@ -27,14 +27,15 @@ class Transcript:
 
 
 class Monologue:
-    def __init__(self, speaker, speaker_info, elements):
+    def __init__(self, speaker, elements, speaker_info=None):
         """
         :param speaker: speaker identified for this monologue
         :param elements: list of elements spoken in this monologue
+        :param speaker_info: information about the speaker if available
         """
         self.speaker = speaker
-        self.speaker_info = speaker_info
         self.elements = elements
+        self.speaker_info = speaker_info
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -48,8 +49,8 @@ class Monologue:
         """Returns the raw form of the monologue as the api
         returns them"""
         return {'speaker': self.speaker,
-                'speaker_info': self.speaker_info.to_dict(),
-                'elements': [element.to_dict() for element in self.elements]}
+                'elements': [element.to_dict() for element in self.elements],
+                'speaker_info': self.speaker_info.to_dict()}
 
     @classmethod
     def from_json(cls, json):
@@ -59,8 +60,8 @@ class Monologue:
             speaker_info = SpeakerInfo.from_json(json['speaker_info'])
         return cls(
             json['speaker'],
-            speaker_info,
-            [Element.from_json(element) for element in json.get('elements', [])])
+            [Element.from_json(element) for element in json.get('elements', [])],
+            speaker_info)
 
 
 class SpeakerInfo:
