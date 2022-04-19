@@ -60,7 +60,8 @@ class RevAiAPIClient(BaseClient):
             verbatim=None,
             rush=None,
             test_mode=None,
-            segments_to_transcribe=None):
+            segments_to_transcribe=None,
+            speaker_names=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL.
 
@@ -99,6 +100,8 @@ class RevAiAPIClient(BaseClient):
             Whether human transcription job is mocked and no transcription actually happens.
         :param segments_to_transcribe: Only available with "human" transcriber.
             Sections of transcript needed to be transcribed.
+        :param speaker_names: Only available with "human" transcriber.
+            Human readable names of speakers in the file.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -111,7 +114,7 @@ class RevAiAPIClient(BaseClient):
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
-                                                   segments_to_transcribe)
+                                                   segments_to_transcribe, speaker_names)
 
         response = self._make_http_request(
             "POST",
