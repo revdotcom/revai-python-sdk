@@ -38,11 +38,12 @@ job = client.submit_job_from_text(text,
 # async_api_client = apiclient.RevAiAPIClient(access_token)
 # transcript = async_api_client.get_transcript_object(async_job_id)
 # transcript_json = transcript
+# callback_info = CustomerUrlData("your_callback_url", "(optional)your_auth_token")
 # job = client.submit_job_from_transcript(transcript_json,
 #                                         metadata=None,
 #                                         delete_after_seconds=None,
 #                                         language=None,
-#                                         notification_config=None)
+#                                         notification_config=callback_info)
 
 print("Submitted Job")
 
