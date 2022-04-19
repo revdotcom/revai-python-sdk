@@ -113,7 +113,7 @@ class RevAiAPIClient(BaseClient):
         if media_url:
             source_config = CustomerUrlData(media_url)
         check_exclusive_options(callback_url, 'callback_url', notification_config,
-                                     'notification_config')
+                                'notification_config')
         if callback_url:
             notification_config = CustomerUrlData(callback_url)
 
