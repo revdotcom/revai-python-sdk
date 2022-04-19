@@ -4,6 +4,7 @@
 from .baseclient import BaseClient
 from . import utils
 from .models.customer_url_data import CustomerUrlData
+from .utils import check_exclusive_options
 
 try:
     from urllib.parse import urljoin
@@ -37,26 +38,30 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def submit_custom_vocabularies(
             self,
             custom_vocabularies,
-            notification_url=None,
-            notification_auth=None,
-            metadata=None):
+            callback_url=None,
+            metadata=None,
+            notification_config=None):
         """Submit custom vocabularies.
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
-
         :param custom_vocabularies: List of CustomVocabulary objects
-        :param notification_url: callback url to invoke on job completion as a webhook
-        :param notification_auth: optional authentication headers to use when calling
-            the notification url
+        :param callback_url: the callback url to invoke on job completion as a webhook
         :param metadata: info to associate with the transcription job
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         """
 
         if not custom_vocabularies:
             raise ValueError('custom_vocabularies must be provided')
 
+        check_exclusive_options(callback_url, 'callback_url', notification_config,
+                                'notification_config')
+        if callback_url:
+            notification_config = CustomerUrlData(callback_url)
+
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
-            notification_url,
-            notification_auth,
+            notification_config,
             metadata
         )
 
@@ -107,16 +112,13 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def _create_custom_vocabularies_options_payload(
             self,
             custom_vocabularies,
-            notification_url=None,
-            notification_auth=None,
+            notification_config,
             metadata=None):
         payload = {}
-        if notification_url:
-            payload['notification_config'] =\
-                CustomerUrlData(notification_url, notification_auth).to_dict()
+        if notification_config:
+            payload['notification_config'] = notification_config.to_dict()
         if metadata:
             payload['metadata'] = metadata
         if custom_vocabularies:
-            payload['custom_vocabularies'] =\
-                utils._process_vocabularies(custom_vocabularies)
+            payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
         return payload
