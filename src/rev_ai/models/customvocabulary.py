@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+"""Class for Custom Vocabulary model"""
+
+
 class CustomVocabulary:
     """CustomVocabulary object to provide a clean way
     to create custom vocabularies. CustomVocabulary objects

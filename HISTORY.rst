@@ -89,3 +89,8 @@ History
 * Add transcriber to async client
 * Add verbatim, rush, segments_to_transcribe, test_mode to async client for human transcription
 * Add start_ts and transcriber to streaming client
+
+2.15.0
+------------------
+* Add topic extraction client
+* Add speaker_names to async client for human transcription
