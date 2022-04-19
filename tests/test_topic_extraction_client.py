@@ -14,7 +14,7 @@ except ImportError:
 
 TOKEN = 'token'
 TEXT = 'Input'
-JSON = Transcript([Monologue(0, None, [Element('text', 'hello', 0.0, 0.1, 100)])])
+JSON = Transcript([Monologue(0, [Element('text', 'hello', 0.0, 0.1, 100)])])
 JOB_ID = '1'
 METADATA = 'test'
 CALLBACK_URL = 'https://example.com/'
