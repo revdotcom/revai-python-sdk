@@ -63,6 +63,7 @@ class RevAiAPIClient(BaseClient):
             rush=None,
             test_mode=None,
             segments_to_transcribe=None,
+            speaker_names=None,
             source_config=None,
             notification_config=None):
         """Submit media given a URL for transcription.
@@ -101,6 +102,8 @@ class RevAiAPIClient(BaseClient):
             Whether human transcription job is mocked and no transcription actually happens.
         :param segments_to_transcribe: Only available with "human" transcriber.
             Sections of transcript needed to be transcribed.
+        :param speaker_names: Only available with "human" transcriber.
+            Human readable names of speakers in the file.
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
@@ -124,7 +127,7 @@ class RevAiAPIClient(BaseClient):
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
-                                                   segments_to_transcribe)
+                                                   segments_to_transcribe, speaker_names)
 
         response = self._make_http_request(
             "POST",
@@ -153,6 +156,7 @@ class RevAiAPIClient(BaseClient):
             rush=None,
             test_mode=None,
             segments_to_transcribe=None,
+            speaker_names=None,
             notification_config=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
@@ -189,6 +193,8 @@ class RevAiAPIClient(BaseClient):
             Whether human transcription job is mocked and no transcription actually happens.
         :param segments_to_transcribe: Only available with "human" transcriber.
             Sections of transcript needed to be transcribed.
+        :param speaker_names: Only available with "human" transcriber.
+            Human readable names of speakers in the file.
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
@@ -210,7 +216,7 @@ class RevAiAPIClient(BaseClient):
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
-                                                   segments_to_transcribe)
+                                                   segments_to_transcribe, speaker_names)
 
         with open(filename, 'rb') as f:
             files = {
@@ -457,7 +463,8 @@ class RevAiAPIClient(BaseClient):
             verbatim=None,
             rush=None,
             test_mode=None,
-            segments_to_transcribe=None):
+            segments_to_transcribe=None,
+            speaker_names=None):
         payload = {}
         if source_config:
             payload['source_config'] = source_config.to_dict()
@@ -493,6 +500,9 @@ class RevAiAPIClient(BaseClient):
             payload['test_mode'] = test_mode
         if segments_to_transcribe:
             payload['segments_to_transcribe'] = segments_to_transcribe
+        if speaker_names:
+            payload['speaker_names'] =\
+                utils._process_speaker_names(speaker_names)
         return payload
 
     def _create_captions_query(self, speaker_channel):

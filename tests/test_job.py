@@ -6,7 +6,7 @@ import pytest
 
 from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models.asynchronous import Job, JobStatus
+from src.rev_ai.models.asynchronous import Job, JobStatus, SpeakerName
 
 try:
     from urllib.parse import urljoin
@@ -239,7 +239,9 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(SOURCE_URL, transcriber='human', verbatim=True, rush=False, segments_to_transcribe=segments)
+        res = client.submit_job_url(SOURCE_URL, transcriber='human', verbatim=True, rush=False,
+                                    segments_to_transcribe=segments,
+                                    speaker_names=[SpeakerName('Kyle Bridburg')])                                    )
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -254,7 +256,8 @@ class TestJobEndpoints():
                 'source_config': {'url': SOURCE_URL},
                 'transcriber': 'human',
                 'verbatim': True,
-                'segments_to_transcribe': segments
+                'segments_to_transcribe': segments,
+                'speaker_names': [{'display_name': 'Kyle Bridburg'}]
             },
             headers=client.default_headers)
 

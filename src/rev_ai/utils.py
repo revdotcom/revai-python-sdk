@@ -2,6 +2,7 @@
 """Speech recognition tools for using Rev AI"""
 
 from . import CustomVocabulary
+from . import SpeakerName
 
 
 def _process_vocabularies(unprocessed_vocabularies):
@@ -15,6 +16,16 @@ def _process_vocabularies(unprocessed_vocabularies):
                     if isinstance(custom_vocabulary, CustomVocabulary)
                     else custom_vocabulary, unprocessed_vocabularies))
 
+def _process_speaker_names(unprocessed_speaker_names):
+    """
+    This method takes in a list that contains SpeakerName objects
+    and returns a list in which any such objects are converted properly
+    to speaker name dictionaries. Any items of other types in the list
+    are not changed.
+    """
+    return list(map(lambda speaker_name: speaker_name.to_dict()
+                    if isinstance(speaker_name, SpeakerName)
+                    else speaker_name, unprocessed_speaker_names))
 
 def check_exclusive_options(option1, option1_name, option2, option2_name):
     if option1 and option2:
