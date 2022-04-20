@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """Client used or interacting with our language identification api"""
 
+import json
 from .generic_api_client import GenericApiClient
 from .models import LanguageIdentificationJob, LanguageIdentificationResult
+from . import utils
 
 
 class LanguageIdentificationClient(GenericApiClient):
@@ -23,7 +25,8 @@ class LanguageIdentificationClient(GenericApiClient):
         """
 
         GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
-                                  LanguageIdentificationJob.from_json, LanguageIdentificationResult.from_json)
+                                  LanguageIdentificationJob.from_json, 
+                                  LanguageIdentificationResult.from_json)
 
     def submit_job_url(
             self,
@@ -84,8 +87,7 @@ class LanguageIdentificationClient(GenericApiClient):
                 files=files
             )
 
-        return Job.from_json(response.json())
-
+        return LanguageIdentificationJob.from_json(response.json())
 
     def get_result_json(self, id_, threshold=None):
         """Get result of a language identification job as json.
