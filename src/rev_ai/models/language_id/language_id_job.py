@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Job model"""
 
-from ...asynchronous.job_status import JobStatus
+from ..asynchronous.job_status import JobStatus
 
 
 class LanguageIdentificationJob:
