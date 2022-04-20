@@ -241,7 +241,7 @@ class TestJobEndpoints():
 
         res = client.submit_job_url(SOURCE_URL, transcriber='human', verbatim=True, rush=False,
                                     segments_to_transcribe=segments,
-                                    speaker_names=[SpeakerName('Kyle Bridburg')])                                    )
+                                    speaker_names=[SpeakerName('Kyle Bridburg')])
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
