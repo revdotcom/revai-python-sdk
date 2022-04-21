@@ -19,7 +19,7 @@ class LanguageIdentificationClient(GenericApiClient):
     api_version = 'v1'
 
     # Default api name of Rev AI topic extraction api
-    api_name = 'language_id'
+    api_name = 'languageid'
 
     def __init__(self, access_token):
         """Constructor
