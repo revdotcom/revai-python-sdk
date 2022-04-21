@@ -19,7 +19,7 @@ METADATA = 'test'
 MEDIA_URL = 'https://www.rev.ai/FTC_Sample_1.mp3'
 CALLBACK_URL = 'https://example.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-FILENAME = 'mandarin.mp3'
+FILENAME = 'test.mp3'
 TOP_LANGUAGE = 'en'
 SCORE = 1
 
@@ -76,7 +76,7 @@ class TestLanguageIdentificationClient:
                 'delete_after_seconds': 0
             },
             headers=client.default_headers)
-    
+
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         client = LanguageIdentificationClient(TOKEN)
         url = urljoin(client.base_url, 'jobs')
