@@ -6,6 +6,10 @@ from .generic_api_client import GenericApiClient
 from .models import LanguageIdentificationJob, LanguageIdentificationResult
 from . import utils
 
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 class LanguageIdentificationClient(GenericApiClient):
     """Client for interacting with the Rev AI language identification api"""
@@ -25,7 +29,7 @@ class LanguageIdentificationClient(GenericApiClient):
         """
 
         GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
-                                  LanguageIdentificationJob.from_json, 
+                                  LanguageIdentificationJob.from_json,
                                   LanguageIdentificationResult.from_json)
 
     def submit_job_url(
