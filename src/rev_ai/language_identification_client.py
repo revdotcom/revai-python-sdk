@@ -11,6 +11,7 @@ try:
 except ImportError:
     from urlparse import urljoin
 
+
 class LanguageIdentificationClient(GenericApiClient):
     """Client for interacting with the Rev AI language identification api"""
 
