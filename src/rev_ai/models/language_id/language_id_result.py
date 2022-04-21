@@ -47,4 +47,4 @@ class LanguageConfidence:
         """Alternate constructor used for parsing json"""
         return cls(
             json['language'],
-            json['confidence'])
+            json.get('confidence'))
