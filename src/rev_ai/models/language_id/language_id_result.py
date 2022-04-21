@@ -23,7 +23,9 @@ class LanguageIdentificationResult:
     @classmethod
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
-        return cls([LanguageConfidence.from_json(language_confidence)
+        return cls(
+            json['top_language'],
+            [LanguageConfidence.from_json(language_confidence)
                   for language_confidence in json.get('language_confidences', [])])
 
 
@@ -47,4 +49,4 @@ class LanguageConfidence:
         """Alternate constructor used for parsing json"""
         return cls(
             json['language'],
-            json.get('confidence'))
+            json['confidence'])
