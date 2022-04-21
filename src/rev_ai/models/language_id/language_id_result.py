@@ -15,8 +15,8 @@ class LanguageIdentificationResult:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return all(a == b for a, b in
-                        zip(self.language_confidences, other.language_confidences)) \
+            return all(a == b for a, b in 
+                   zip(self.language_confidences, other.language_confidences)) \
                         and self.top_language == other.top_language
         return False
 
@@ -24,7 +24,7 @@ class LanguageIdentificationResult:
     def from_json(cls, json):
         """Alternate constructor used for parsing json"""
         return cls([LanguageConfidence.from_json(language_confidence)
-                    for language_confidence in json.get('language_confidences', [])])
+               for language_confidence in json.get('language_confidences', [])])
 
 
 class LanguageConfidence:
