@@ -19,7 +19,7 @@ METADATA = 'test'
 MEDIA_URL = 'https://www.rev.ai/FTC_Sample_1.mp3'
 CALLBACK_URL = 'https://example.com/'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-FILENAME = 'test.mp3'
+FILENAME = 'mandarin.mp3'
 TOP_LANGUAGE = 'en'
 SCORE = 1
 
@@ -91,7 +91,7 @@ class TestLanguageIdentificationClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
+        with mocker.patch('src.rev_ai.language_identification_client.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
                                                CALLBACK_URL, 0)
 
