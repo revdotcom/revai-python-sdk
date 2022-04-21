@@ -94,20 +94,20 @@ class LanguageIdentificationClient(GenericApiClient):
 
         return LanguageIdentificationJob.from_json(response.json())
 
-    def get_result_json(self, id_, threshold=None):
+    def get_result_json(self, id_):
         """Get result of a language identification job as json.
 
         :param id_: id of job to be requested
         :returns: job result data as raw json
         :raises: HTTPError
         """
-        return self._get_result_json(id_)
+        return self._get_result_json(id_, {})
 
-    def get_result_object(self, id_, threshold=None):
+    def get_result_object(self, id_):
         """Get result of a language identification job as LanguageIdentificationResult object.
 
         :param id_: id of job to be requested
         :returns: job result data as LanguageIdentificationResult object
         :raises: HTTPError
         """
-        return self._get_result_object(id_)
+        return self._get_result_object(id_, {})
