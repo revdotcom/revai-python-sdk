@@ -18,7 +18,7 @@ from rev_ai import language_identification_client, apiclient
 
 
 # String containing your access token
-access_token = "028Rd-PdaRGCV8JOFKSFmawQShU0vI88nTBH0qCNwkayoQyGBEWMnjyvssEzsdnGi9NGgZUyN4P-NBSTykFySUSVL_nUo"
+access_token = "<your_access_token>"
 
 # Create your api client
 client = language_identification_client.LanguageIdentificationClient(access_token)
