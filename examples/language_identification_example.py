@@ -14,7 +14,7 @@ limitations under the License.
 """
 
 import time
-from rev_ai import language_identification_client, apiclient
+from rev_ai import language_identification_client
 
 
 # String containing your access token
