@@ -4,7 +4,6 @@
 import json
 from .generic_api_client import GenericApiClient
 from .models import LanguageIdentificationJob, LanguageIdentificationResult
-from . import utils
 
 try:
     from urllib.parse import urljoin
@@ -15,10 +14,10 @@ except ImportError:
 class LanguageIdentificationClient(GenericApiClient):
     """Client for interacting with the Rev AI language identification api"""
 
-    # Default version of Rev AI topic extraction api
+    # Default version of Rev AI language identification api
     api_version = 'v1'
 
-    # Default api name of Rev AI topic extraction api
+    # Default api name of Rev AI language identification api
     api_name = 'languageid'
 
     def __init__(self, access_token):
