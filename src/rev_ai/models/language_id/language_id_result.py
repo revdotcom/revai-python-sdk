@@ -15,9 +15,9 @@ class LanguageIdentificationResult:
     def __eq__(self, other):
         """Override default equality operator"""
         if isinstance(other, self.__class__):
-            return all(a == b for a, b in
+            return all(a == b for a, b in 
                        zip(self.language_confidences, other.language_confidences)) \
-                    and self.top_language == other.top_language
+                           and self.top_language == other.top_language
         return False
 
     @classmethod
