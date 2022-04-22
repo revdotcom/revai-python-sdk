@@ -18,7 +18,7 @@ from rev_ai import language_identification_client, apiclient
 
 
 # String containing your access token
-access_token = "<your_access_token>"
+access_token = "028Rd-PdaRGCV8JOFKSFmawQShU0vI88nTBH0qCNwkayoQyGBEWMnjyvssEzsdnGi9NGgZUyN4P-NBSTykFySUSVL_nUo"
 
 # Create your api client
 client = language_identification_client.LanguageIdentificationClient(access_token)
@@ -61,11 +61,11 @@ while True:
 
         # obtain the most probable language spoken and a list of other possible languages and their confidence scores
         result = client.get_result_object(job.id)
-        print(result.top_language)
-        print([{
+        print("Top Language : {}".format(result.top_language))
+        print("Language Confidences : {}".format([{
             'language': language_confidence.language,
             'confidence': language_confidence.confidence
-        } for language_confidence in result.language_confidences])
+        } for language_confidence in result.language_confidences]))
 
         break
 
