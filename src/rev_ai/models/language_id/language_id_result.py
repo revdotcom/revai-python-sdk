@@ -17,7 +17,7 @@ class LanguageIdentificationResult:
         if isinstance(other, self.__class__):
             return all(a == b for a, b in
                        zip(self.language_confidences, other.language_confidences)) \
-                       and self.top_language == other.top_language
+                           and self.top_language == other.top_language
         return False
 
     @classmethod
@@ -25,7 +25,7 @@ class LanguageIdentificationResult:
         """Alternate constructor used for parsing json"""
         return cls(
             json['top_language'],
-            [LanguageConfidence.from_json(language_confidence) for 
+            [LanguageConfidence.from_json(language_confidence) for
              language_confidence in json.get('language_confidences', [])])
 
 
