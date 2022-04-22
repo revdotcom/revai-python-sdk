@@ -15,7 +15,7 @@ class LanguageIdentificationClient(GenericApiClient):
     """Client for interacting with the Rev AI language identification api"""
 
     # Default version of Rev AI language identification api
-    api_version = 'v1beta'
+    api_version = 'v1'
 
     # Default api name of Rev AI language identification api
     api_name = 'languageid'
