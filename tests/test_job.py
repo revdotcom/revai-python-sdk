@@ -222,10 +222,21 @@ class TestJobEndpoints():
             },
             headers=client.default_headers)
 
+    def test_submit_job_url_with_no_source_options(self, mock_session):
+        expected_err = 'media_url or source_config must be provided'
+        with pytest.raises(ValueError, match=expected_err):
+            RevAiAPIClient(TOKEN).submit_job_url()
+
     def test_submit_job_url_with_both_source_options(self, mock_session):
         expected_err = 'Only one of media_url or source_config may be provided'
         with pytest.raises(ValueError, match=expected_err):
-            RevAiAPIClient(TOKEN).submit_job_url(media_url="something", source_config="something")
+            RevAiAPIClient(TOKEN).submit_job_url(media_url='foo', source_config='bar')
+            
+    def test_submit_job_url_with_both_notification_options(self, mock_session):
+        expected_err = 'Only one of callback_url or notification_config may be provided'
+        with pytest.raises(ValueError, match=expected_err):
+            RevAiAPIClient(TOKEN).submit_job_url(media_url='foo', callback_url='bar',
+                                                 notification_config='baz')
 
     def test_submit_job_url_with_human_transcription_and_success(self, mock_session, make_mock_response):
         segments = [{
