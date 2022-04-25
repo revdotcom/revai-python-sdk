@@ -18,17 +18,14 @@ class LanguageIdentificationJob:
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
-        :param status: current job status 'IN_PROGRESS', 'COMPLETED',
-                       or 'FAILED'
-        :param completed_on: date and time at which this job finished
-                             being processed
+        :param status: current job status 'IN_PROGRESS', 'COMPLETED', or 'FAILED'
+        :param completed_on: date and time at which this job finished being processed
         :param callback_url: callback_url if provided
         :param metadata: metadata if provided
-        :param media_url: url of transcribed media if job was submitted
-                          this way
+        :param media_url: url of transcribed media if job was submitted this way
         :param failure: type of failure if job has failed
         :param failure_detail: more detailed failure message if job has failed
-        :param duration_seconds: duration of file processed in seconds
+        :param processed_duration_seconds: duration of file processed in seconds
         :param delete_after_seconds: seconds before deletion if provided
         """
 

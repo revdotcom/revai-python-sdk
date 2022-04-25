@@ -15,7 +15,7 @@ class LanguageIdentificationClient(GenericApiClient):
     """Client for interacting with the Rev AI language identification api"""
 
     # Default version of Rev AI language identification api
-    api_version = 'v1'
+    api_version = 'v1beta'
 
     # Default api name of Rev AI language identification api
     api_name = 'languageid'
@@ -38,13 +38,12 @@ class LanguageIdentificationClient(GenericApiClient):
             metadata=None,
             callback_url=None,
             delete_after_seconds=None):
-        """Submit media given a URL for language identification.
+        """Submit media as a URL for language identification.
         The audio data is downloaded from the URL.
 
         :param media_url: web location of the media file
         :param metadata: info to associate with the language identification job
-        :param callback_url: callback url to invoke on job completion as
-                             a webhook
+        :param callback_url: callback url to invoke on job completion as a webhook
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :returns: raw response data
         :raises: HTTPError
@@ -68,8 +67,7 @@ class LanguageIdentificationClient(GenericApiClient):
 
         :param filename: path to a local file on disk
         :param metadata: info to associate with the language identification job
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
+        :param callback_url: callback url to invoke on job completion as a webhook
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :returns: raw response data
         :raises: HTTPError

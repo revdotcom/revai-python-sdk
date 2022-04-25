@@ -5,7 +5,7 @@
 class LanguageIdentificationResult:
     def __init__(self, top_language, language_confidences):
         """
-        :param top_language: Language code of dominant predicted language
+        :param top_language: Language code of predicted language
         :param language_confidences: List of all potential languages with their corresponding
             confidence scores
         """
@@ -32,7 +32,7 @@ class LanguageIdentificationResult:
 class LanguageConfidence:
     def __init__(self, language, confidence):
         """
-        :param language: Language code of dominant predicted language
+        :param language: Language code of predicted language
         :param confidence: Confidence score of the predicted language, ranges from 0.00 to 1.00
         """
         self.language = language
