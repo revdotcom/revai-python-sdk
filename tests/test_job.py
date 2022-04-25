@@ -231,7 +231,7 @@ class TestJobEndpoints():
         expected_err = 'Only one of media_url or source_config may be provided'
         with pytest.raises(ValueError, match=expected_err):
             RevAiAPIClient(TOKEN).submit_job_url(media_url='foo', source_config='bar')
-            
+
     def test_submit_job_url_with_both_notification_options(self, mock_session):
         expected_err = 'Only one of callback_url or notification_config may be provided'
         with pytest.raises(ValueError, match=expected_err):
