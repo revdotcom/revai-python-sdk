@@ -9,7 +9,9 @@ class Job:
             self, id_, created_on, status,
             completed_on=None,
             name=None,
+            callback_url=None,
             metadata=None,
+            media_url=None,
             failure=None,
             failure_detail=None,
             duration_seconds=None,
@@ -33,7 +35,10 @@ class Job:
         :param completed_on: date and time at which this job finished
                              being transcribed
         :param name: name of submitted file if local file was used
+        :param callback_url: callback_url if provided
         :param metadata: metadata if provided
+        :param media_url: url of transcribed media if job was submitted
+                          this way
         :param failure: type of failure if job has failed
         :param failure_detail: more detailed failure message if job has failed
         :param duration_seconds: duration of submitted file in seconds
@@ -55,7 +60,9 @@ class Job:
         self.status = status
         self.completed_on = completed_on
         self.name = name
+        self.callback_url = callback_url,
         self.metadata = metadata
+        self.media_url = media_url
         self.failure = failure
         self.failure_detail = failure_detail
         self.duration_seconds = duration_seconds
@@ -87,7 +94,9 @@ class Job:
             JobStatus.from_string(json['status']),
             completed_on=json.get('completed_on'),
             name=json.get('name'),
+            callback_url=json.get('callback_url'),
             metadata=json.get('metadata'),
+            media_url=json.get('media_url'),
             failure=json.get('failure'),
             failure_detail=json.get('failure_detail'),
             duration_seconds=json.get('duration_seconds'),
