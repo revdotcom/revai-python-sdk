@@ -60,7 +60,6 @@ The url submission option also supports authentication headers by using the `sou
 All options are described in the request body of the
 [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
-
 ### Human Transcription
 
 If you want transcription to be performed by a human, both methods allow you to submit human transcription jobs

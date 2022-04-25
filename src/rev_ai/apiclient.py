@@ -69,8 +69,6 @@ class RevAiAPIClient(BaseClient):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
-        :param source_config: CustomerUrlData object containing url of the source media and
-            optional authentication headers to use when accessing the source url
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
@@ -104,6 +102,8 @@ class RevAiAPIClient(BaseClient):
             Sections of transcript needed to be transcribed.
         :param speaker_names: Only available with "human" transcriber.
             Human readable names of speakers in the file.
+        :param source_config: CustomerUrlData object containing url of the source media and
+            optional authentication headers to use when accessing the source url
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
