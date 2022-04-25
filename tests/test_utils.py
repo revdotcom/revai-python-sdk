@@ -41,11 +41,10 @@ class TestUtils:
         option2 = "opt2"
         option1_name = "name1"
         option2_name = "name2"
-        # test either option
+        # test either option, should not raise
         check_exclusive_options(None, option1_name, option2, option2_name)
         check_exclusive_options(option1, option1_name, None, option2_name)
         # Raise error if both
-        with pytest.raises(ValueError) as err:
+        expected_err = "Only one of {0} or {1} may be provided".format(option1_name, option2_name)
+        with pytest.raises(ValueError, match=expected_err):
             check_exclusive_options(option1, option1_name, option2, option2_name)
-        assert "Only one of {0} or {1} may be provided".format(option1_name, option2_name) in \
-               str(err.value)

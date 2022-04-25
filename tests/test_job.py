@@ -222,6 +222,11 @@ class TestJobEndpoints():
             },
             headers=client.default_headers)
 
+    def test_submit_job_url_with_both_source_options(self, mock_session):
+        expected_err = 'Only one of media_url or source_config may be provided'
+        with pytest.raises(ValueError, match=expected_err):
+            RevAiAPIClient(TOKEN).submit_job_url(media_url="something", source_config="something")
+
     def test_submit_job_url_with_human_transcription_and_success(self, mock_session, make_mock_response):
         segments = [{
             'start': 1.0,
