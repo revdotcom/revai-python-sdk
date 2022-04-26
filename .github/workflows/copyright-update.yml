@@ -11,8 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 1
+          fetch-depth: 0
       - uses: FantasticFiasco/action-update-license-year@771ff9afdc55b09e1fb649cf03e312d0cf86b4a6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           transform: (?<from>\d{4})+-?(\d{4})?
+          path: |
+            LICENSE
+            examples/*.py
