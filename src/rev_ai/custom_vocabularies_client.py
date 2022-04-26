@@ -44,6 +44,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
         :param custom_vocabularies: List of CustomVocabulary objects
         :param callback_url: callback url to invoke on job completion as a webhook
+        .. deprecated:: 2.15
+                Use notification_config instead
         :param metadata: info to associate with the transcription job
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
@@ -52,11 +54,6 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         if not custom_vocabularies:
             raise ValueError('custom_vocabularies must be provided')
-
-        check_exclusive_options(callback_url, 'callback_url', notification_config,
-                                'notification_config')
-        if callback_url:
-            notification_config = CustomerUrlData(callback_url)
 
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
@@ -111,13 +108,16 @@ class RevAiCustomVocabulariesClient(BaseClient):
     def _create_custom_vocabularies_options_payload(
             self,
             custom_vocabularies,
-            notification_config,
-            metadata=None):
+            callback_url=None,
+            metadata=None,
+            notification_config=None):
         payload = {}
-        if notification_config:
-            payload['notification_config'] = notification_config.to_dict()
-        if metadata:
-            payload['metadata'] = metadata
         if custom_vocabularies:
             payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
+        if callback_url:
+            payload['callback_url'] = callback_url
+        if metadata:
+            payload['metadata'] = metadata
+        if notification_config:
+            payload['notification_config'] = notification_config.to_dict()
         return payload

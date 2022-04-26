@@ -38,6 +38,8 @@ class TopicExtractionClient(GenericApiClient):
         :param text: Plain text string to be run through topic extraction
         :param metadata: info to associate with the transcription job
         :param callback_url: the callback url to invoke on job completion as a webhook
+            .. deprecated:: 2.15
+                Use notification_config instead
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
         :param language: specify language using the one of the supported ISO 639-1 (2-letter) or
             ISO 639-3 (3-letter) language codes as defined in the API Reference
@@ -45,14 +47,10 @@ class TopicExtractionClient(GenericApiClient):
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
         :returns: TopicExtractionJob object
-        :raises: HTTPError, ValueError
+        :raises: HTTPError
         """
-        check_exclusive_options(callback_url, 'callback_url', notification_config,
-                                'notification_config')
-        if callback_url:
-            notification_config = CustomerUrlData(callback_url)
         payload = self._enhance_payload({'text': text, 'language': language}, metadata,
-                                        notification_config, delete_after_seconds)
+                                        callback_url, delete_after_seconds, notification_config)
         return self._submit_job(payload)
 
     def submit_job_from_transcript(self,

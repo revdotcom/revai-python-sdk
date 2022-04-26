@@ -144,12 +144,15 @@ class GenericApiClient(BaseClient):
 
         return
 
-    def _enhance_payload(self, payload, metadata, notification_config, delete_after_seconds):
+    def _enhance_payload(self, payload, metadata, callback_url, delete_after_seconds,
+                         notification_config):
         enhanced = payload.copy()
         if metadata:
             enhanced['metadata'] = metadata
-        if notification_config:
-            enhanced['notification_config'] = notification_config.to_dict()
+        if callback_url:
+            enhanced['callback_url'] = callback_url
         if delete_after_seconds is not None:
             enhanced['delete_after_seconds'] = delete_after_seconds
+        if notification_config:
+            enhanced['notification_config'] = notification_config.to_dict()
         return enhanced
