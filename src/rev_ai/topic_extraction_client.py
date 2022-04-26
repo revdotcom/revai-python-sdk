@@ -4,7 +4,6 @@
 from .generic_api_client import GenericApiClient
 from .models import TopicExtractionJob, TopicExtractionResult
 from .models.customer_url_data import CustomerUrlData
-from .utils import check_exclusive_options
 
 
 class TopicExtractionClient(GenericApiClient):

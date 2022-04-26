@@ -4,7 +4,6 @@
 from .baseclient import BaseClient
 from . import utils
 from .models.customer_url_data import CustomerUrlData
-from .utils import check_exclusive_options
 
 try:
     from urllib.parse import urljoin

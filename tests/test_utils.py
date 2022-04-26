@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit tests for Rev Ai Utils"""
-import pytest
-
-from src.rev_ai.utils import _process_vocabularies, check_exclusive_options
+from src.rev_ai.utils import _process_vocabularies
 from src.rev_ai.models import CustomVocabulary
 
 phrases = ["Patrick Henry Winston", "Noam Chomsky"]
@@ -35,16 +33,3 @@ class TestUtils:
         processed_vocabs = _process_vocabularies([])
 
         assert processed_vocabs == []
-
-    def test_check_exclusive_options(self):
-        option1 = "opt1"
-        option2 = "opt2"
-        option1_name = "name1"
-        option2_name = "name2"
-        # test either option, should not raise
-        check_exclusive_options(None, option1_name, option2, option2_name)
-        check_exclusive_options(option1, option1_name, None, option2_name)
-        # Raise error if both
-        expected_err = "Only one of {0} or {1} may be provided".format(option1_name, option2_name)
-        with pytest.raises(ValueError, match=expected_err):
-            check_exclusive_options(option1, option1_name, option2, option2_name)

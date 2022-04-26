@@ -27,9 +27,3 @@ def _process_speaker_names(unprocessed_speaker_names):
     return list(map(lambda speaker_name: speaker_name.to_dict()
                     if isinstance(speaker_name, SpeakerName)
                     else speaker_name, unprocessed_speaker_names))
-
-
-def check_exclusive_options(option1, option1_name, option2, option2_name):
-    if option1 and option2:
-        raise ValueError('Only one of {0} or {1} may be provided'
-                         .format(option1_name, option2_name))

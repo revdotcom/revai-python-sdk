@@ -6,7 +6,6 @@ from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
 from .models.customer_url_data import CustomerUrlData
-from .utils import check_exclusive_options
 
 try:
     from urllib.parse import urljoin
@@ -69,8 +68,12 @@ class RevAiAPIClient(BaseClient):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
+        .. deprecated:: 2.15
+            Use source_config instead
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
+        .. deprecated:: 2.15
+                Use notification_config instead
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
         :param speaker_channels_count: the number of speaker channels in the
@@ -110,24 +113,15 @@ class RevAiAPIClient(BaseClient):
         :returns: raw response data
         :raises: HTTPError
         """
-        if not (media_url or source_config):
-            raise ValueError('media_url or source_config must be provided')
-        check_exclusive_options(media_url, 'media_url', source_config, 'source_config')
-        if media_url:
-            source_config = CustomerUrlData(media_url)
-        check_exclusive_options(callback_url, 'callback_url', notification_config,
-                                'notification_config')
-        if callback_url:
-            notification_config = CustomerUrlData(callback_url)
-
-        payload = self._create_job_options_payload(source_config, metadata, notification_config,
+        payload = self._create_job_options_payload(media_url, metadata, callback_url,
                                                    skip_diarization, skip_punctuation,
                                                    speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
-                                                   segments_to_transcribe, speaker_names)
+                                                   segments_to_transcribe, speaker_names,
+                                                   source_config, notification_config)
 
         response = self._make_http_request(
             "POST",
@@ -204,19 +198,15 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        check_exclusive_options(callback_url, 'callback_url', notification_config,
-                                'notification_config')
-        if callback_url:
-            notification_config = CustomerUrlData(callback_url)
-
-        payload = self._create_job_options_payload(None, metadata, notification_config,
+        payload = self._create_job_options_payload(None, metadata, callback_url,
                                                    skip_diarization, skip_punctuation,
                                                    speaker_channels_count,
                                                    custom_vocabularies, filter_profanity,
                                                    remove_disfluencies, delete_after_seconds,
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
-                                                   segments_to_transcribe, speaker_names)
+                                                   segments_to_transcribe, speaker_names, None,
+                                                   notification_config)
 
         with open(filename, 'rb') as f:
             files = {
@@ -447,9 +437,9 @@ class RevAiAPIClient(BaseClient):
 
     def _create_job_options_payload(
             self,
-            source_config,
+            media_url=None,
             metadata=None,
-            notification_config=None,
+            callback_url=None,
             skip_diarization=None,
             skip_punctuation=None,
             speaker_channels_count=None,
@@ -464,18 +454,20 @@ class RevAiAPIClient(BaseClient):
             rush=None,
             test_mode=None,
             segments_to_transcribe=None,
-            speaker_names=None):
+            speaker_names=None,
+            source_config=None,
+            notification_config=None):
         payload = {}
-        if source_config:
-            payload['source_config'] = source_config.to_dict()
+        if media_url:
+            payload['media_url'] = media_url
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
         if skip_punctuation:
             payload['skip_punctuation'] = skip_punctuation
         if metadata:
             payload['metadata'] = metadata
-        if notification_config:
-            payload['notification_config'] = notification_config.to_dict()
+        if callback_url:
+            payload['callback_url'] = callback_url.to_dict()
         if custom_vocabularies:
             payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
@@ -503,6 +495,10 @@ class RevAiAPIClient(BaseClient):
         if speaker_names:
             payload['speaker_names'] =\
                 utils._process_speaker_names(speaker_names)
+        if source_config:
+            payload['source_config'] = source_config.to_dict()
+        if notification_config:
+            payload['notification_config'] = notification_config.to_dict()
         return payload
 
     def _create_captions_query(self, speaker_channel):
