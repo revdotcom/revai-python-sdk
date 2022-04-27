@@ -147,8 +147,8 @@ class TestJobEndpoints():
             "POST",
             JOBS_URL,
             json={
-                'source_config': {'url': SOURCE_URL},
-                'notification_config': {'url': NOTIFICATION_URL},
+                'media_url': SOURCE_URL,
+                'callback_url': NOTIFICATION_URL,
                 'metadata': METADATA,
                 'skip_diarization': True,
                 'skip_punctuation': True,
@@ -222,23 +222,8 @@ class TestJobEndpoints():
             },
             headers=client.default_headers)
 
-    def test_submit_job_url_with_no_source_options(self, mock_session):
-        expected_err = 'media_url or source_config must be provided'
-        with pytest.raises(ValueError, match=expected_err):
-            RevAiAPIClient(TOKEN).submit_job_url()
-
-    def test_submit_job_url_with_both_source_options(self, mock_session):
-        expected_err = 'Only one of media_url or source_config may be provided'
-        with pytest.raises(ValueError, match=expected_err):
-            RevAiAPIClient(TOKEN).submit_job_url(media_url='foo', source_config='bar')
-
-    def test_submit_job_url_with_both_notification_options(self, mock_session):
-        expected_err = 'Only one of callback_url or notification_config may be provided'
-        with pytest.raises(ValueError, match=expected_err):
-            RevAiAPIClient(TOKEN).submit_job_url(media_url='foo', callback_url='bar',
-                                                 notification_config='baz')
-
-    def test_submit_job_url_with_human_transcription_and_success(self, mock_session, make_mock_response):
+    def test_submit_job_url_with_human_transcription_and_success(self, mock_session,
+                                                                 make_mock_response):
         segments = [{
             'start': 1.0,
             'end': 2.0
@@ -269,18 +254,13 @@ class TestJobEndpoints():
             'POST',
             JOBS_URL,
             json={
-                'source_config': {'url': SOURCE_URL},
+                'media_url': SOURCE_URL,
                 'transcriber': 'human',
                 'verbatim': True,
                 'segments_to_transcribe': segments,
                 'speaker_names': [{'display_name': 'Kyle Bridburg'}]
             },
             headers=client.default_headers)
-
-    @pytest.mark.parametrize('source_url', [None, ''])
-    def test_submit_job_url_with_no_source_url(self, source_url, mock_session):
-        with pytest.raises(ValueError, match='media_url or source_config must be provided'):
-            RevAiAPIClient(TOKEN).submit_job_url(source_url)
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
@@ -330,7 +310,7 @@ class TestJobEndpoints():
                         None,
                         json.dumps({
                             'metadata': METADATA,
-                            'notification_config': {'url': NOTIFICATION_URL},
+                            'callback_url': NOTIFICATION_URL,
                             'skip_punctuation': True,
                             'skip_diarization': True,
                             'speaker_channels_count': 1,

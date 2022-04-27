@@ -162,7 +162,7 @@ class TestGenericApiClient:
         }
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
-        payload = client._enhance_payload({'random': True}, METADATA, NOTIFICATION_CONFIG, 0)
+        payload = client._enhance_payload({'random': True}, METADATA, None, 0, NOTIFICATION_CONFIG)
 
         res = client._submit_job(payload)
 

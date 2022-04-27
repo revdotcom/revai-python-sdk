@@ -44,7 +44,7 @@ class RevAiCustomVocabulariesClient(BaseClient):
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
         :param custom_vocabularies: List of CustomVocabulary objects
         :param callback_url: callback url to invoke on job completion as a webhook
-        .. deprecated:: 2.15
+        .. deprecated:: 2.16.0
                 Use notification_config instead
         :param metadata: info to associate with the transcription job
         :param notification_config: CustomerUrlData object containing the callback url to

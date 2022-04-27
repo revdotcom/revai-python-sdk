@@ -78,7 +78,7 @@ class TestTopicExtractionClient:
             url,
             json={
                 'text': TEXT,
-                'notification_config': {'url': NOTIFICATION_URL},
+                'callback_url': NOTIFICATION_URL,
                 'metadata': METADATA,
                 'delete_after_seconds': 0,
                 'language': LANGUAGE
@@ -122,12 +122,6 @@ class TestTopicExtractionClient:
             },
             headers=client.default_headers)
 
-    def test_both_callback_options_failure(self):
-        client = TopicExtractionClient(TOKEN)
-        expected_err = 'Only one of callback_url or notification_config may be provided'
-        with pytest.raises(ValueError, match=expected_err):
-            client.submit_job_from_text(text='text', callback_url='foo', notification_config='bar')
-
     def test_submit_job_json_with_success(self, mock_session, make_mock_response):
         client = TopicExtractionClient(TOKEN)
         url = urljoin(client.base_url, 'jobs')
@@ -158,7 +152,7 @@ class TestTopicExtractionClient:
             url,
             json={
                 'json': JSON.to_dict(),
-                'notification_config': {'url': NOTIFICATION_URL},
+                'callback_url': NOTIFICATION_URL,
                 'metadata': METADATA,
                 'delete_after_seconds': 0,
                 'language': LANGUAGE

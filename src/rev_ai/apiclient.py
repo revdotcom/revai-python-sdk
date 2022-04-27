@@ -68,11 +68,11 @@ class RevAiAPIClient(BaseClient):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
-        .. deprecated:: 2.15
+        .. deprecated:: 2.16.0
             Use source_config instead
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as a webhook
-        .. deprecated:: 2.15
+        .. deprecated:: 2.16.0
                 Use notification_config instead
         :param skip_diarization: should Rev AI skip diarization when transcribing this file
         :param skip_punctuation: should Rev AI skip punctuation when transcribing this file
@@ -467,7 +467,7 @@ class RevAiAPIClient(BaseClient):
         if metadata:
             payload['metadata'] = metadata
         if callback_url:
-            payload['callback_url'] = callback_url.to_dict()
+            payload['callback_url'] = callback_url
         if custom_vocabularies:
             payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
         if speaker_channels_count:
