@@ -24,7 +24,7 @@ client = apiclient.RevAiAPIClient(access_token)
 
 # Submitting a job with the authentication header options
 source_url = "https://www.rev.ai/FTC_Sample_1.mp3"
-source_auth_headers = "Authentication: Bearer <token>"
+source_auth_headers = '{"Authorization": "Bearer <token>"}'
 callback_url = "https://www.example.com/callback"
 callback_auth_headers = '{"Authorization": "Bearer <token>"}'
 
