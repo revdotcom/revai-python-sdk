@@ -31,7 +31,7 @@ callback_auth_headers = "Authentication: Bearer <token>"
 # Create config objects containing the url and auth headers for each option
 # These options replace media_url and callback_url and should not be used alongside them
 job = client.submit_job_url(
-    source_config=CustomerUrlData(source_url, source_auth_headers),
-    notification_config=CustomerUrlData(callback_url, callback_auth_headers))
+    source_config=CustomerUrlData(url=source_url, auth_headers=source_auth_headers),
+    notification_config=CustomerUrlData(url=callback_url, auth_headers=callback_auth_headers))
 
 print("Submitted Job")

@@ -5,7 +5,10 @@ class CustomerUrlData:
     def __init__(self, url, auth_headers=None):
         """Constructor
         :param url: customer provided url
-        :param auth_headers: optional customer provided headers to access the url
+        :param auth_headers: optional customer provided headers to access the url.
+        Only the “Authorization” header is currently supported.
+        This should be a json string in the form `{"<header>": "<scheme> <token>"}`.
+        For example: `{"Authorization": "Bearer $BEARER_TOKEN"}`
         """
         self.url = url
         self.auth_headers = auth_headers
