@@ -26,7 +26,7 @@ client = apiclient.RevAiAPIClient(access_token)
 source_url = "https://www.rev.ai/FTC_Sample_1.mp3"
 source_auth_headers = "Authentication: Bearer <token>"
 callback_url = "https://www.example.com/callback"
-callback_auth_headers = "{Authentication: Bearer <token>}"
+callback_auth_headers = '{"Authorization": "Bearer <token>"}'
 
 # Create config objects containing the url and auth headers for each option
 # These options replace media_url and callback_url and should not be used alongside them
