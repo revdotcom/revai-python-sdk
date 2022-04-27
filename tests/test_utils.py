@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit tests for Rev Ai Utils"""
+
 from src.rev_ai.utils import _process_vocabularies
 from src.rev_ai.models import CustomVocabulary
 
