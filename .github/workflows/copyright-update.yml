@@ -16,10 +16,3 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           transform: (?<from>\d{4})+-?(\d{4})?
-          path: |
-            LICENSE
-            examples/async_example.py
-            examples/custom_vocabularies_example.py
-            examples/generator_streaming_example.py
-            examples/language_identification_example.py
-            examples/topic_extraction_example.py
