@@ -9,7 +9,7 @@ class TopicExtractionClient(GenericApiClient):
     """Client for interacting with the Rev AI topic extraction api"""
 
     # Default version of Rev AI topic extraction api
-    api_version = 'v1beta'
+    api_version = 'v1'
 
     # Default api name of Rev AI topic extraction api
     api_name = 'topic_extraction'

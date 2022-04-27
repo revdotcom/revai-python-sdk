@@ -7,6 +7,7 @@ import sys
 from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.generic_api_client import GenericApiClient
 from src.rev_ai import __version__
+from tests.helpers import Matcher
 
 try:
     from urllib.parse import urljoin
@@ -223,7 +224,7 @@ class TestGenericApiClient:
         assert res == data
         mock_session.request.assert_called_once_with(
             "GET",
-            url,
+            Matcher(lambda x: '?name1=1&name2=2' in x or '?name2=2&name1=1' in x),
             headers=client.default_headers)
 
     def test_get_result_object_with_success(self, mock_session, make_mock_response):
@@ -276,7 +277,7 @@ class TestGenericApiClient:
         assert res == data
         mock_session.request.assert_called_once_with(
             "GET",
-            url,
+            Matcher(lambda x: '?name1=1&name2=2' in x or '?name2=2&name1=1' in x),
             headers=client.default_headers)
 
 

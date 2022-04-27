@@ -41,7 +41,7 @@ class TestTopicExtractionClient:
 
         assert headers.get('User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer {}'.format(TOKEN)
-        assert client.base_url == 'https://api.rev.ai/topic_extraction/v1beta/'
+        assert client.base_url == 'https://api.rev.ai/topic_extraction/v1/'
 
     @pytest.mark.parametrize('token', [None, ''])
     def test_constructor_with_no_token(self, token):
