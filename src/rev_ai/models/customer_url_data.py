@@ -6,8 +6,8 @@ class CustomerUrlData:
         """Constructor
         :param url: customer provided url
         :param auth_headers: optional customer provided headers to access the url
-        Only the “Authorization” header is currently supported
-        This should be a json string in the form `{"<header>": "<scheme> <token>"}`
+        Only the "Authorization" header is currently supported
+        This should be a json string in the form `{"header": "scheme token"}`
         For example: `{"Authorization": "Bearer $BEARER_TOKEN"}`
         """
         self.url = url
