@@ -5,7 +5,6 @@ import json
 from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
-from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -28,7 +27,7 @@ class RevAiAPIClient(BaseClient):
     version = 'v1'
 
     # Default base url for Rev AI
-    base_url = 'https://api-test.rev.ai/speechtotext/{}/'.format(version)
+    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
 
     # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
