@@ -17,19 +17,19 @@ from rev_ai import apiclient
 from rev_ai.models.customer_url_data import CustomerUrlData
 
 # String containing your access token
-access_token = "<your_access_token>"
+access_token = "02pdY6dtZV4fhcIQd6iAbUTJ3XNx8aQf79jtLmuuoj-e8odNxE6NRCRawLh4GgS5SGCZmLjZgsOEYslOhg2uvOe5mxGQk"
 
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)
 
-# Submitting a job with the authentication header options
-source_url = "https://www.rev.ai/FTC_Sample_1.mp3"
-source_auth_headers = '{"Authorization": "Bearer <token>"}'
-callback_url = "https://www.example.com/callback"
-callback_auth_headers = '{"Authorization": "Bearer <token>"}'
-
 # Create config objects containing the url and auth headers for each option
 # These options replace media_url and callback_url and should not be used alongside them
+source_url = "https://www.rev.ai/FTC_Sample_1.mp3"
+source_auth_headers = {"Authorization": "Bearer <token>"}
+callback_url = "https://www.example.com/callback"
+callback_auth_headers = {"Authorization": "Bearer <token>"}
+
+# Submitting a job with the authentication header options
 job = client.submit_job_url(
     source_config=CustomerUrlData(url=source_url, auth_headers=source_auth_headers),
     notification_config=CustomerUrlData(url=callback_url, auth_headers=callback_auth_headers))

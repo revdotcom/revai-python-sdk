@@ -7,8 +7,8 @@ class CustomerUrlData:
         :param url: customer provided url
         :param auth_headers: optional customer provided headers to access the url
         Only the "Authorization" header is currently supported
-        This should be a stringified json in the form `{"header": "scheme token"}`
-        For example: `{"Authorization": "Bearer $BEARER_TOKEN"}`
+        This should be a dictionary in the form {"header": "scheme token"}
+        For example: {"Authorization": "Bearer $BEARER_TOKEN"}
         """
         self.url = url
         self.auth_headers = auth_headers
