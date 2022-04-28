@@ -17,7 +17,7 @@ from rev_ai import apiclient
 from rev_ai.models.customer_url_data import CustomerUrlData
 
 # String containing your access token
-access_token = "02pdY6dtZV4fhcIQd6iAbUTJ3XNx8aQf79jtLmuuoj-e8odNxE6NRCRawLh4GgS5SGCZmLjZgsOEYslOhg2uvOe5mxGQk"
+access_token = "<your_access_token>"
 
 # Create your api client
 client = apiclient.RevAiAPIClient(access_token)
