@@ -5,4 +5,4 @@ __version__ = '2.15.1'
 
 from .models import Job, JobStatus, Account, Transcript, Monologue, Element, MediaConfig, \
     CaptionType, CustomVocabulary, TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
-    SpeakerName
+    SpeakerName, LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence
