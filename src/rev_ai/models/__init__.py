@@ -6,3 +6,4 @@ from .streaming import MediaConfig
 from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Element, CaptionType, \
     SpeakerName
 from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informant
+from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence
