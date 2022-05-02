@@ -57,8 +57,9 @@ class RevAiCustomVocabulariesClient(BaseClient):
 
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
-            notification_config,
-            metadata
+            callback_url,
+            metadata,
+            notification_config
         )
 
         response = self._make_http_request(

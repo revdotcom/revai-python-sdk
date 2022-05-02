@@ -37,22 +37,31 @@ class LanguageIdentificationClient(GenericApiClient):
             media_url,
             metadata=None,
             callback_url=None,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            source_config=None,
+            notification_config=None):
         """Submit media as a URL for language identification.
         The audio data is downloaded from the URL.
 
         :param media_url: web location of the media file
+        .. deprecated:: 2.16.0
+            Use source_config instead
         :param metadata: info to associate with the language identification job
         :param callback_url: callback url to invoke on job completion as a webhook
+        .. deprecated:: 2.16.0
+                Use notification_config instead
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
+        :param source_config: CustomerUrlData object containing url of the source media and
+            optional authentication headers to use when accessing the source url
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: raw response data
         :raises: HTTPError
         """
-        if not media_url:
-            raise ValueError('media_url must be provided')
-
-        payload = self._enhance_payload({'media_url': media_url},
-                                        metadata, callback_url, delete_after_seconds)
+        payload = self._enhance_payload({'media_url': media_url, 'source_config': source_config},
+                                        metadata, callback_url, delete_after_seconds,
+                                        notification_config)
 
         return self._submit_job(payload)
 
@@ -61,7 +70,8 @@ class LanguageIdentificationClient(GenericApiClient):
             filename,
             metadata=None,
             callback_url=None,
-            delete_after_seconds=None):
+            delete_after_seconds=None,
+            notification_config=None):
         """Submit a local file for language identification.
         Note that the content type is inferred if not provided.
 
@@ -69,13 +79,17 @@ class LanguageIdentificationClient(GenericApiClient):
         :param metadata: info to associate with the language identification job
         :param callback_url: callback url to invoke on job completion as a webhook
         :param delete_after_seconds: number of seconds after job completion when job is auto-deleted
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         :returns: raw response data
         :raises: HTTPError
         """
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._enhance_payload({}, metadata, callback_url, delete_after_seconds)
+        payload = self._enhance_payload({}, metadata, callback_url, delete_after_seconds,
+                                        notification_config)
 
         with open(filename, 'rb') as f:
             files = {
