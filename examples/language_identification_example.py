@@ -28,7 +28,9 @@ client = language_identification_client.LanguageIdentificationClient(access_toke
 url = "https://www.rev.ai/FTC_Sample_1.mp3"
 job = client.submit_job_url(url,
                             metadata=None,
-                            delete_after_seconds=None)
+                            callback_url=None,
+                            delete_after_seconds=None,
+                            notification_config=None)
 
 print("Submitted Job")
 
