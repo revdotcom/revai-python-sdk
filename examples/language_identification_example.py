@@ -18,6 +18,8 @@ from rev_ai import language_identification_client
 
 
 # String containing your access token
+from rev_ai.models.customer_url_data import CustomerUrlData
+
 access_token = "<your_access_token>"
 
 # Create your api client
@@ -25,11 +27,12 @@ client = language_identification_client.LanguageIdentificationClient(access_toke
 
 # Submitting a job with a link to the file you want to identify the language of
 # Change url to your url
-url = "https://www.rev.ai/FTC_Sample_1.mp3"
-job = client.submit_job_url(url,
+source_config = CustomerUrlData(url="https://www.rev.ai/FTC_Sample_1.mp3")
+job = client.submit_job_url(media_url=None,
                             metadata=None,
                             callback_url=None,
                             delete_after_seconds=None,
+                            source_config=source_config,
                             notification_config=None)
 
 print("Submitted Job")
