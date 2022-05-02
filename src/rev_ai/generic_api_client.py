@@ -144,7 +144,7 @@ class GenericApiClient(BaseClient):
 
         return
 
-    def create_payload_with_source(self, source_config, media_url, metadata, callback_url,
+    def create_payload_with_source(self, media_url, source_config, metadata, callback_url,
                                    delete_after_seconds, notification_config):
         payload = {}
         if media_url:
