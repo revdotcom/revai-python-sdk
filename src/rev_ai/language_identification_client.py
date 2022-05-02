@@ -59,9 +59,8 @@ class LanguageIdentificationClient(GenericApiClient):
         :returns: raw response data
         :raises: HTTPError
         """
-        payload = self._enhance_payload({'media_url': media_url, 'source_config': source_config},
-                                        metadata, callback_url, delete_after_seconds,
-                                        notification_config)
+        payload = self.create_payload_with_source(media_url, source_config, metadata, callback_url,
+                                                  delete_after_seconds, notification_config)
 
         return self._submit_job(payload)
 

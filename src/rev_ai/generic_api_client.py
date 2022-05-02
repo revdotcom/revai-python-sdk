@@ -144,15 +144,32 @@ class GenericApiClient(BaseClient):
 
         return
 
+    def create_payload_with_source(self, source_config, media_url, metadata, callback_url,
+                                   delete_after_seconds, notification_config):
+        payload = {}
+        if media_url:
+            payload['media_url'] = media_url
+        if source_config:
+            payload['source_config'] = source_config.to_dict()
+        self._copy_options(payload, metadata, callback_url, delete_after_seconds,
+                           notification_config)
+        return payload
+
     def _enhance_payload(self, payload, metadata, callback_url, delete_after_seconds,
                          notification_config):
         enhanced = payload.copy()
-        if metadata:
-            enhanced['metadata'] = metadata
-        if callback_url:
-            enhanced['callback_url'] = callback_url
-        if delete_after_seconds is not None:
-            enhanced['delete_after_seconds'] = delete_after_seconds
-        if notification_config:
-            enhanced['notification_config'] = notification_config.to_dict()
+        self._copy_options(enhanced, metadata, callback_url, delete_after_seconds,
+                           notification_config)
         return enhanced
+
+    @staticmethod
+    def _copy_options(payload, metadata, callback_url, delete_after_seconds,
+                      notification_config):
+        if metadata:
+            payload['metadata'] = metadata
+        if callback_url:
+            payload['callback_url'] = callback_url
+        if delete_after_seconds is not None:
+            payload['delete_after_seconds'] = delete_after_seconds
+        if notification_config:
+            payload['notification_config'] = notification_config.to_dict()
