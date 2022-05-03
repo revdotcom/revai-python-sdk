@@ -127,7 +127,7 @@ class TestSentimentAnalysisClient:
                 {
                     'content': CONTENT,
                     'score': SCORE,
-                    'sentiment': SentimentValue.NEGATIVE.value,
+                    'sentiment': str(SentimentValue.NEGATIVE),
                     'offset': OFFSET,
                     'length': LENGTH
                 }
@@ -147,13 +147,13 @@ class TestSentimentAnalysisClient:
     def test_get_result_json_with_threshold_with_success(self, mock_session, make_mock_response):
         client = SentimentAnalysisClient(TOKEN)
         url = urljoin(client.base_url, 'jobs/{0}/result?filter_for={1}'
-                      .format(JOB_ID, SentimentValue.NEGATIVE.value))
+                      .format(JOB_ID, SentimentValue.NEGATIVE))
         data = {
             'messages': [
                 {
                     'content': CONTENT,
                     'score': SCORE,
-                    'sentiment': SentimentValue.NEGATIVE.value,
+                    'sentiment': str(SentimentValue.NEGATIVE),
                     'offset': OFFSET,
                     'length': LENGTH
                 }
@@ -178,7 +178,7 @@ class TestSentimentAnalysisClient:
                 {
                     'content': CONTENT,
                     'score': SCORE,
-                    'sentiment': SentimentValue.NEGATIVE.value,
+                    'sentiment': str(SentimentValue.NEGATIVE),
                     'offset': OFFSET,
                     'length': LENGTH
                 }
@@ -206,13 +206,13 @@ class TestSentimentAnalysisClient:
     def test_get_result_object_with_threshold_with_success(self, mock_session, make_mock_response):
         client = SentimentAnalysisClient(TOKEN)
         url = urljoin(client.base_url, 'jobs/{0}/result?filter_for={1}'
-                      .format(JOB_ID, SentimentValue.POSITIVE.value))
+                      .format(JOB_ID, SentimentValue.POSITIVE))
         data = {
             'messages': [
                 {
                     'content': CONTENT,
                     'score': SCORE,
-                    'sentiment': SentimentValue.POSITIVE.value,
+                    'sentiment': str(SentimentValue.POSITIVE),
                     'offset': OFFSET,
                     'length': LENGTH
                 }
@@ -221,7 +221,7 @@ class TestSentimentAnalysisClient:
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        res = client.get_result_object(JOB_ID, SentimentValue)
+        res = client.get_result_object(JOB_ID, SentimentValue.POSITIVE)
 
         assert res == SentimentAnalysisResult(
             [SentimentMessage(

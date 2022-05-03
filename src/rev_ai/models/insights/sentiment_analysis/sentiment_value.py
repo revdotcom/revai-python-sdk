@@ -5,9 +5,12 @@ from enum import Enum
 
 
 class SentimentValue(Enum):
-    POSITIVE = "positive"
-    NEGATIVE = "negative"
-    NEUTRAL = "neutral"
+    POSITIVE = 1
+    NEGATIVE = 2
+    NEUTRAL = 3
+
+    def __str__(self):
+        return self.name.lower()
 
     @classmethod
     def from_string(cls, status):

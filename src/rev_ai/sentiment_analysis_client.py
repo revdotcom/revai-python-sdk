@@ -81,7 +81,7 @@ class SentimentAnalysisClient(GenericApiClient):
         :returns: job result data as raw json
         :raises: HTTPError
         """
-        to_filter_for = filter_for.value if filter_for else None
+        to_filter_for = str(filter_for) if filter_for else None
         return self._get_result_object(id_, {'filter_for': to_filter_for})
 
     def get_result_object(self, id_, filter_for=None):
@@ -93,5 +93,5 @@ class SentimentAnalysisClient(GenericApiClient):
         :returns: job result data as SentimentAnalysisResult object
         :raises: HTTPError
         """
-        to_filter_for = filter_for.value if filter_for else None
+        to_filter_for = str(filter_for) if filter_for else None
         return self._get_result_object(id_, {'filter_for': to_filter_for})
