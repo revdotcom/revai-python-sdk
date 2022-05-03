@@ -144,7 +144,7 @@ class TestSentimentAnalysisClient:
             url,
             headers=client.default_headers)
 
-    def test_get_result_json_with_threshold_with_success(self, mock_session, make_mock_response):
+    def test_get_result_json_with_filter_for_with_success(self, mock_session, make_mock_response):
         client = SentimentAnalysisClient(TOKEN)
         url = urljoin(client.base_url, 'jobs/{0}/result?filter_for={1}'
                       .format(JOB_ID, SentimentValue.NEGATIVE))
@@ -203,7 +203,7 @@ class TestSentimentAnalysisClient:
             url,
             headers=client.default_headers)
 
-    def test_get_result_object_with_threshold_with_success(self, mock_session, make_mock_response):
+    def test_get_result_object_with_filter_for_with_success(self, mock_session, make_mock_response):
         client = SentimentAnalysisClient(TOKEN)
         url = urljoin(client.base_url, 'jobs/{0}/result?filter_for={1}'
                       .format(JOB_ID, SentimentValue.POSITIVE))

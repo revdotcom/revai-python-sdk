@@ -82,7 +82,7 @@ class SentimentAnalysisClient(GenericApiClient):
         :raises: HTTPError
         """
         to_filter_for = str(filter_for) if filter_for else None
-        return self._get_result_object(id_, {'filter_for': to_filter_for})
+        return self._get_result_json(id_, {'filter_for': to_filter_for})
 
     def get_result_object(self, id_, filter_for=None):
         """Get result of a sentiment analysis job as SentimentAnalysisResult object.
