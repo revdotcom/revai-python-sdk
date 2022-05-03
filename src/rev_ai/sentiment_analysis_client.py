@@ -2,17 +2,17 @@
 """Client used or interacting with out sentiment analysis api"""
 
 from .generic_api_client import GenericApiClient
-from .models import InsightsJob, TopicExtractionResult
+from .models import InsightsJob, SentimentAnalysisResult
 
 
-class TopicExtractionClient(GenericApiClient):
-    """Client for interacting with the Rev AI topic extraction api"""
+class SentimentAnalysisClient(GenericApiClient):
+    """Client for interacting with the Rev AI sentiment analysis api"""
 
-    # Default version of Rev AI topic extraction api
+    # Default version of Rev AI sentiment analysis api
     api_version = 'v1'
 
-    # Default api name of Rev AI topic extraction api
-    api_name = 'topic_extraction'
+    # Default api name of Rev AI sentiment analysis api
+    api_name = 'sentiment_analysis'
 
     def __init__(self, access_token):
         """Constructor
@@ -23,7 +23,7 @@ class TopicExtractionClient(GenericApiClient):
         """
 
         GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
-                                  InsightsJob.from_json, TopicExtractionResult.from_json)
+                                  InsightsJob.from_json, SentimentAnalysisResult.from_json)
 
     def submit_job_from_text(self,
                              text=None,
@@ -31,10 +31,10 @@ class TopicExtractionClient(GenericApiClient):
                              callback_url=None,
                              delete_after_seconds=None,
                              language=None):
-        """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
+        """Submit a job to the Rev AI sentiment analysis api. Takes either a plain text string or
         Transcript object
 
-        :param text: Plain text string to be run through topic extraction
+        :param text: Plain text string to be run through sentiment analysis
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
@@ -54,11 +54,11 @@ class TopicExtractionClient(GenericApiClient):
                                    callback_url=None,
                                    delete_after_seconds=None,
                                    language=None):
-        """Submit a job to the Rev AI topic extraction api. Takes either a plain text string or
+        """Submit a job to the Rev AI sentiment analysis api. Takes either a plain text string or
         Transcript object
 
         :param transcript: Transcript object from the Rev AI async transcription client to be run
-                           through topic extraction
+                           through sentiment analysis
         :param metadata: info to associate with the transcription job
         :param callback_url: callback url to invoke on job completion as
                              a webhook
@@ -72,24 +72,26 @@ class TopicExtractionClient(GenericApiClient):
                                         metadata, callback_url, delete_after_seconds)
         return self._submit_job(payload)
 
-    def get_result_json(self, id_, threshold=None):
-        """Get result of a topic extraction job as json.
+    def get_result_json(self, id_, filter_for=None):
+        """Get result of a sentiment analysis job as json.
 
         :param id_: id of job to be requested
-        :param threshold: score threshold for topics. No topics with scores under this threshold
-                          will be returned
+        :param filter_for: SentimentValue to filter for.
+                           If specified only sentiments of this type will be returned
         :returns: job result data as raw json
         :raises: HTTPError
         """
-        return self._get_result_json(id_, {'threshold': threshold})
+        to_filter_for = filter_for.value if filter_for else None
+        return self._get_result_object(id_, {'filter_for': to_filter_for})
 
-    def get_result_object(self, id_, threshold=None):
-        """Get result of a topic extraction job as TopicExtractionResult object.
+    def get_result_object(self, id_, filter_for=None):
+        """Get result of a sentiment analysis job as SentimentAnalysisResult object.
 
         :param id_: id of job to be requested
-        :param threshold: score threshold for topics. No topics with scores under this threshold
-                          will be returned
-        :returns: job result data as TopicExtractionResult object
+        :param filter_for: SentimentValue to filter for.
+                           If specified only sentiments of this type will be returned
+        :returns: job result data as SentimentAnalysisResult object
         :raises: HTTPError
         """
-        return self._get_result_object(id_, {'threshold': threshold})
+        to_filter_for = filter_for.value if filter_for else None
+        return self._get_result_object(id_, {'filter_for': to_filter_for})

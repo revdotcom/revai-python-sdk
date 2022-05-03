@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Job model"""
 
-from ...asynchronous.job_status import JobStatus
+from ..asynchronous.job_status import JobStatus
 
 
-class TopicExtractionJob:
+class InsightsJob:
     def __init__(
             self, id_, created_on, status,
             completed_on=None,
