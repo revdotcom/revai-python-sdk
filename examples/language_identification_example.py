@@ -26,7 +26,7 @@ access_token = "<your_access_token>"
 client = language_identification_client.LanguageIdentificationClient(access_token)
 
 # Submitting a job with a link to the file you want to identify the language of
-# Change url to your url
+# Change the url specified in source_config to the url of the media to submit
 source_config = CustomerUrlData(url="https://www.rev.ai/FTC_Sample_1.mp3")
 job = client.submit_job_url(media_url=None,
                             metadata=None,
