@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+"""Class for Customer Url Data model"""
+
+
 class CustomerUrlData:
-    """Object used to contain a url provided by the customer along with any other related information,
-     such as authentication headers."""
+    """Object used to contain a url provided by the customer along with any other related
+    information, such as authentication headers."""
 
     def __init__(self, url, auth_headers=None):
         """Constructor
