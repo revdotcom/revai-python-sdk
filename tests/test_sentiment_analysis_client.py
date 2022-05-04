@@ -4,7 +4,7 @@
 import pytest
 from src.rev_ai.sentiment_analysis_client import SentimentAnalysisClient
 from src.rev_ai import __version__
-from src.rev_ai import Transcript, Monologue, Element, InsightsJob, JobStatus, \
+from src.rev_ai import Transcript, Monologue, Element, SentimentAnalysisJob, JobStatus, \
     SentimentAnalysisResult, SentimentValue, SentimentMessage
 
 try:
@@ -62,12 +62,12 @@ class TestSentimentAnalysisClient:
                                           delete_after_seconds=0,
                                           language=LANGUAGE)
 
-        assert res == InsightsJob(JOB_ID,
-                                  CREATED_ON,
-                                  JobStatus.IN_PROGRESS,
-                                  metadata=METADATA,
-                                  callback_url=CALLBACK_URL,
-                                  delete_after_seconds=0)
+        assert res == SentimentAnalysisJob(JOB_ID,
+                                           CREATED_ON,
+                                           JobStatus.IN_PROGRESS,
+                                           metadata=METADATA,
+                                           callback_url=CALLBACK_URL,
+                                           delete_after_seconds=0)
         mock_session.request.assert_called_once_with(
             "POST",
             url,
@@ -101,12 +101,12 @@ class TestSentimentAnalysisClient:
                                                 delete_after_seconds=0,
                                                 language=LANGUAGE)
 
-        assert res == InsightsJob(JOB_ID,
-                                  CREATED_ON,
-                                  JobStatus.IN_PROGRESS,
-                                  metadata=METADATA,
-                                  callback_url=CALLBACK_URL,
-                                  delete_after_seconds=0)
+        assert res == SentimentAnalysisJob(JOB_ID,
+                                           CREATED_ON,
+                                           JobStatus.IN_PROGRESS,
+                                           metadata=METADATA,
+                                           callback_url=CALLBACK_URL,
+                                           delete_after_seconds=0)
         mock_session.request.assert_called_once_with(
             "POST",
             url,
