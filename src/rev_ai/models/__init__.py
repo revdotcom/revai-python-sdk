@@ -5,6 +5,6 @@ from .customvocabulary import CustomVocabulary
 from .streaming import MediaConfig
 from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Element, CaptionType, \
     SpeakerName
-from .insights import InsightsJob, TopicExtractionResult, Topic, Informant, \
-    SentimentAnalysisResult, SentimentValue, SentimentMessage
+from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
+    SentimentAnalysisResult, SentimentValue, SentimentMessage, SentimentAnalysisJob
 from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence

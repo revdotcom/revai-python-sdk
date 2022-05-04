@@ -24,7 +24,14 @@ access_token = "<your_access_token>"
 client = topic_extraction_client.TopicExtractionClient(access_token)
 
 # Submit a job with whatever text you want by changing this input
-text = "<input_text>"
+text = "An umbrella or parasol is a folding canopy supported by wooden or metal ribs that is  \
+    usually mounted on a wooden, metal, or plastic pole. It is designed to protect a person \
+    against rain or sunlight. The term umbrella is traditionally used when protecting oneself from \
+    rain, with parasol used when protecting oneself from sunlight, though the terms continue to be \
+    used interchangeably. Often the difference is the material used for the canopy; some parasols \
+    are not waterproof, and some umbrellas are transparent. Umbrella canopies may be made of \
+    fabric or flexible plastic. There are also combinations of parasol and umbrella that are \
+    called en-tout-cas (French for 'in any case')."
 job = client.submit_job_from_text(text,
                                   metadata=None,
                                   callback_url=None,
