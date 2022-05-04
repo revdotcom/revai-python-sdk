@@ -50,9 +50,17 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3")
 `job` will contain all the information normally found in a successful response from our
 [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
-If you want to get fancy, both send job methods take `metadata`, `callback_url`,
-`skip_diarization`, `skip_punctuation`, `speaker_channels_count`, `custom_vocabularies`, `filter_profanity`, `remove_disfluencies`, `delete_after_seconds`, `language`, and `custom_vocabulary_id` as optional parameters, these are described in the request body of
-the [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
+If you want to get fancy, both submit job methods take `metadata`,`notification_config`, 
+`skip_diarization`, `skip_punctuation`, `speaker_channels_count`,`custom_vocabularies`,
+`filter_profanity`, `remove_disfluencies`, `delete_after_seconds`,`language`,
+and `custom_vocabulary_id` as optional parameters.
+
+The url submission option also supports authentication headers by using the `source_config` option.
+
+All options are described in the request body of the
+[Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
+
+### Human Transcription
 
 If you want transcription to be performed by a human, both methods allow you to submit human transcription jobs
 using `transcriber=human` with `verbatim`, `rush`, `segments_to_transcribe` and `test_mode` as optional parameters.

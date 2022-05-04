@@ -27,9 +27,9 @@ client = topic_extraction_client.TopicExtractionClient(access_token)
 text = "<input_text>"
 job = client.submit_job_from_text(text,
                                   metadata=None,
-                                  callback_url=None,
                                   delete_after_seconds=None,
-                                  language=None)
+                                  language=None,
+                                  notification_config=None)
 
 # If you'd like to submit the transcript of an existing transcription job you can do so by
 # uncommenting the lines below
@@ -40,7 +40,6 @@ job = client.submit_job_from_text(text,
 # transcript_json = transcript
 # job = client.submit_job_from_transcript(transcript_json,
 #                                         metadata=None,
-#                                         callback_url=None,
 #                                         delete_after_seconds=None,
 #                                         language=None)
 
@@ -55,7 +54,7 @@ while True:
 
     # Checks if the job has been completed. Please note that this is not the recommended way
     # of getting job status in a real application. For recommended methods of getting job status
-    # please see our documentation on callback_urls here:
+    # please see our documentation on setting a callback url here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
     if status == "IN_PROGRESS":
         time.sleep(2)

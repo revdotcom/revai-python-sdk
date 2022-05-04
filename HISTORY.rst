@@ -94,3 +94,9 @@ History
 ------------------
 * Add topic extraction client
 * Add speaker_names to async client for human transcription
+
+2.16.0
+------------------
+* Add source_config and notification_config job options to support customer provided urls with authentication headers
+* Deprecate media_url option, replace with source_config
+* Deprecate callback_url option, replace with notification_config

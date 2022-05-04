@@ -3,6 +3,8 @@
 
 import json
 import pytest
+
+from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous import Job, JobStatus, SpeakerName
 
@@ -14,9 +16,11 @@ except ImportError:
 JOB_ID = '1'
 TOKEN = "token"
 METADATA = 'test'
-CALLBACK_URL = 'https://callback.com/'
+NOTIFICATION_URL = 'https://example.com/'
+NOTIFICATION_AUTH = 'notification auth headers'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
-MEDIA_URL = 'https://example.com/test.mp3'
+SOURCE_URL = 'https://example.com/test.mp3'
+SOURCE_AUTH = 'source auth headers'
 FILENAME = 'test.mp3'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
@@ -24,6 +28,9 @@ CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 CUSTOM_VOCAB_ID = "vid"
 LANGUAGE = 'en'
 TRANSCRIBER = 'machine_v2'
+
+SOURCE_CONFIG = CustomerUrlData(SOURCE_URL, SOURCE_AUTH)
+NOTIFICATION_CONFIG = CustomerUrlData(NOTIFICATION_URL, NOTIFICATION_AUTH)
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -105,7 +112,6 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': CREATED_ON,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
             'skip_diarization': True,
             'skip_punctuation': True,
             'speaker_channels_count': 1,
@@ -119,8 +125,8 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(MEDIA_URL, METADATA,
-                                    CALLBACK_URL, True,
+        res = client.submit_job_url(SOURCE_URL, METADATA,
+                                    NOTIFICATION_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                     TRANSCRIBER)
@@ -129,7 +135,6 @@ class TestJobEndpoints():
                           CREATED_ON,
                           JobStatus.IN_PROGRESS,
                           metadata=METADATA,
-                          callback_url=CALLBACK_URL,
                           skip_punctuation=True,
                           skip_diarization=True,
                           speaker_channels_count=1,
@@ -142,8 +147,8 @@ class TestJobEndpoints():
             "POST",
             JOBS_URL,
             json={
-                'media_url': MEDIA_URL,
-                'callback_url': CALLBACK_URL,
+                'media_url': SOURCE_URL,
+                'callback_url': NOTIFICATION_URL,
                 'metadata': METADATA,
                 'skip_diarization': True,
                 'skip_punctuation': True,
@@ -158,7 +163,67 @@ class TestJobEndpoints():
             },
             headers=client.default_headers)
 
-    def test_submit_job_url_with_human_transcription_and_success(self, mock_session, make_mock_response):
+    def test_submit_job_url_with_auth_options(self, mock_session, make_mock_response):
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+            'metadata': METADATA,
+            'skip_diarization': True,
+            'skip_punctuation': True,
+            'speaker_channels_count': 1,
+            'filter_profanity': True,
+            'remove_disfluencies': True,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        res = client.submit_job_url(metadata=METADATA, skip_diarization=True, skip_punctuation=True,
+                                    speaker_channels_count=1, custom_vocabularies=CUSTOM_VOCAB,
+                                    filter_profanity=True, remove_disfluencies=True,
+                                    delete_after_seconds=0, language=LANGUAGE,
+                                    custom_vocabulary_id=CUSTOM_VOCAB_ID, transcriber=TRANSCRIBER,
+                                    source_config=SOURCE_CONFIG,
+                                    notification_config=NOTIFICATION_CONFIG)
+
+        assert res == Job(JOB_ID,
+                          CREATED_ON,
+                          JobStatus.IN_PROGRESS,
+                          metadata=METADATA,
+                          skip_punctuation=True,
+                          skip_diarization=True,
+                          speaker_channels_count=1,
+                          filter_profanity=True,
+                          remove_disfluencies=True,
+                          delete_after_seconds=0,
+                          language=LANGUAGE,
+                          transcriber=TRANSCRIBER)
+        mock_session.request.assert_called_once_with(
+            "POST",
+            JOBS_URL,
+            json={
+                'source_config': {'url': SOURCE_URL, 'auth_headers': SOURCE_AUTH},
+                'notification_config': {'url': NOTIFICATION_URL, 'auth_headers': NOTIFICATION_AUTH},
+                'metadata': METADATA,
+                'skip_diarization': True,
+                'skip_punctuation': True,
+                'speaker_channels_count': 1,
+                'custom_vocabularies': CUSTOM_VOCAB,
+                'filter_profanity': True,
+                'remove_disfluencies': True,
+                'delete_after_seconds': 0,
+                'language': LANGUAGE,
+                'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                'transcriber': TRANSCRIBER
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_url_with_human_transcription_and_success(self, mock_session,
+                                                                 make_mock_response):
         segments = [{
             'start': 1.0,
             'end': 2.0
@@ -175,7 +240,7 @@ class TestJobEndpoints():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        res = client.submit_job_url(MEDIA_URL, transcriber='human', verbatim=True, rush=False,
+        res = client.submit_job_url(SOURCE_URL, transcriber='human', verbatim=True, rush=False,
                                     segments_to_transcribe=segments,
                                     speaker_names=[SpeakerName('Kyle Bridburg')])
 
@@ -189,18 +254,13 @@ class TestJobEndpoints():
             'POST',
             JOBS_URL,
             json={
-                'media_url': MEDIA_URL,
+                'media_url': SOURCE_URL,
                 'transcriber': 'human',
                 'verbatim': True,
                 'segments_to_transcribe': segments,
                 'speaker_names': [{'display_name': 'Kyle Bridburg'}]
             },
             headers=client.default_headers)
-
-    @pytest.mark.parametrize('url', [None, ''])
-    def test_submit_job_url_with_no_media_url(self, url, mock_session):
-        with pytest.raises(ValueError, match='media_url must be provided'):
-            RevAiAPIClient(TOKEN).submit_job_url(url)
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
@@ -209,7 +269,7 @@ class TestJobEndpoints():
             'status': 'in_progress',
             'created_on': created_on,
             'metadata': METADATA,
-            'callback_url': CALLBACK_URL,
+            'callback_url': NOTIFICATION_URL,
             'skip_punctuation': True,
             'skip_diarization': True,
             'speaker_channels_count': 1,
@@ -225,7 +285,7 @@ class TestJobEndpoints():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             res = client.submit_job_local_file(FILENAME, METADATA,
-                                               CALLBACK_URL, True,
+                                               NOTIFICATION_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
                                                TRANSCRIBER)
@@ -234,7 +294,7 @@ class TestJobEndpoints():
                               CREATED_ON,
                               JobStatus.IN_PROGRESS,
                               metadata=METADATA,
-                              callback_url=CALLBACK_URL,
+                              callback_url=NOTIFICATION_URL,
                               skip_punctuation=True,
                               skip_diarization=True,
                               speaker_channels_count=1,
@@ -252,7 +312,77 @@ class TestJobEndpoints():
                         None,
                         json.dumps({
                             'metadata': METADATA,
-                            'callback_url': CALLBACK_URL,
+                            'callback_url': NOTIFICATION_URL,
+                            'skip_punctuation': True,
+                            'skip_diarization': True,
+                            'speaker_channels_count': 1,
+                            'custom_vocabularies': CUSTOM_VOCAB,
+                            'filter_profanity': True,
+                            'remove_disfluencies': True,
+                            'delete_after_seconds': 0,
+                            'language': LANGUAGE,
+                            'custom_vocabulary_id': CUSTOM_VOCAB_ID,
+                            'transcriber': TRANSCRIBER
+                        }, sort_keys=True)
+                    )
+                },
+                headers=client.default_headers)
+
+    def test_submit_job_local_file_auth_options_with_success(self, mocker, mock_session,
+                                                             make_mock_response):
+        created_on = '2018-05-05T23:23:22.29Z'
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': created_on,
+            'metadata': METADATA,
+            'skip_punctuation': True,
+            'skip_diarization': True,
+            'speaker_channels_count': 1,
+            'filter_profanity': True,
+            'remove_disfluencies': True,
+            'delete_after_seconds': 0,
+            'language': LANGUAGE,
+            'transcriber': TRANSCRIBER
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
+            res = client.submit_job_local_file(filename=FILENAME, metadata=METADATA,
+                                               callback_url=None, skip_diarization=True,
+                                               skip_punctuation=True, speaker_channels_count=1,
+                                               custom_vocabularies=CUSTOM_VOCAB,
+                                               filter_profanity=True, remove_disfluencies=True,
+                                               delete_after_seconds=0, language=LANGUAGE,
+                                               custom_vocabulary_id=CUSTOM_VOCAB_ID,
+                                               transcriber=TRANSCRIBER,
+                                               notification_config=NOTIFICATION_CONFIG)
+
+            assert res == Job(JOB_ID,
+                              CREATED_ON,
+                              JobStatus.IN_PROGRESS,
+                              metadata=METADATA,
+                              skip_punctuation=True,
+                              skip_diarization=True,
+                              speaker_channels_count=1,
+                              filter_profanity=True,
+                              remove_disfluencies=True,
+                              delete_after_seconds=0,
+                              language=LANGUAGE,
+                              transcriber=TRANSCRIBER)
+            mock_session.request.assert_called_once_with(
+                "POST",
+                JOBS_URL,
+                files={
+                    'media': (FILENAME, file),
+                    'options': (
+                        None,
+                        json.dumps({
+                            'metadata': METADATA,
+                            'notification_config': {'url': NOTIFICATION_URL,
+                                                    'auth_headers': NOTIFICATION_AUTH},
                             'skip_punctuation': True,
                             'skip_diarization': True,
                             'speaker_channels_count': 1,

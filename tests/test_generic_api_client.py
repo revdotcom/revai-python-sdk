@@ -3,6 +3,8 @@
 
 import pytest
 import sys
+
+from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.generic_api_client import GenericApiClient
 from src.rev_ai import __version__
 from tests.helpers import Matcher
@@ -17,9 +19,12 @@ VERSION = 'version'
 API = 'api'
 JOB_ID = '1'
 METADATA = 'test'
-CALLBACK_URL = 'https://example.com/'
+NOTIFICATION_URL = 'https://example.com/'
+NOTIFICATION_AUTH = 'headers'
 CREATED_ON = '2018-05-05T23:23:22.29Z'
 LANGUAGE = 'en'
+
+NOTIFICATION_CONFIG = CustomerUrlData(NOTIFICATION_URL, NOTIFICATION_AUTH)
 
 
 class TestGenericApiClient:
@@ -158,7 +163,7 @@ class TestGenericApiClient:
         }
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
-        payload = client._enhance_payload({'random': True}, METADATA, CALLBACK_URL, 0)
+        payload = client._enhance_payload({'random': True}, METADATA, None, 0, NOTIFICATION_CONFIG)
 
         res = client._submit_job(payload)
 

@@ -3,6 +3,7 @@
 
 from .baseclient import BaseClient
 from . import utils
+from .models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -37,14 +38,18 @@ class RevAiCustomVocabulariesClient(BaseClient):
             self,
             custom_vocabularies,
             callback_url=None,
-            metadata=None):
+            metadata=None,
+            notification_config=None):
         """Submit custom vocabularies.
         See https://docs.rev.ai/api/custom-vocabulary/reference/#operation/SubmitCustomVocabulary
-
         :param custom_vocabularies: List of CustomVocabulary objects
-        :param callback_url: callback url to invoke on job completion as a
-                             webhook
+        :param callback_url: callback url to invoke on job completion as a webhook
+        .. deprecated:: 2.16.0
+                Use notification_config instead
         :param metadata: info to associate with the transcription job
+        :param notification_config: CustomerUrlData object containing the callback url to
+            invoke on job completion as a webhook and optional authentication headers to use when
+            calling the callback url
         """
 
         if not custom_vocabularies:
@@ -53,7 +58,8 @@ class RevAiCustomVocabulariesClient(BaseClient):
         payload = self._create_custom_vocabularies_options_payload(
             custom_vocabularies,
             callback_url,
-            metadata
+            metadata,
+            notification_config
         )
 
         response = self._make_http_request(
@@ -104,13 +110,15 @@ class RevAiCustomVocabulariesClient(BaseClient):
             self,
             custom_vocabularies,
             callback_url=None,
-            metadata=None):
+            metadata=None,
+            notification_config=None):
         payload = {}
+        if custom_vocabularies:
+            payload['custom_vocabularies'] = utils._process_vocabularies(custom_vocabularies)
         if callback_url:
             payload['callback_url'] = callback_url
         if metadata:
             payload['metadata'] = metadata
-        if custom_vocabularies:
-            payload['custom_vocabularies'] =\
-                utils._process_vocabularies(custom_vocabularies)
+        if notification_config:
+            payload['notification_config'] = notification_config.to_dict()
         return payload
