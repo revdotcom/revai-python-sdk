@@ -2,7 +2,7 @@
 """Client used or interacting with out sentiment analysis api"""
 
 from .generic_api_client import GenericApiClient
-from .models import InsightsJob, SentimentAnalysisResult
+from .models import SentimentAnalysisJob, SentimentAnalysisResult
 
 
 class SentimentAnalysisClient(GenericApiClient):
@@ -23,7 +23,7 @@ class SentimentAnalysisClient(GenericApiClient):
         """
 
         GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
-                                  InsightsJob.from_json, SentimentAnalysisResult.from_json)
+                                  SentimentAnalysisJob.from_json, SentimentAnalysisResult.from_json)
 
     def submit_job_from_text(self,
                              text=None,
