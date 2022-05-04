@@ -1,4 +1,4 @@
-"""Copyright 2019 REV
+"""Copyright 2022 REV
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@ limitations under the License.
 """
 
 import time
-from rev_ai import topic_extraction_client, apiclient
+from rev_ai import sentiment_analysis_client, apiclient
+from rev_ai.models import SentimentValue
 
 
 # String containing your access token
 access_token = "<your_access_token>"
 
 # Create your api client
-client = topic_extraction_client.TopicExtractionClient(access_token)
+client = sentiment_analysis_client.SentimentAnalysisClient(access_token)
 
 # Submit a job with whatever text you want by changing this input
 text = "An umbrella or parasol is a folding canopy supported by wooden or metal ribs that is  \
@@ -34,6 +35,7 @@ text = "An umbrella or parasol is a folding canopy supported by wooden or metal 
     called en-tout-cas (French for 'in any case')."
 job = client.submit_job_from_text(text,
                                   metadata=None,
+                                  callback_url=None,
                                   delete_after_seconds=None,
                                   language=None,
                                   notification_config=None)
@@ -47,6 +49,7 @@ job = client.submit_job_from_text(text,
 # transcript_json = transcript
 # job = client.submit_job_from_transcript(transcript_json,
 #                                         metadata=None,
+#                                         callback_url=None,
 #                                         delete_after_seconds=None,
 #                                         language=None,
 #                                         notification_config=None)
@@ -62,7 +65,7 @@ while True:
 
     # Checks if the job has been completed. Please note that this is not the recommended way
     # of getting job status in a real application. For recommended methods of getting job status
-    # please see our documentation on setting a callback url here:
+    # please see our documentation on callback_urls here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
     if status == "IN_PROGRESS":
         time.sleep(2)
@@ -73,22 +76,16 @@ while True:
         break
 
     if status == "COMPLETED":
-        # Getting a list of current topic extraction jobs connected with your account
+        # Getting a list of current sentiment analysis jobs connected with your account
         # The optional parameters limits the length of the list.
         # starting_after is a job id which causes the removal of
         # all jobs from the list which were created before that job
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
         # obtain a list of topics and their scores for the job
-        result = client.get_result_object(job.id, threshold=None)
+        result = client.get_result_object(job.id, filter_for=None)
         remove_none_elements = lambda dictionary: {k: v for k, v in dictionary.items() if v}
-        print([{
-            'topic': topic.topic_name,
-            'score': topic.score,
-            'informants': [
-                remove_none_elements(informant.__dict__) for informant in topic.informants
-            ]
-        } for topic in result.topics])
+        print([remove_none_elements(message.__dict__) for message in result.messages])
 
         break
 

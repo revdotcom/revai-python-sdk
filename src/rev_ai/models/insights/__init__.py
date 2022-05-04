@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
 """Insights Models"""
 
-from .topic_extraction import TopicExtractionJob, TopicExtractionResult, Topic, Informant
+from .sentiment_analysis import SentimentAnalysisResult, SentimentValue, SentimentMessage, \
+    SentimentAnalysisJob
+from .topic_extraction import TopicExtractionResult, Topic, Informant, TopicExtractionJob
