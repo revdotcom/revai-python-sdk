@@ -8,3 +8,4 @@ from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Elemen
 from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
     SentimentAnalysisResult, SentimentValue, SentimentMessage, SentimentAnalysisJob
 from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence
+from .customer_url_data import CustomerUrlData

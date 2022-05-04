@@ -37,7 +37,8 @@ job = client.submit_job_from_text(text,
                                   metadata=None,
                                   callback_url=None,
                                   delete_after_seconds=None,
-                                  language=None)
+                                  language=None,
+                                  notification_config=None)
 
 # If you'd like to submit the transcript of an existing transcription job you can do so by
 # uncommenting the lines below
@@ -50,7 +51,8 @@ job = client.submit_job_from_text(text,
 #                                         metadata=None,
 #                                         callback_url=None,
 #                                         delete_after_seconds=None,
-#                                         language=None)
+#                                         language=None,
+#                                         notification_config=None)
 
 print("Submitted Job")
 

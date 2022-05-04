@@ -4,7 +4,7 @@
 import json
 import pytest
 
-from rev_ai.models.customer_url_data import CustomerUrlData
+from src.rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous import Job, JobStatus, SpeakerName
 

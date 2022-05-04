@@ -3,11 +3,10 @@
 
 import pytest
 
-from rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.topic_extraction_client import TopicExtractionClient
 from src.rev_ai import __version__
 from src.rev_ai import Transcript, Monologue, Element, TopicExtractionJob, JobStatus, \
-    TopicExtractionResult, Topic, Informant
+    TopicExtractionResult, Topic, Informant, CustomerUrlData
 
 try:
     from urllib.parse import urljoin

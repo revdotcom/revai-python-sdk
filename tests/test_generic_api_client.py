@@ -4,7 +4,7 @@
 import pytest
 import sys
 
-from rev_ai.models.customer_url_data import CustomerUrlData
+from src.rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.generic_api_client import GenericApiClient
 from src.rev_ai import __version__
 from tests.helpers import Matcher

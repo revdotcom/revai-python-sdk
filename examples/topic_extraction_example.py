@@ -48,7 +48,8 @@ job = client.submit_job_from_text(text,
 # job = client.submit_job_from_transcript(transcript_json,
 #                                         metadata=None,
 #                                         delete_after_seconds=None,
-#                                         language=None)
+#                                         language=None,
+#                                         notification_config=None)
 
 print("Submitted Job")
 
