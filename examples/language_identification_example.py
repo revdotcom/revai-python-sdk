@@ -17,9 +17,9 @@ import time
 from rev_ai import language_identification_client
 
 
-# String containing your access token
 from rev_ai.models.customer_url_data import CustomerUrlData
 
+# String containing your access token
 access_token = "<your_access_token>"
 
 # Create your api client
@@ -35,7 +35,7 @@ job = client.submit_job_url(media_url=None,
                             source_config=source_config,
                             notification_config=None)
 
-print("Submitted Job")
+print("Submitted Job: {}".format(job.id))
 
 while True:
     # Obtains details of a job in json format
@@ -79,5 +79,7 @@ while True:
 # if you're sure you want to delete the job.
 #
 # client.delete_job(job.id)
+#
+# print("Deleted Job: {}".format(job.id))
 
 print("Job Submission and Collection Finished.")
