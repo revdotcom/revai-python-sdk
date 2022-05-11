@@ -80,7 +80,7 @@ while True:
         list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
 
         # obtain a list of topics and their scores for the job
-        result = client.get_result_object(job.id, threshold=None)
+        result = client.get_result_object(job.id, threshold=0)
         remove_none_elements = lambda dictionary: {k: v for k, v in dictionary.items() if v}
         print([{
             'topic': topic.topic_name,
