@@ -22,8 +22,8 @@ filename = "english_test.raw"
 access_token = "<your_access_token>"
 
 # Media configuration of audio file.
-# This includes the content type, layout, rate, format, and # of channels
-config = MediaConfig("audio/x-raw", "interleaved", 16000, "S16LE", 1)
+# This includes the content type, layout, rate, format, # of channels and language
+config = MediaConfig("audio/x-raw", "interleaved", 16000, "S16LE", 1, "en")
 
 # Create client with your access token and media configuration
 streamclient = RevAiStreamingClient(access_token, config)

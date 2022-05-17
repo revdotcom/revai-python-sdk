@@ -90,7 +90,7 @@ chunk = int(rate/10)
 access_token = "<your_access_token>"
 
 # Creates a media config with the settings set for a raw microphone input
-example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1)
+example_mc = MediaConfig('audio/x-raw', 'interleaved', 44100, 'S16LE', 1, 'en')
 
 streamclient = RevAiStreamingClient(access_token, example_mc)
 
