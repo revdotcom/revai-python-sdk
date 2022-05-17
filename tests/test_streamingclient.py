@@ -55,7 +55,7 @@ class TestStreamingClient():
 
     def test_start_noparams_success(self, mock_streaming_client, mock_generator, capsys):
         expected_query_dict = build_expected_query_dict(mock_streaming_client, None, None, None, None, None, None, None,
-            None)
+            None, None)
 
         example_data = '{"type":"partial","transcript":"Test"}'
         example_connected = '{"type":"connected","id":"testid"}'
@@ -152,7 +152,7 @@ class TestStreamingClient():
 
 def build_expected_query_dict(mock_streaming_client,
     metadata, custom_vocabulary_id, filter_profanity, remove_disfluencies, delete_after_seconds, detailed_partials,
-    start_ts, transcriber):
+    start_ts, transcriber, language):
     expected_query_dict = {
         'access_token': mock_streaming_client.access_token,
         'content_type': mock_streaming_client.config.get_content_type_string(),
@@ -175,6 +175,8 @@ def build_expected_query_dict(mock_streaming_client,
         expected_query_dict["start_ts"] = str(start_ts)
     if transcriber:
         expected_query_dict["transcriber"] = transcriber
+    if language:
+        expected_query_dict["language"] = language
 
     return expected_query_dict
 
