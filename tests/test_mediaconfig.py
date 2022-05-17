@@ -10,15 +10,13 @@ class TestMediaConfig():
                                      'layout',
                                      'rate',
                                      'format',
-                                     'channels',
-                                     'language')
+                                     'channels')
 
         assert example_config.content_type == 'content_type'
         assert example_config.layout == 'layout'
         assert example_config.rate == 'rate'
         assert example_config.format == 'format'
         assert example_config.channels == 'channels'
-        assert example_config.language == 'language'
 
     def test_constructor_with_defaults(self):
         example_config = MediaConfig()
@@ -28,15 +26,13 @@ class TestMediaConfig():
         assert not example_config.rate
         assert not example_config.format
         assert not example_config.channels
-        assert not example_config.language
 
     def test_get_content_type_string_all(self):
         example_config = MediaConfig('content_type',
                                      'LAYOUT',
                                      'RATE',
                                      'FORMAT',
-                                     'CHANNELS',
-                                     'LANGUAGE')
+                                     'CHANNELS')
 
         content_type_string = example_config.get_content_type_string()
 
@@ -44,16 +40,14 @@ class TestMediaConfig():
                                        ';layout=LAYOUT'
                                        ';rate=RATE'
                                        ';format=FORMAT'
-                                       ';channels=CHANNELS'
-                                       ';language=LANGUAGE')
+                                       ';channels=CHANNELS')
 
     def test_get_content_type_string_missing(self):
         example_config = MediaConfig('content_type',
                                      '',
                                      '',
                                      '',
-                                     'CHANNELS',
-                                     '')
+                                     'CHANNELS')
 
         content_type_string = example_config.get_content_type_string()
 
