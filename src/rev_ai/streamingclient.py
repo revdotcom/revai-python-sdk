@@ -71,7 +71,8 @@ class RevAiStreamingClient():
               delete_after_seconds=None,
               detailed_partials=None,
               start_ts=None,
-              transcriber=None):
+              transcriber=None,
+              language=None):
         """Function to connect the websocket to the URL and start the response
             thread
         :param generator: generator object that yields binary audio data
@@ -83,6 +84,7 @@ class RevAiStreamingClient():
         :param detailed_partials: whether to receive timestamps and confidence scores
         :param start_ts: number of seconds to offset all hypotheses timings
         :param transcriber: type of transcriber to use to transcribe the media file
+        :param language: language to use for the streaming job
         """
         url = self.base_url + '?' + urlencode({
             'access_token': self.access_token,
@@ -113,6 +115,9 @@ class RevAiStreamingClient():
 
         if transcriber:
             url += '&' + urlencode({'transcriber': transcriber})
+
+        if language:
+            url += '&' + urlencode({'language': language})
 
         try:
             self.client.connect(url)
