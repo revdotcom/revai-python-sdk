@@ -7,6 +7,10 @@ ERRORS = {
         "title": "Authorization has been denied for this request",
         "status": 401
     },
+    'forbidden': {
+        "status": 403,
+        "error": "HIPAA user is not allowed to use MediaUrl"
+    },
     'job-not-found': {
         "type": "https://www.rev.ai/api/v1/errors/job-not-found",
         "title": "could not find job",
