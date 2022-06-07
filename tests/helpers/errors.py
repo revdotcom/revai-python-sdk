@@ -3,6 +3,11 @@ def get_error_test_cases(errors):
 
 
 ERRORS = {
+    'invalid-parameters': {
+        "type": "https://www.rev.ai/api/v1/errors/invalid-parameters",
+        "title": "Your request parameters did not validate",
+        "status": 400
+    },
     'unauthorized': {
         "title": "Authorization has been denied for this request",
         "status": 401
