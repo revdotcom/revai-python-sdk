@@ -14,7 +14,7 @@ ERRORS = {
     },
     'forbidden': {
         "status": 403,
-        "error": "HIPAA user is not allowed to use MediaUrl"
+        "error": "The client is forbidden to submit that request"
     },
     'job-not-found': {
         "type": "https://www.rev.ai/api/v1/errors/job-not-found",
