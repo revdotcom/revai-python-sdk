@@ -4,30 +4,22 @@ def get_error_test_cases(errors):
 
 ERRORS = {
     'invalid-parameters': {
-        "parameter": {
-            "example": [
-                "The example field is required"
-            ]
-        },
         "type": "https://www.rev.ai/api/v1/errors/invalid-parameters",
-        "title": "Your request parameters didn't validate",
+        "title": "Your request parameters did not validate",
         "status": 400
     },
     'unauthorized': {
         "title": "Authorization has been denied for this request",
         "status": 401
     },
+    'forbidden': {
+        "status": 403,
+        "error": "The client is forbidden to submit that request"
+    },
     'job-not-found': {
         "type": "https://www.rev.ai/api/v1/errors/job-not-found",
         "title": "could not find job",
         "status": 404
-    },
-    'out-of-credit': {
-        "title": "You do not have enough credits",
-        "type": "https://www.rev.ai/api/v1/errors/out-of-credit",
-        "detail": "You have only 60 seconds remaining",
-        "current_balance": 60,
-        "status": 403
     },
     'invalid-job-state': {
         "allowed_values": [
