@@ -4,7 +4,7 @@
 from .customvocabulary import CustomVocabulary
 from .streaming import MediaConfig
 from .asynchronous import Job, JobStatus, Account, Transcript, Monologue, Element, CaptionType, \
-    SpeakerName
+   TranscriptType, RevAIBaseUrl, SpeakerName
 from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
     SentimentAnalysisResult, SentimentValue, SentimentMessage, SentimentAnalysisJob
 from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence

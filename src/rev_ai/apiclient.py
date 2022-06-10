@@ -280,7 +280,7 @@ class RevAiAPIClient(BaseClient):
         response = self._make_http_request(
             "GET",
             urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-            headers={'Accept': 'text/plain'}
+            headers={'Accept': TranscriptType.TEXT.value}
         )
 
         return response.text
@@ -299,7 +299,7 @@ class RevAiAPIClient(BaseClient):
         response = self._make_http_request(
             "GET",
             urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
-            headers={'Accept': 'text/plain'},
+            headers={'Accept': TranscriptType.TEXT.value},
             stream=True
         )
 
