@@ -5,12 +5,12 @@ import requests
 from requests.exceptions import HTTPError
 from . import __version__
 from . import CustomVocabulary
-
+from .models import RevAIBaseUrl
 
 class BaseClient:
     """Base for client's making HTTP Requests to Rev AI Apis"""
 
-    def __init__(self, access_token):
+    def __init__(self, access_token, revai_base_url=RevAIBaseUrl.US.value):
         """Constructor
 
         :param access_token: access token which authorizes all requests and
@@ -25,6 +25,8 @@ class BaseClient:
             'Authorization': 'Bearer {}'.format(access_token),
             'User-Agent': 'RevAi-PythonSDK/{}'.format(__version__)
         }
+
+        self.revai_base_url = revai_base_url
 
     def _make_http_request(self, method, url, **kwargs):
         """Wrapper method for initiating HTTP requests and handling potential

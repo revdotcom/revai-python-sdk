@@ -15,12 +15,17 @@ limitations under the License.
 
 from rev_ai import apiclient
 from rev_ai.models.customer_url_data import CustomerUrlData
+from rev_ai.models import RevAIBaseUrl
 
 # String containing your access token
 access_token = "<your_access_token>"
 
+# String containing the Rev AI base URL, this value should correspond to the same RevAI
+# deployment as your access token
+revai_base_url = RevAIBaseUrl.US.return_value
+
 # Create your api client
-client = apiclient.RevAiAPIClient(access_token)
+client = apiclient.RevAiAPIClient(access_token, revai_base_url)
 
 # Create config objects containing the url and auth headers for each option
 # These options replace media_url and callback_url and should not be used alongside them

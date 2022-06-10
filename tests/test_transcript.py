@@ -3,7 +3,7 @@
 
 import pytest
 import json
-from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
+from src.rev_ai.models.asynchronous import Transcript, TranscriptType, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
 
 try:
@@ -21,7 +21,7 @@ class TestTranscriptEndpoints():
     def test_get_transcript_text(self, mock_session, make_mock_response):
         data = 'Test'
         client = RevAiAPIClient(TOKEN)
-        expected_headers = {'Accept': 'text/plain'}
+        expected_headers = {'Accept': TranscriptType.TEXT.value}
         expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, text=data)
         mock_session.request.return_value = response
@@ -41,7 +41,7 @@ class TestTranscriptEndpoints():
     def test_get_transcript_text_as_stream(self, mock_session, make_mock_response):
         data = 'Test'
         client = RevAiAPIClient(TOKEN)
-        expected_headers = {'Accept': 'text/plain'}
+        expected_headers = {'Accept': TranscriptType.TEXT.value}
         expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, text=data)
         mock_session.request.return_value = response
@@ -74,7 +74,7 @@ class TestTranscriptEndpoints():
         }
         expected = json.loads(json.dumps(data))
         client = RevAiAPIClient(TOKEN)
-        expected_headers = {'Accept': 'application/vnd.rev.transcript.v1.0+json'}
+        expected_headers = {'Accept': TranscriptType.JSON.value}
         expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, json_data=data)
         mock_session.request.return_value = response
@@ -105,7 +105,7 @@ class TestTranscriptEndpoints():
         }
         expected = json.loads(json.dumps(data))
         client = RevAiAPIClient(TOKEN)
-        expected_headers = {'Accept': 'application/vnd.rev.transcript.v1.0+json'}
+        expected_headers = {'Accept': TranscriptType.JSON.value}
         expected_headers.update(client.default_headers)
         response = make_mock_response(url=URL, json_data=data)
         mock_session.request.return_value = response

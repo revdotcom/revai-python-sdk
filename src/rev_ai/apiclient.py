@@ -2,7 +2,7 @@
 """Speech recognition tools for using Rev AI"""
 
 import json
-from .models import Account, CaptionType, Job, Transcript
+from .models import Account, CaptionType, Job, RevAIBaseUrl, Transcript, TranscriptType
 from .baseclient import BaseClient
 from . import utils
 
@@ -26,13 +26,13 @@ class RevAiAPIClient(BaseClient):
     # Default version of Rev AI
     version = 'v1'
 
-    # Default base url for Rev AI
-    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
+    # Default base url for Rev AI speech to text
+    base_url = '{0}/speechtotext/{1}/'.format(self.revai_base_url or RevAIBaseUrl.US.value, version)
 
     # Rev AI transcript format
-    rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
+    rev_json_content_type = TranscriptType.JSON.value
 
-    def __init__(self, access_token):
+    def __init__(self, access_token, revai_base_url):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
@@ -40,7 +40,7 @@ class RevAiAPIClient(BaseClient):
                              on Rev AI.
         """
 
-        BaseClient.__init__(self, access_token)
+        BaseClient.__init__(self, access_token, revai_base_url)
 
     def submit_job_url(
             self,
