@@ -8,6 +8,7 @@ from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai import __version__
 from src.rev_ai.baseclient import BaseClient
+from src.rev_ai.models import RevAIBaseUrl
 from tests.helpers.errors import get_error_test_cases
 
 TOKEN = "token"
@@ -18,10 +19,23 @@ class TestBaseClient:
         client = BaseClient(TOKEN)
 
         headers = client.default_headers
+        revai_base_url = client.revai_base_url
 
         assert headers.get(
             'User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
         assert headers.get('Authorization') == 'Bearer token'
+        assert revai_base_url == RevAIBaseUrl.US.value
+
+    def test_constructor_with_revai_base_url_success(self):
+        client = BaseClient(TOKEN, RevAIBaseUrl.EU.value)
+
+        headers = client.default_headers
+        revai_base_url = client.revai_base_url
+
+        assert headers.get(
+            'User-Agent') == 'RevAi-PythonSDK/{}'.format(__version__)
+        assert headers.get('Authorization') == 'Bearer token'
+        assert revai_base_url == RevAIBaseUrl.EU.value
 
     @pytest.mark.parametrize('token', [None, ''])
     def test_constructor_with_no_token(self, token):
