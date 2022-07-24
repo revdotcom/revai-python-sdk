@@ -25,7 +25,7 @@ def on_connected(job_id):
     print('Connected, Job ID : {}'.format(job_id))
 
 
-class RevAiStreamingClient():
+class RevAiStreamingClient:
     def __init__(self,
                  access_token,
                  config,
@@ -40,7 +40,7 @@ class RevAiStreamingClient():
         :param config: a MediaConfig object containing audio information.
             See MediaConfig.py for more information
         :param version (optional): version of the streaming api to be used
-        :param on_error (optional): function to be called when recieving an
+        :param on_error (optional): function to be called when receiving an
             error from the server
         :param on_close (optional): function to be called when the websocket
             closes
@@ -72,7 +72,8 @@ class RevAiStreamingClient():
               detailed_partials=None,
               start_ts=None,
               transcriber=None,
-              language=None):
+              language=None,
+              skip_postprocessing=None):
         """Function to connect the websocket to the URL and start the response
             thread
         :param generator: generator object that yields binary audio data
@@ -85,6 +86,7 @@ class RevAiStreamingClient():
         :param start_ts: number of seconds to offset all hypotheses timings
         :param transcriber: type of transcriber to use to transcribe the media file
         :param language: language to use for the streaming job
+        :param skip_postprocessing: skip all text postprocessing on final hypotheses
         """
         url = self.base_url + '?' + urlencode({
             'access_token': self.access_token,
@@ -118,6 +120,9 @@ class RevAiStreamingClient():
 
         if language:
             url += '&' + urlencode({'language': language})
+
+        if skip_postprocessing:
+            url += '&' + urlencode({'skip_postprocessing': 'true'})
 
         try:
             self.client.connect(url)
@@ -153,7 +158,7 @@ class RevAiStreamingClient():
 
     def _send_data(self, generator):
         """Function used in a thread to send requests to the server.
-        :param generator: enerator object that yields binary audio data
+        :param generator: enumerator object that yields binary audio data
         """
         if not generator:
             raise ValueError('generator must be provided')
@@ -164,7 +169,7 @@ class RevAiStreamingClient():
         self.client.send("EOS")
 
     def _get_response_generator(self):
-        """A generator of reponses from the server. Yields the data decoded.
+        """A generator of responses from the server. Yields the data decoded.
         """
         while True:
             with self.client.readlock:
