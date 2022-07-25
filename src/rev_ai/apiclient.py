@@ -63,7 +63,8 @@ class RevAiAPIClient(BaseClient):
             segments_to_transcribe=None,
             speaker_names=None,
             source_config=None,
-            notification_config=None):
+            notification_config=None,
+            skip_postprocessing=False):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -109,6 +110,7 @@ class RevAiAPIClient(BaseClient):
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
+        :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
         :returns: raw response data
         :raises: HTTPError
         """
@@ -120,7 +122,8 @@ class RevAiAPIClient(BaseClient):
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names,
-                                                   source_config, notification_config)
+                                                   source_config, notification_config,
+                                                   skip_postprocessing)
 
         response = self._make_http_request(
             "POST",
@@ -150,7 +153,8 @@ class RevAiAPIClient(BaseClient):
             test_mode=None,
             segments_to_transcribe=None,
             speaker_names=None,
-            notification_config=None):
+            notification_config=None,
+            skip_postprocessing=False):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -193,6 +197,7 @@ class RevAiAPIClient(BaseClient):
         :param notification_config: CustomerUrlData object containing the callback url to
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
+        :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
         :returns: raw response data
         :raises: HTTPError, ValueError
         """
@@ -207,7 +212,7 @@ class RevAiAPIClient(BaseClient):
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names, None,
-                                                   notification_config)
+                                                   notification_config, skip_postprocessing)
 
         with open(filename, 'rb') as f:
             files = {
@@ -457,7 +462,8 @@ class RevAiAPIClient(BaseClient):
             segments_to_transcribe=None,
             speaker_names=None,
             source_config=None,
-            notification_config=None):
+            notification_config=None,
+            skip_postprocessing=False):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -500,6 +506,8 @@ class RevAiAPIClient(BaseClient):
             payload['source_config'] = source_config.to_dict()
         if notification_config:
             payload['notification_config'] = notification_config.to_dict()
+        if skip_postprocessing:
+            payload['skip_postprocessing'] = skip_postprocessing
         return payload
 
     def _create_captions_query(self, speaker_channel):

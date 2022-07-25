@@ -119,7 +119,8 @@ class TestJobEndpoints():
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
-            'transcriber': TRANSCRIBER
+            'transcriber': TRANSCRIBER,
+            'skip_postprocessing': True
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -129,7 +130,7 @@ class TestJobEndpoints():
                                     NOTIFICATION_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
-                                    TRANSCRIBER)
+                                    TRANSCRIBER, skip_postprocessing=True)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -159,7 +160,8 @@ class TestJobEndpoints():
                 'delete_after_seconds': 0,
                 'language': LANGUAGE,
                 'custom_vocabulary_id': CUSTOM_VOCAB_ID,
-                'transcriber': TRANSCRIBER
+                'transcriber': TRANSCRIBER,
+                'skip_postprocessing': True
             },
             headers=client.default_headers)
 
@@ -176,7 +178,8 @@ class TestJobEndpoints():
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
-            'transcriber': TRANSCRIBER
+            'transcriber': TRANSCRIBER,
+            'skip_postprocessing': True
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -188,7 +191,8 @@ class TestJobEndpoints():
                                     delete_after_seconds=0, language=LANGUAGE,
                                     custom_vocabulary_id=CUSTOM_VOCAB_ID, transcriber=TRANSCRIBER,
                                     source_config=SOURCE_CONFIG,
-                                    notification_config=NOTIFICATION_CONFIG)
+                                    notification_config=NOTIFICATION_CONFIG,
+                                    skip_postprocessing=True)
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -218,7 +222,8 @@ class TestJobEndpoints():
                 'delete_after_seconds': 0,
                 'language': LANGUAGE,
                 'custom_vocabulary_id': CUSTOM_VOCAB_ID,
-                'transcriber': TRANSCRIBER
+                'transcriber': TRANSCRIBER,
+                'skip_postprocessing': True
             },
             headers=client.default_headers)
 
@@ -277,7 +282,8 @@ class TestJobEndpoints():
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
-            'transcriber': TRANSCRIBER
+            'transcriber': TRANSCRIBER,
+            'skip_postprocessing': True
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -288,7 +294,7 @@ class TestJobEndpoints():
                                                NOTIFICATION_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
-                                               TRANSCRIBER)
+                                               TRANSCRIBER, skip_postprocessing=True)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -322,7 +328,8 @@ class TestJobEndpoints():
                             'delete_after_seconds': 0,
                             'language': LANGUAGE,
                             'custom_vocabulary_id': CUSTOM_VOCAB_ID,
-                            'transcriber': TRANSCRIBER
+                            'transcriber': TRANSCRIBER,
+                            'skip_postprocessing': True
                         }, sort_keys=True)
                     )
                 },
@@ -343,7 +350,8 @@ class TestJobEndpoints():
             'remove_disfluencies': True,
             'delete_after_seconds': 0,
             'language': LANGUAGE,
-            'transcriber': TRANSCRIBER
+            'transcriber': TRANSCRIBER,
+            'skip_postprocessing': True
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -358,7 +366,8 @@ class TestJobEndpoints():
                                                delete_after_seconds=0, language=LANGUAGE,
                                                custom_vocabulary_id=CUSTOM_VOCAB_ID,
                                                transcriber=TRANSCRIBER,
-                                               notification_config=NOTIFICATION_CONFIG)
+                                               notification_config=NOTIFICATION_CONFIG,
+                                               skip_postprocessing=True)
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -392,7 +401,8 @@ class TestJobEndpoints():
                             'delete_after_seconds': 0,
                             'language': LANGUAGE,
                             'custom_vocabulary_id': CUSTOM_VOCAB_ID,
-                            'transcriber': TRANSCRIBER
+                            'transcriber': TRANSCRIBER,
+                            'skip_postprocessing': True
                         }, sort_keys=True)
                     )
                 },
