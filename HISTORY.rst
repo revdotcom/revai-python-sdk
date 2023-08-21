@@ -105,3 +105,8 @@ History
 2.17.0
 ------------------
 * Add language to the streaming client
+
+2.18.0
+------------------
+* Add atmospherics and speaker_count support
+* Deprecated support for Python versions up to 3.8
