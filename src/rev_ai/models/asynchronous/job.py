@@ -56,8 +56,8 @@ class Job:
         :param verbatim: whether to transcribe verbatim if provided for human transcription
         :param rush: whether to transcribe with rush if provided for human transcription
         :param segments_to_transcribe: segments to transcribe if provided for human transcription
-        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
-            in the transcript.
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will noT
+            appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
         """
         self.id = id_

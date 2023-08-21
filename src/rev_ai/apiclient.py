@@ -113,8 +113,8 @@ class RevAiAPIClient(BaseClient):
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
         :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
-        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
-            in the transcript.
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
+            appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
         :returns: raw response data
         :raises: HTTPError
@@ -205,8 +205,8 @@ class RevAiAPIClient(BaseClient):
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
         :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
-        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
-            in the transcript.
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
+            appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
         :returns: raw response data
         :raises: HTTPError, ValueError
