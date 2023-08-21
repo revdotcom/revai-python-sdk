@@ -64,7 +64,9 @@ class RevAiAPIClient(BaseClient):
             speaker_names=None,
             source_config=None,
             notification_config=None,
-            skip_postprocessing=False):
+            skip_postprocessing=False,
+            remove_atmospherics=False,
+            speakers_count=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -111,6 +113,9 @@ class RevAiAPIClient(BaseClient):
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
         :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
+            in the transcript.
+        :param speakers_count: Use to specify the total number of unique speakers in the audio.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -154,7 +159,9 @@ class RevAiAPIClient(BaseClient):
             segments_to_transcribe=None,
             speaker_names=None,
             notification_config=None,
-            skip_postprocessing=False):
+            skip_postprocessing=False,
+            remove_atmospherics=False,
+            speakers_count=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -198,6 +205,9 @@ class RevAiAPIClient(BaseClient):
             invoke on job completion as a webhook and optional authentication headers to use when
             calling the callback url
         :param skip_postprocessing: skip all text postprocessing (punctuation, capitalization, ITN)
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
+            in the transcript.
+        :param speakers_count: Use to specify the total number of unique speakers in the audio.
         :returns: raw response data
         :raises: HTTPError, ValueError
         """
@@ -463,7 +473,9 @@ class RevAiAPIClient(BaseClient):
             speaker_names=None,
             source_config=None,
             notification_config=None,
-            skip_postprocessing=False):
+            skip_postprocessing=False,
+            remove_atmospherics=None,
+            speakers_count=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -508,6 +520,10 @@ class RevAiAPIClient(BaseClient):
             payload['notification_config'] = notification_config.to_dict()
         if skip_postprocessing:
             payload['skip_postprocessing'] = skip_postprocessing
+        if remove_atmospherics:
+            payload['remove_atmospherics'] = remove_atmospherics
+        if speakers_count:
+            payload['speakers_count'] = speakers_count
         return payload
 
     def _create_captions_query(self, speaker_channel):

@@ -26,7 +26,9 @@ class Job:
             transcriber=None,
             verbatim=None,
             rush=None,
-            segments_to_transcribe=None):
+            segments_to_transcribe=None,
+            remove_atmospherics=None,
+            speakers_count=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
@@ -54,6 +56,9 @@ class Job:
         :param verbatim: whether to transcribe verbatim if provided for human transcription
         :param rush: whether to transcribe with rush if provided for human transcription
         :param segments_to_transcribe: segments to transcribe if provided for human transcription
+        :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not appear
+            in the transcript.
+        :param speakers_count: Use to specify the total number of unique speakers in the audio.
         """
         self.id = id_
         self.created_on = created_on
@@ -78,6 +83,8 @@ class Job:
         self.verbatim = verbatim
         self.rush = rush
         self.segments_to_transcribe = segments_to_transcribe
+        self.remove_atmospherics = remove_atmospherics
+        self.speakers_count = speakers_count
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -111,5 +118,7 @@ class Job:
             transcriber=json.get('transcriber'),
             verbatim=json.get('verbatim'),
             rush=json.get('rush'),
-            segments_to_transcribe=json.get('segments_to_transcribe')
+            segments_to_transcribe=json.get('segments_to_transcribe'),
+            remove_atmospherics=json.get('remove_atmospherics'),
+            speakers_count=json.get('speakers_count')
         )
