@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN useradd -u 1001 -ms /bin/bash dockeruser
 
