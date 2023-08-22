@@ -4,6 +4,7 @@ pipeline {
     }
     environment {
         GIT_CREDENTIALS = credentials("${GITHUB_CREDENTIALS}")
+        DOCKER_BUILDKIT = 0
     }
     stages {
         stage('Build') {

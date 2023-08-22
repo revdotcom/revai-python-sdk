@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 RUN useradd -u 1001 -ms /bin/bash dockeruser
 
 RUN set -x \
-    && pythonVersions='python2.7 python3.4 python3.5 python3.6 python3.7' \
+    && pythonVersions='python3.8 python3.9 python3.10 python3.11' \
     && apt-get update \
     && apt-get install -y --no-install-recommends software-properties-common \
     && apt-add-repository ppa:/deadsnakes/ppa \
