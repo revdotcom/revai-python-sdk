@@ -66,7 +66,8 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            diarization_type=None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -116,6 +117,7 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -128,7 +130,8 @@ class RevAiAPIClient(BaseClient):
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names,
                                                    source_config, notification_config,
-                                                   skip_postprocessing)
+                                                   skip_postprocessing, remove_atmospherics,
+                                                   speakers_count, diarization_type)
 
         response = self._make_http_request(
             "POST",
@@ -161,7 +164,8 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            diarization_type=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -208,6 +212,7 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         :returns: raw response data
         :raises: HTTPError, ValueError
         """
@@ -222,7 +227,9 @@ class RevAiAPIClient(BaseClient):
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names, None,
-                                                   notification_config, skip_postprocessing)
+                                                   notification_config, skip_postprocessing,
+                                                   remove_atmospherics, speakers_count,
+                                                   diarization_type)
 
         with open(filename, 'rb') as f:
             files = {
@@ -475,7 +482,8 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=None,
-            speakers_count=None):
+            speakers_count=None,
+            diarization_type=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -524,6 +532,8 @@ class RevAiAPIClient(BaseClient):
             payload['remove_atmospherics'] = remove_atmospherics
         if speakers_count:
             payload['speakers_count'] = speakers_count
+        if diarization_type:
+            payload['diarization_type'] = diarization_type
         return payload
 
     def _create_captions_query(self, speaker_channel):
