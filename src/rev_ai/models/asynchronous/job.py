@@ -28,7 +28,8 @@ class Job:
             rush=None,
             segments_to_transcribe=None,
             remove_atmospherics=None,
-            speakers_count=None):
+            speakers_count=None,
+            diarization_type=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
@@ -59,6 +60,7 @@ class Job:
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will noT
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         """
         self.id = id_
         self.created_on = created_on
@@ -85,6 +87,7 @@ class Job:
         self.segments_to_transcribe = segments_to_transcribe
         self.remove_atmospherics = remove_atmospherics
         self.speakers_count = speakers_count
+        self.diarization_type = diarization_type
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -120,5 +123,6 @@ class Job:
             rush=json.get('rush'),
             segments_to_transcribe=json.get('segments_to_transcribe'),
             remove_atmospherics=json.get('remove_atmospherics'),
-            speakers_count=json.get('speakers_count')
+            speakers_count=json.get('speakers_count'),
+            diarization_type=json.get('diarization_type')
         )
