@@ -30,6 +30,7 @@ class Job:
             segments_to_transcribe=None,
             remove_atmospherics=None,
             speakers_count=None,
+            diarization_type=None,
             summarization: Summarization = None,
             translation: Translation = None):
         """
@@ -62,6 +63,7 @@ class Job:
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will noT
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         """
         self.id = id_
         self.created_on = created_on
@@ -88,6 +90,7 @@ class Job:
         self.segments_to_transcribe = segments_to_transcribe
         self.remove_atmospherics = remove_atmospherics
         self.speakers_count = speakers_count
+        self.diarization_type = diarization_type
         self.summarization = summarization
         self.translation = translation
 
@@ -126,6 +129,7 @@ class Job:
             segments_to_transcribe=json.get('segments_to_transcribe'),
             remove_atmospherics=json.get('remove_atmospherics'),
             speakers_count=json.get('speakers_count'),
+            diarization_type=json.get('diarization_type'),
             summarization=Summarization.from_json(json.get('summarization')),
             translation=Translation.from_json(json.get('translation'))
         )

@@ -71,6 +71,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=False,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         """Submit media given a URL for transcription.
@@ -124,6 +125,7 @@ class RevAiAPIClient(BaseClient):
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
         :param summarization_config: Use to request transcript summary.
         :param translation_config: Use to request transcript translation.
+        :param diarization_type: Use to specify diarization type.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -136,6 +138,10 @@ class RevAiAPIClient(BaseClient):
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names,
                                                    source_config, notification_config,
+                                                   skip_postprocessing,
+						   remove_atmospherics,
+                                                   speakers_count,
+                                                   diarization_type,
                                                    skip_postprocessing,
                                                    summarization_config=summarization_config,
                                                    translation_config=translation_config)
@@ -172,6 +178,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=False,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         """Submit a local file for transcription.
@@ -220,6 +227,7 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         :param summarization_config: Use to request transcript summary.
         :param translation_config: Use to request transcript translation.
         :returns: raw response data
@@ -237,6 +245,8 @@ class RevAiAPIClient(BaseClient):
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names, None,
                                                    notification_config, skip_postprocessing,
+                                                   remove_atmospherics, speakers_count,
+                                                   diarization_type,
                                                    summarization_config=summarization_config,
                                                    translation_config=translation_config)
 
@@ -714,6 +724,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=None,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         payload = {}
@@ -764,6 +775,8 @@ class RevAiAPIClient(BaseClient):
             payload['remove_atmospherics'] = remove_atmospherics
         if speakers_count:
             payload['speakers_count'] = speakers_count
+        if diarization_type:
+            payload['diarization_type'] = diarization_type
         if summarization_config:
             payload['summarization_config'] = summarization_config.to_dict()
         if translation_config:
