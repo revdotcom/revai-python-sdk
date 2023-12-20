@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from src.rev_ai import JobStatus
@@ -18,11 +20,13 @@ except ImportError:
 TOKEN = "token"
 JOB_ID = '1'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
+JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
 class TestSuperApi():
-    def test_super_api_local_file(self, mock_session, make_mock_response):
+
+    def test_super_api_local_file(self, mocker, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         completed_on = '2018-05-05T23:23:22.30Z'
@@ -57,7 +61,8 @@ class TestSuperApi():
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)
 
-        job = client.submit_job_local_file('./resources/test_mp3.mp3',
+        with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
+            job = client.submit_job_local_file('test_mp3.mp3',
                                            metadata="python sdk SuperApi test",
                                            delete_after_seconds=50000,
                                            language="en",
@@ -74,20 +79,77 @@ class TestSuperApi():
                                                ]
                                            )
                                            )
+        mock_session.request.assert_called_once_with(
+            "POST",
+            JOBS_URL,
+            files={
+                'media': ('test_mp3.mp3', file),
+                'options': (
+                    None,
+                    json.dumps({
+                        'metadata': "python sdk SuperApi test",
+                        'delete_after_seconds': 50000,
+                        'language':'en',
+                        'summarization_config':{
+                            'prompt': "Try to summarize this transcript as good as you possibly can",
+                            'model':'premium',
+                            'type':'bullets'
+                        },
+                        'translation_config':{
+                            'target_languages':[
+                            {
+                                'language':'es',
+                                'model':'premium'
+                            },
+                            {
+                                'language':'ru'
+                            }
+
+                        ]}
+                    }, sort_keys=True)
+                )
+            },
+            headers=client.default_headers
+        )
         self.assert_job(client, job, mock_session, make_mock_response)
 
     def test_super_api_source_url(self, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
+        completed_on = '2018-05-05T23:23:22.30Z'
         data = {
             'id': JOB_ID,
             'status': status,
-            'created_on': created_on
+            'created_on': created_on,
+            'summarization': {
+                'prompt': 'Try to summarize this transcript as good as you possibly can',
+                'model': 'premium',
+                'type': 'bullets',
+                'status': 'completed',
+                'completed_on': completed_on
+            },
+            'translation': {
+                'target_languages': [
+                    {
+                        'language': 'es',
+                        'model': 'premium',
+                        'status': 'completed'
+                    },
+                    {
+                        'language': 'ru',
+                        'model': 'premium',
+                        'status': 'completed'
+                    }
+                ],
+                'completed_on': completed_on
+            }
         }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
 
         client = RevAiAPIClient(TOKEN)
 
-        job = client.submit_job_url('https://www.flatworldsolutions.com/transcription/samples/DIALOGUE.mp3',
+        job = client.submit_job_url('https://example.com/test.mp3',
                                     metadata="python sdk SuperApi test",
                                     delete_after_seconds=50000,
                                     language="en",
@@ -104,8 +166,34 @@ class TestSuperApi():
                                         ]
                                     )
                                     )
-        # self.assert_job(client, job)
+        mock_session.request.assert_called_once_with(
+            "POST",
+            JOBS_URL,
+            json={
+                        'metadata': "python sdk SuperApi test",
+                        'media_url':'https://example.com/test.mp3',
+                        'delete_after_seconds': 50000,
+                        'language': 'en',
+                        'summarization_config': {
+                            'prompt': "Try to summarize this transcript as good as you possibly can",
+                            'model': 'premium',
+                            'type': 'bullets'
+                        },
+                        'translation_config': {
+                            'target_languages': [
+                                {
+                                    'language': 'es',
+                                    'model': 'premium'
+                                },
+                                {
+                                    'language': 'ru'
+                                }
 
+                            ]}
+            },
+            headers=client.default_headers
+        )
+        self.assert_job(client, job, mock_session, make_mock_response)
     def assert_job(self, client, job, mock_session, make_mock_response):
         assert job.summarization is not None
         assert job.summarization.model == NlpModel.PREMIUM
