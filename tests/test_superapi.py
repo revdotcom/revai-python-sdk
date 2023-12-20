@@ -63,22 +63,22 @@ class TestSuperApi():
 
         with mocker.patch('src.rev_ai.apiclient.open', create=True)() as file:
             job = client.submit_job_local_file('test_mp3.mp3',
-                                           metadata="python sdk SuperApi test",
-                                           delete_after_seconds=50000,
-                                           language="en",
-                                           summarization_config=SummarizationOptions(
-                                               "Try to summarize this transcript as good as you possibly can",
-                                               NlpModel.PREMIUM,
-                                               SummarizationFormattingOptions.BULLETS
+                                               metadata="python sdk SuperApi test",
+                                               delete_after_seconds=50000,
+                                               language="en",
+                                               summarization_config=SummarizationOptions(
+                                                   "Try to summarize this transcript as good as you possibly can",
+                                                   NlpModel.PREMIUM,
+                                                   SummarizationFormattingOptions.BULLETS
 
-                                           ),
-                                           translation_config=TranslationOptions(
-                                               target_languages=[
-                                                   TranslationLanguageOptions("es", NlpModel.PREMIUM),
-                                                   TranslationLanguageOptions("ru")
-                                               ]
-                                           )
-                                           )
+                                               ),
+                                               translation_config=TranslationOptions(
+                                                   target_languages=[
+                                                       TranslationLanguageOptions("es", NlpModel.PREMIUM),
+                                                       TranslationLanguageOptions("ru")
+                                                   ]
+                                               )
+                                               )
         mock_session.request.assert_called_once_with(
             "POST",
             JOBS_URL,
@@ -89,23 +89,23 @@ class TestSuperApi():
                     json.dumps({
                         'metadata': "python sdk SuperApi test",
                         'delete_after_seconds': 50000,
-                        'language':'en',
-                        'summarization_config':{
+                        'language': 'en',
+                        'summarization_config': {
                             'prompt': "Try to summarize this transcript as good as you possibly can",
-                            'model':'premium',
-                            'type':'bullets'
+                            'model': 'premium',
+                            'type': 'bullets'
                         },
-                        'translation_config':{
-                            'target_languages':[
-                            {
-                                'language':'es',
-                                'model':'premium'
-                            },
-                            {
-                                'language':'ru'
-                            }
+                        'translation_config': {
+                            'target_languages': [
+                                {
+                                    'language': 'es',
+                                    'model': 'premium'
+                                },
+                                {
+                                    'language': 'ru'
+                                }
 
-                        ]}
+                            ]}
                     }, sort_keys=True)
                 )
             },
@@ -170,30 +170,31 @@ class TestSuperApi():
             "POST",
             JOBS_URL,
             json={
-                        'metadata': "python sdk SuperApi test",
-                        'media_url':'https://example.com/test.mp3',
-                        'delete_after_seconds': 50000,
-                        'language': 'en',
-                        'summarization_config': {
-                            'prompt': "Try to summarize this transcript as good as you possibly can",
-                            'model': 'premium',
-                            'type': 'bullets'
+                'metadata': "python sdk SuperApi test",
+                'media_url': 'https://example.com/test.mp3',
+                'delete_after_seconds': 50000,
+                'language': 'en',
+                'summarization_config': {
+                    'prompt': "Try to summarize this transcript as good as you possibly can",
+                    'model': 'premium',
+                    'type': 'bullets'
+                },
+                'translation_config': {
+                    'target_languages': [
+                        {
+                            'language': 'es',
+                            'model': 'premium'
                         },
-                        'translation_config': {
-                            'target_languages': [
-                                {
-                                    'language': 'es',
-                                    'model': 'premium'
-                                },
-                                {
-                                    'language': 'ru'
-                                }
+                        {
+                            'language': 'ru'
+                        }
 
-                            ]}
+                    ]}
             },
             headers=client.default_headers
         )
         self.assert_job(client, job, mock_session, make_mock_response)
+
     def assert_job(self, client, job, mock_session, make_mock_response):
         assert job.summarization is not None
         assert job.summarization.model == NlpModel.PREMIUM
