@@ -45,6 +45,9 @@ class Summarization(SummarizationOptions):
 
     @classmethod
     def from_json(cls, json):
+        if json is None:
+            return None
+
         return cls(
             json.get('prompt'),
             json.get('model'),

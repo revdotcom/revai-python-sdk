@@ -28,6 +28,8 @@ class Translation(TranslationOptions):
 
     @classmethod
     def from_json(cls, json):
+        if json is None:
+            return None
         return cls(
             [TranslationLanguage.from_json(tl) for tl in json.get('target_languages')],
             json.get('completed_on')
