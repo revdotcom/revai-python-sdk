@@ -38,6 +38,8 @@ class TranslationLanguage(TranslationLanguageOptions):
 
     @classmethod
     def from_json(cls, json):
+        if json is None:
+            return None
         return cls(
             json.get('language'),
             json.get('model'),
