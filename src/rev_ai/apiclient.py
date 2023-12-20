@@ -485,7 +485,7 @@ class RevAiAPIClient(BaseClient):
         return response.text
 
     def get_transcript_summary_json(self, id_):
-        """Get the transcript of a specific job as json.
+        """Get the transcript summary of a specific job as json.
 
         :param id_: id of job to be requested
         :returns: transcript data as json
@@ -503,7 +503,7 @@ class RevAiAPIClient(BaseClient):
         return Summary.from_json(response.json())
 
     def get_transcript_summary_json_as_stream(self, id_):
-        """Get the transcript of a specific job as streamed json.
+        """Get the transcript summary of a specific job as streamed json.
 
         :param id_: id of job to be requested
         :returns: requests.models.Response HTTP response which can be used to stream
@@ -526,6 +526,7 @@ class RevAiAPIClient(BaseClient):
         """Get the translated transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
+        :param language: requested language
         :returns: transcript data as text
         :raises: HTTPError
         """
@@ -540,10 +541,11 @@ class RevAiAPIClient(BaseClient):
 
         return response.text
 
-    def get_translated_transcript_text_as_stream(self, id_):
+    def get_translated_transcript_text_as_stream(self, id_, language):
         """Get the translated transcript of a specific job as a plain text stream.
 
         :param id_: id of job to be requested
+        :param language: requested language
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -553,7 +555,7 @@ class RevAiAPIClient(BaseClient):
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
             headers={'Accept': 'text/plain'},
             stream=True
         )
@@ -564,6 +566,7 @@ class RevAiAPIClient(BaseClient):
         """Get the translated transcript of a specific job as json.
 
         :param id_: id of job to be requested
+        :param language: requested language
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -582,6 +585,7 @@ class RevAiAPIClient(BaseClient):
         """Get the translated transcript of a specific job as streamed json.
 
         :param id_: id of job to be requested
+        :param language: requested language
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -602,6 +606,7 @@ class RevAiAPIClient(BaseClient):
         """Get the translated transcript of a specific job as a python object`.
 
         :param id_: id of job to be requested
+        :param language: requested language
         :returns: transcript data as a python object
         :raises: HTTPError
         """
