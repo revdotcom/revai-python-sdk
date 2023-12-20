@@ -1,5 +1,5 @@
-from rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
-from rev_ai.models.nlp_model import NlpModel
+from .summarization_job_status import SummarizationJobStatus
+from ..nlp_model import NlpModel
 
 
 class TranslationLanguageOptions:

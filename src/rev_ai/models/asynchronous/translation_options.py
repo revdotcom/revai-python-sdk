@@ -1,4 +1,4 @@
-from rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions, TranslationLanguage
+from .translation_language_options import TranslationLanguageOptions, TranslationLanguage
 
 
 class TranslationOptions:

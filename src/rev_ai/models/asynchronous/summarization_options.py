@@ -1,6 +1,6 @@
-from rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
-from rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
-from rev_ai.models.nlp_model import NlpModel
+from .summarization_formatting_options import SummarizationFormattingOptions
+from .summarization_job_status import SummarizationJobStatus
+from ..nlp_model import NlpModel
 
 
 class SummarizationOptions:
