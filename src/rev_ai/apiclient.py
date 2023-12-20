@@ -70,7 +70,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -132,7 +134,9 @@ class RevAiAPIClient(BaseClient):
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names,
                                                    source_config, notification_config,
-                                                   skip_postprocessing)
+                                                   skip_postprocessing,
+                                                   summarization_config=summarization_config,
+                                                   translation_config=translation_config)
 
         response = self._make_http_request(
             "POST",
