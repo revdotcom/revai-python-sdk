@@ -1,3 +1,4 @@
+from typing import List, Dict
 from .translation_language_options import TranslationLanguageOptions, TranslationLanguage
 
 
