@@ -30,8 +30,8 @@ class Job:
             segments_to_transcribe=None,
             remove_atmospherics=None,
             speakers_count=None,
-            summarization:Summarization = None,
-            translation:Translation = None):
+            summarization: Summarization = None,
+            translation: Translation = None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
