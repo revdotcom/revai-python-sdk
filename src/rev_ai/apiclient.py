@@ -122,6 +122,8 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param summarization_config: Use to request transcript summary.
+        :param summarization_config: Use to request transcript translation.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -218,6 +220,8 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param summarization_config: Use to request transcript summary.
+        :param summarization_config: Use to request transcript translation.
         :returns: raw response data
         :raises: HTTPError, ValueError
         """
