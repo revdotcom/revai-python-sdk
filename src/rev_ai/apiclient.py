@@ -2,9 +2,10 @@
 """Speech recognition tools for using Rev AI"""
 
 import json
-from .models import Account, CaptionType, Job, Transcript
-from .baseclient import BaseClient
+
 from . import utils
+from .baseclient import BaseClient
+from .models import Account, CaptionType, Job, Transcript
 from .models.asynchronous.summarization_options import SummarizationOptions
 from .models.asynchronous.summary import Summary
 from .models.asynchronous.translation_options import TranslationOptions
@@ -165,8 +166,8 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=False,
             speakers_count=None,
-            summarization_config: SummarizationOptions=None,
-            translation_config: TranslationOptions=None):
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -525,7 +526,7 @@ class RevAiAPIClient(BaseClient):
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_,language)),
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
             headers={'Accept': 'text/plain'}
         )
 
@@ -632,8 +633,8 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=None,
             speakers_count=None,
-            summarization_config: SummarizationOptions=None,
-            translation_config: TranslationOptions=None):
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -670,7 +671,7 @@ class RevAiAPIClient(BaseClient):
         if segments_to_transcribe:
             payload['segments_to_transcribe'] = segments_to_transcribe
         if speaker_names:
-            payload['speaker_names'] =\
+            payload['speaker_names'] = \
                 utils._process_speaker_names(speaker_names)
         if source_config:
             payload['source_config'] = source_config.to_dict()
