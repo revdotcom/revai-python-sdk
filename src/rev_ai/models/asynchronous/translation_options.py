@@ -1,6 +1,8 @@
 from typing import List, Dict
 from .translation_language_options import TranslationLanguageOptions, TranslationLanguage
 
+"""Translation request options."""
+
 
 class TranslationOptions:
     def __init__(
@@ -16,6 +18,9 @@ class TranslationOptions:
         dict_result["target_languages"] = [tl.to_dict() for tl in self.target_languages]
 
         return dict_result
+
+
+"""Translation options."""
 
 
 class Translation(TranslationOptions):

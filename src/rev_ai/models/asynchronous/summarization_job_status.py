@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Enum for Job statuses"""
+"""Enum for Summarization Job statuses"""
 
 from enum import Enum
 

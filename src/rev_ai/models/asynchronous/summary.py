@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+"""Transcript summary model."""
+
 
 class Summary:
     def __init__(

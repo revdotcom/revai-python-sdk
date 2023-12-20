@@ -2,6 +2,8 @@ from .summarization_formatting_options import SummarizationFormattingOptions
 from .summarization_job_status import SummarizationJobStatus
 from ..nlp_model import NlpModel
 
+"""Summarization request options."""
+
 
 class SummarizationOptions:
     def __init__(
@@ -26,6 +28,9 @@ class SummarizationOptions:
             dict_result['type'] = self.type
 
         return dict_result
+
+
+"""Summarization options."""
 
 
 class Summarization(SummarizationOptions):

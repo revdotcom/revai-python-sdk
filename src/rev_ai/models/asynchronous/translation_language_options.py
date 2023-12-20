@@ -1,6 +1,8 @@
 from .summarization_job_status import SummarizationJobStatus
 from ..nlp_model import NlpModel
 
+"""Translation language request options."""
+
 
 class TranslationLanguageOptions:
     def __init__(
@@ -21,6 +23,9 @@ class TranslationLanguageOptions:
             dict_result['model'] = self.model
 
         return dict_result
+
+
+"""Translation language options."""
 
 
 class TranslationLanguage(TranslationLanguageOptions):
