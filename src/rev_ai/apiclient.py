@@ -512,6 +512,101 @@ class RevAiAPIClient(BaseClient):
         )
 
         return response
+
+    def get_translated_transcript_text(self, id_, language):
+        """Get the translated transcript of a specific job as plain text.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_,language)),
+            headers={'Accept': 'text/plain'}
+        )
+
+        return response.text
+
+    def get_translated_transcript_text_as_stream(self, id_):
+        """Get the translated transcript of a specific job as a plain text stream.
+
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            headers={'Accept': 'text/plain'},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_transcript_json(self, id_, language):
+        """Get the translated transcript of a specific job as json.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type}
+        )
+
+        return response.json()
+
+    def get_translated_transcript_json_as_stream(self, id_, language):
+        """Get the translated transcript of a specific job as streamed json.
+
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_transcript_object(self, id_, language):
+        """Get the translated transcript of a specific job as a python object`.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as a python object
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type}
+        )
+
+        return Transcript.from_json(response.json())
+
     def _create_job_options_payload(
             self,
             media_url=None,
