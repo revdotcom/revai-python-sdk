@@ -1,11 +1,7 @@
-import time
-import unittest
-import re
-from typing import Dict
-
 import pytest
 
 from src.rev_ai import JobStatus
+from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
 from src.rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
 from src.rev_ai.models.asynchronous.summarization_options import SummarizationOptions
@@ -13,7 +9,6 @@ from src.rev_ai.models.asynchronous.translation_job_status import TranslationJob
 from src.rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions
 from src.rev_ai.models.asynchronous.translation_options import TranslationOptions
 from src.rev_ai.models.nlp_model import NlpModel
-from src.rev_ai.apiclient import RevAiAPIClient
 
 try:
     from urllib.parse import urljoin
@@ -146,12 +141,12 @@ class TestSuperApi():
 
         mock_session.reset_mock()
         data = {
-            'bullet_points': ['bullet1','bullet2']
+            'bullet_points': ['bullet1', 'bullet2']
         }
         url = '{}/transcript/summary'.format(JOB_ID_URL)
         hdr = {}
         hdr.update(client.default_headers)
-        hdr.update({'Accept':'application/json'})
+        hdr.update({'Accept': 'application/json'})
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
@@ -163,12 +158,12 @@ class TestSuperApi():
 
         mock_session.reset_mock()
         data = {
-            'bullet_points': ['bullet1','bullet2']
+            'bullet_points': ['bullet1', 'bullet2']
         }
         url = '{}/transcript/summary'.format(JOB_ID_URL)
         hdr = {}
         hdr.update(client.default_headers)
-        hdr.update({'Accept':'application/json'})
+        hdr.update({'Accept': 'application/json'})
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
@@ -177,7 +172,7 @@ class TestSuperApi():
         mock_session.request.assert_called_once_with("GET", url, headers=hdr, stream=True)
 
         mock_session.reset_mock()
-        url = '{}/transcript/translation/{}'.format(JOB_ID_URL,"es")
+        url = '{}/transcript/translation/{}'.format(JOB_ID_URL, "es")
         hdr = {}
         hdr.update(client.default_headers)
         hdr.update({'Accept': 'text/plain'})
@@ -190,9 +185,9 @@ class TestSuperApi():
 
         mock_session.reset_mock()
         data = {
-            'monologues':[]
+            'monologues': []
         }
-        url = '{}/transcript/translation/{}'.format(JOB_ID_URL,'es')
+        url = '{}/transcript/translation/{}'.format(JOB_ID_URL, 'es')
         hdr = {}
         hdr.update(client.default_headers)
         hdr.update({'Accept': 'application/vnd.rev.transcript.v1.0+json'})
@@ -205,9 +200,9 @@ class TestSuperApi():
 
         mock_session.reset_mock()
         data = {
-            'monologues':[]
+            'monologues': []
         }
-        url = '{}/transcript/translation/{}'.format(JOB_ID_URL,'es')
+        url = '{}/transcript/translation/{}'.format(JOB_ID_URL, 'es')
         hdr = {}
         hdr.update(client.default_headers)
         hdr.update({'Accept': 'application/vnd.rev.transcript.v1.0+json'})
@@ -221,7 +216,7 @@ class TestSuperApi():
         mock_session.reset_mock()
         data = {
             'monologues': [
-                {'speaker':123}
+                {'speaker': 123}
             ]
         }
         url = '{}/transcript/translation/{}'.format(JOB_ID_URL, 'es')
