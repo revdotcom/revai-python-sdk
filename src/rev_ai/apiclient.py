@@ -5,6 +5,9 @@ import json
 from .models import Account, CaptionType, Job, Transcript
 from .baseclient import BaseClient
 from . import utils
+from .models.asynchronous.summarization_options import SummarizationOptions
+from .models.asynchronous.summary import Summary
+from .models.asynchronous.translation_options import TranslationOptions
 
 try:
     from urllib.parse import urljoin
@@ -161,7 +164,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions=None,
+            translation_config: TranslationOptions=None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -222,7 +227,9 @@ class RevAiAPIClient(BaseClient):
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names, None,
-                                                   notification_config, skip_postprocessing)
+                                                   notification_config, skip_postprocessing,
+                                                   summarization_config=summarization_config,
+                                                   translation_config=translation_config)
 
         with open(filename, 'rb') as f:
             files = {
@@ -451,6 +458,60 @@ class RevAiAPIClient(BaseClient):
 
         return Account.from_json(response.json())
 
+    def get_transcript_summary_text(self, id_):
+        """Get the transcript summary of a specific job as plain text.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'text/plain'}
+        )
+        return response.text
+
+    def get_transcript_summary_json(self, id_):
+        """Get the transcript of a specific job as json.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'application/json'}
+        )
+
+        return Summary.from_json(response.json())
+
+    def get_transcript_summary_json_as_stream(self, id_):
+        """Get the transcript of a specific job as streamed json.
+
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'application/json'},
+            stream=True
+        )
+
+        return response
     def _create_job_options_payload(
             self,
             media_url=None,
@@ -475,7 +536,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=None,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions=None,
+            translation_config: TranslationOptions=None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -524,6 +587,10 @@ class RevAiAPIClient(BaseClient):
             payload['remove_atmospherics'] = remove_atmospherics
         if speakers_count:
             payload['speakers_count'] = speakers_count
+        if summarization_config:
+            payload['summarization_config'] = summarization_config.to_dict()
+        if translation_config:
+            payload['translation_config'] = translation_config.to_dict()
         return payload
 
     def _create_captions_query(self, speaker_channel):

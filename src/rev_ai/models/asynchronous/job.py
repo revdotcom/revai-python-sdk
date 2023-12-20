@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Job model"""
-
+from .summarization_options import Summarization
 from .job_status import JobStatus
+from .translation_options import Translation
 
 
 class Job:
@@ -28,7 +29,9 @@ class Job:
             rush=None,
             segments_to_transcribe=None,
             remove_atmospherics=None,
-            speakers_count=None):
+            speakers_count=None,
+            summarization:Summarization=None,
+            translation:Translation=None):
         """
         :param id_: unique id of job
         :param created_on: date and time at which this job was started
@@ -85,6 +88,8 @@ class Job:
         self.segments_to_transcribe = segments_to_transcribe
         self.remove_atmospherics = remove_atmospherics
         self.speakers_count = speakers_count
+        self.summarization = summarization
+        self.translation = translation
 
     def __eq__(self, other):
         """Override default equality operator"""
@@ -120,5 +125,7 @@ class Job:
             rush=json.get('rush'),
             segments_to_transcribe=json.get('segments_to_transcribe'),
             remove_atmospherics=json.get('remove_atmospherics'),
-            speakers_count=json.get('speakers_count')
+            speakers_count=json.get('speakers_count'),
+            summarization=Summarization.from_json(json.get('summarization')),
+            translation=Translation.from_json(json.get('translation'))
         )
