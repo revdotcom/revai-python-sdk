@@ -5,7 +5,7 @@ from .translation_language_options import TranslationLanguageOptions, Translatio
 class TranslationOptions:
     def __init__(
             self,
-            target_languages: list[TranslationLanguageOptions]
+            target_languages: List[TranslationLanguageOptions]
     ):
         self.target_languages = target_languages
 
@@ -21,7 +21,7 @@ class TranslationOptions:
 class Translation(TranslationOptions):
     def __init__(
             self,
-            target_languages: list[TranslationLanguageOptions],
+            target_languages: List[TranslationLanguageOptions],
             completed_on: str = None,
     ):
         super().__init__(target_languages)
