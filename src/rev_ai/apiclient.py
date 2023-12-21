@@ -458,10 +458,16 @@ class RevAiAPIClient(BaseClient):
 
         return response
 
-    def get_translated_captions_as_stream(self, id_, language, content_type=CaptionType.SRT, channel_id=None):
+    def get_translated_captions_as_stream(
+            self,
+            id_,
+            language,
+            content_type=CaptionType.SRT,
+            channel_id=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
         :param id_: id of job to be requested
+        :param language: requested translation language
         :param content_type: caption type which should be returned. Defaults to SRT
         :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: requests.models.Response HTTP response which can be used to stream
