@@ -413,6 +413,27 @@ class RevAiAPIClient(BaseClient):
 
         return response.text
 
+    def get_translated_captions(self, id_, language, content_type=CaptionType.SRT, channel_id=None):
+        """Get the captions output of a specific job and return it as plain text
+
+        :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
+        :returns: caption data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions/translation/{2}{1}'.format(id_, query, language)),
+            headers={'Accept': content_type.value}
+        )
+
+        return response.text
+
     def get_captions_as_stream(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
@@ -430,6 +451,29 @@ class RevAiAPIClient(BaseClient):
         response = self._make_http_request(
             "GET",
             urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_captions_as_stream(self, id_, language, content_type=CaptionType.SRT, channel_id=None):
+        """Get the captions output of a specific job and return it as a plain text stream
+
+        :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{0}/captions/translation/{2}{1}'.format(id_, query, language)),
             headers={'Accept': content_type.value},
             stream=True
         )

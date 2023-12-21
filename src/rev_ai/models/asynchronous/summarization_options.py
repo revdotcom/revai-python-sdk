@@ -10,11 +10,11 @@ class SummarizationOptions:
             self,
             prompt: str = None,
             model: NlpModel = None,
-            formattingType: SummarizationFormattingOptions = None
+            formatting_type: SummarizationFormattingOptions=None
     ):
         self.prompt = prompt
         self.model = model
-        self.type = formattingType
+        self.type = formatting_type
 
     def to_dict(self):
         """Returns the raw form of the url data object as the api
