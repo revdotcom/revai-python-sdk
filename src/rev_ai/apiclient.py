@@ -2,9 +2,13 @@
 """Speech recognition tools for using Rev AI"""
 
 import json
-from .models import Account, CaptionType, Job, Transcript
-from .baseclient import BaseClient
+
 from . import utils
+from .baseclient import BaseClient
+from .models import Account, CaptionType, Job, Transcript
+from .models.asynchronous.summarization_options import SummarizationOptions
+from .models.asynchronous.summary import Summary
+from .models.asynchronous.translation_options import TranslationOptions
 
 try:
     from urllib.parse import urljoin
@@ -66,7 +70,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -116,6 +122,8 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param summarization_config: Use to request transcript summary.
+        :param translation_config: Use to request transcript translation.
         :returns: raw response data
         :raises: HTTPError
         """
@@ -128,7 +136,9 @@ class RevAiAPIClient(BaseClient):
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names,
                                                    source_config, notification_config,
-                                                   skip_postprocessing)
+                                                   skip_postprocessing,
+                                                   summarization_config=summarization_config,
+                                                   translation_config=translation_config)
 
         response = self._make_http_request(
             "POST",
@@ -161,7 +171,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=False,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -208,6 +220,8 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param summarization_config: Use to request transcript summary.
+        :param translation_config: Use to request transcript translation.
         :returns: raw response data
         :raises: HTTPError, ValueError
         """
@@ -222,7 +236,9 @@ class RevAiAPIClient(BaseClient):
                                                    language, custom_vocabulary_id, transcriber,
                                                    verbatim, rush, test_mode,
                                                    segments_to_transcribe, speaker_names, None,
-                                                   notification_config, skip_postprocessing)
+                                                   notification_config, skip_postprocessing,
+                                                   summarization_config=summarization_config,
+                                                   translation_config=translation_config)
 
         with open(filename, 'rb') as f:
             files = {
@@ -397,6 +413,28 @@ class RevAiAPIClient(BaseClient):
 
         return response.text
 
+    def get_translated_captions(self, id_, language, content_type=CaptionType.SRT, channel_id=None):
+        """Get the captions output of a specific job and return it as plain text
+
+        :param id_: id of job to be requested
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
+        :returns: caption data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url,
+                    'jobs/{0}/captions/translation/{1}{2}'.format(id_, language, query)),
+            headers={'Accept': content_type.value}
+        )
+
+        return response.text
+
     def get_captions_as_stream(self, id_, content_type=CaptionType.SRT, channel_id=None):
         """Get the captions output of a specific job and return it as a plain text stream
 
@@ -414,6 +452,36 @@ class RevAiAPIClient(BaseClient):
         response = self._make_http_request(
             "GET",
             urljoin(self.base_url, 'jobs/{0}/captions{1}'.format(id_, query)),
+            headers={'Accept': content_type.value},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_captions_as_stream(
+            self,
+            id_,
+            language,
+            content_type=CaptionType.SRT,
+            channel_id=None):
+        """Get the captions output of a specific job and return it as a plain text stream
+
+        :param id_: id of job to be requested
+        :param language: requested translation language
+        :param content_type: caption type which should be returned. Defaults to SRT
+        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+        query = self._create_captions_query(channel_id)
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url,
+                    'jobs/{0}/captions/translation/{1}{2}'.format(id_, language, query)),
             headers={'Accept': content_type.value},
             stream=True
         )
@@ -451,6 +519,160 @@ class RevAiAPIClient(BaseClient):
 
         return Account.from_json(response.json())
 
+    def get_transcript_summary_text(self, id_):
+        """Get the transcript summary of a specific job as plain text.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'text/plain'}
+        )
+        return response.text
+
+    def get_transcript_summary_json(self, id_):
+        """Get the transcript summary of a specific job as json.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'application/json'}
+        )
+
+        return Summary.from_json(response.json())
+
+    def get_transcript_summary_json_as_stream(self, id_):
+        """Get the transcript summary of a specific job as streamed json.
+
+        :param id_: id of job to be requested
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'application/json'},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_transcript_text(self, id_, language):
+        """Get the translated transcript of a specific job as plain text.
+
+        :param id_: id of job to be requested
+        :param language: requested language
+        :returns: transcript data as text
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': 'text/plain'}
+        )
+
+        return response.text
+
+    def get_translated_transcript_text_as_stream(self, id_, language):
+        """Get the translated transcript of a specific job as a plain text stream.
+
+        :param id_: id of job to be requested
+        :param language: requested language
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': 'text/plain'},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_transcript_json(self, id_, language):
+        """Get the translated transcript of a specific job as json.
+
+        :param id_: id of job to be requested
+        :param language: requested language
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type}
+        )
+
+        return response.json()
+
+    def get_translated_transcript_json_as_stream(self, id_, language):
+        """Get the translated transcript of a specific job as streamed json.
+
+        :param id_: id of job to be requested
+        :param language: requested language
+        :returns: requests.models.Response HTTP response which can be used to stream
+            the payload of the response
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type},
+            stream=True
+        )
+
+        return response
+
+    def get_translated_transcript_object(self, id_, language):
+        """Get the translated transcript of a specific job as a python object`.
+
+        :param id_: id of job to be requested
+        :param language: requested language
+        :returns: transcript data as a python object
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/translation/{}'.format(id_, language)),
+            headers={'Accept': self.rev_json_content_type}
+        )
+
+        return Transcript.from_json(response.json())
+
     def _create_job_options_payload(
             self,
             media_url=None,
@@ -475,7 +697,9 @@ class RevAiAPIClient(BaseClient):
             notification_config=None,
             skip_postprocessing=False,
             remove_atmospherics=None,
-            speakers_count=None):
+            speakers_count=None,
+            summarization_config: SummarizationOptions = None,
+            translation_config: TranslationOptions = None):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -512,7 +736,7 @@ class RevAiAPIClient(BaseClient):
         if segments_to_transcribe:
             payload['segments_to_transcribe'] = segments_to_transcribe
         if speaker_names:
-            payload['speaker_names'] =\
+            payload['speaker_names'] = \
                 utils._process_speaker_names(speaker_names)
         if source_config:
             payload['source_config'] = source_config.to_dict()
@@ -524,6 +748,10 @@ class RevAiAPIClient(BaseClient):
             payload['remove_atmospherics'] = remove_atmospherics
         if speakers_count:
             payload['speakers_count'] = speakers_count
+        if summarization_config:
+            payload['summarization_config'] = summarization_config.to_dict()
+        if translation_config:
+            payload['translation_config'] = translation_config.to_dict()
         return payload
 
     def _create_captions_query(self, speaker_channel):

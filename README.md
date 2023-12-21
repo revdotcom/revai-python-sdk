@@ -57,6 +57,30 @@ and `custom_vocabulary_id` as optional parameters.
 
 The url submission option also supports authentication headers by using the `source_config` option.
 
+You can request transcript summary.
+
+```python
+# submitting a human transcription jobs
+job = client.submit_job_url("https://example.com/file-to-transcribe.mp3",
+    language='en',
+    summarization_config=SummarizationOptions(
+        formatting_type=SummarizationFormattingOptions.BULLETS
+    ))
+```
+
+You can request transcript translation into up to five languages.
+
+```javascript
+job = client.submit_job_url("https://example.com/file-to-transcribe.mp3",
+    language='en',
+    translation_config=TranslationOptions(
+        target_languages: [
+            TranslationLanguageOptions("es", NlpModel.PREMIUM),
+            TranslationLanguageOptions("de")
+        ]
+    ));
+```
+
 All options are described in the request body of the
 [Submit Job](https://docs.rev.ai/api/asynchronous/reference/#operation/SubmitTranscriptionJob) endpoint.
 
@@ -131,6 +155,9 @@ transcript_json = client.get_transcript_json(job.id)
 
 # or as a python object
 transcript_object = client.get_transcript_object(job.id)
+
+# or if you requested transcript translation(s)
+transcript_object = client.get_translated_transcript_object(job.id,'es')
 ```
 
 Both the json and object forms contain all the formation outlined in the response
@@ -138,6 +165,21 @@ of the [Get Transcript](https://docs.rev.ai/api/asynchronous/reference/#operatio
 when using the json response schema. While the text output is a string containing
 just the text of your transcript
 
+### Getting transcript summary
+
+If you requested transcript summary, you can retrieve it as plain text or structured object:
+
+```python
+# as text
+summary = client.get_transcript_summary_text(job.id)
+
+# as json
+summary = client.get_transcript_summary_json(job.id)
+
+# or as a python object
+summary = client.get_transcript_summary_object(job.id)
+
+```
 ### Getting captions output
 
 You can also get captions output from the SDK. We offer both SRT and VTT caption formats.
@@ -145,6 +187,10 @@ If you submitted your job as speaker channel audio then you must also provide a 
 
 ```python
 captions = client.get_captions(job.id, content_type=CaptionType.SRT, channel_id=None)
+
+# or if you requested transcript translation(s)
+captions = client.get_translated_captions(job.id, 'es')
+
 ```
 
 ### Streamed outputs

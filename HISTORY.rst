@@ -110,3 +110,7 @@ History
 ------------------
 * Add atmospherics and speaker_count support
 * Deprecated support for Python versions up to 3.8
+
+2.19.0
+------------------
+* Add async translation and summarization
