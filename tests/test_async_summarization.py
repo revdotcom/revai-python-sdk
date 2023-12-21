@@ -17,6 +17,7 @@ TOKEN = "token"
 JOB_ID = '1'
 JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
 JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
+JOB_TRANSCRIPT_SUMMARY_URL = '{}/transcript/summary'.format(JOB_ID_URL)
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
@@ -131,7 +132,7 @@ class TestAsyncSummarization():
         assert job.summarization.prompt == "Try to summarize this transcript as good as you possibly can"
 
     def test_get_transcript_summary_text(self, mock_session, make_mock_response):
-        url = '{}/transcript/summary'.format(JOB_ID_URL)
+        url = JOB_TRANSCRIPT_SUMMARY_URL
         client = RevAiAPIClient(TOKEN)
         response = make_mock_response(url=url, text='transcript summary')
         mock_session.request.return_value = response
@@ -145,7 +146,7 @@ class TestAsyncSummarization():
         )
 
     def test_get_transcript_summary_json_paragraph(self, mock_session, make_mock_response):
-        url = '{}/transcript/summary'.format(JOB_ID_URL)
+        url = JOB_TRANSCRIPT_SUMMARY_URL
         data = {
             'summary': 'transcript summary'
         }
@@ -162,7 +163,7 @@ class TestAsyncSummarization():
         )
 
     def test_get_transcript_summary_json_paragraph_as_stream(self, mock_session, make_mock_response):
-        url = '{}/transcript/summary'.format(JOB_ID_URL)
+        url = JOB_TRANSCRIPT_SUMMARY_URL
         data = {
             "summary": "transcript summary"
         }
@@ -183,7 +184,7 @@ class TestAsyncSummarization():
         )
 
     def test_get_transcript_summary_json_bullets(self, mock_session, make_mock_response):
-        url = '{}/transcript/summary'.format(JOB_ID_URL)
+        url = JOB_TRANSCRIPT_SUMMARY_URL
         data = {
             'bullet_points': ['bullet1', 'bullet2']
         }
