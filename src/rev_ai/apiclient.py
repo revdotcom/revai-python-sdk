@@ -428,7 +428,8 @@ class RevAiAPIClient(BaseClient):
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{0}/captions/translation/{2}{1}'.format(id_, query, language)),
+            urljoin(self.base_url,
+                    'jobs/{0}/captions/translation/{1}{2}'.format(id_, language, query)),
             headers={'Accept': content_type.value}
         )
 
@@ -473,7 +474,8 @@ class RevAiAPIClient(BaseClient):
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{0}/captions/translation/{2}{1}'.format(id_, query, language)),
+            urljoin(self.base_url,
+                    'jobs/{0}/captions/translation/{1}{2}'.format(id_, language, query)),
             headers={'Accept': content_type.value},
             stream=True
         )
