@@ -77,7 +77,7 @@ class TestAsyncSummarization():
         assert job.summarization.type == SummarizationFormattingOptions.BULLETS
         assert job.summarization.prompt == "Try to summarize this transcript as good as you possibly can"
 
-    def test_super_api_source_url(self, mock_session, make_mock_response):
+    def test_submit_source_url(self, mock_session, make_mock_response):
         status = 'transcribed'
         created_on = '2018-05-05T23:23:22.29Z'
         completed_on = '2018-05-05T23:23:22.30Z'
@@ -99,8 +99,6 @@ class TestAsyncSummarization():
         client = RevAiAPIClient(TOKEN)
 
         job = client.submit_job_url('https://example.com/test.mp3',
-                                    metadata="python sdk SuperApi test",
-                                    delete_after_seconds=50000,
                                     language="en",
                                     summarization_config=SummarizationOptions(
                                         "Try to summarize this transcript as good as you possibly can",
@@ -112,9 +110,7 @@ class TestAsyncSummarization():
             "POST",
             JOBS_URL,
             json={
-                'metadata': "python sdk SuperApi test",
                 'media_url': 'https://example.com/test.mp3',
-                'delete_after_seconds': 50000,
                 'language': 'en',
                 'summarization_config': {
                     'prompt': "Try to summarize this transcript as good as you possibly can",
