@@ -1,34 +1,28 @@
 from typing import List, Dict
 from .translation_language_options import TranslationLanguageOptions, TranslationLanguage
 
-"""Translation request options."""
-
 
 class TranslationOptions:
+    """Translation request options."""
     def __init__(
             self,
-            target_languages: List[TranslationLanguageOptions]
-    ):
+            target_languages: List[TranslationLanguageOptions]):
         self.target_languages = target_languages
 
     def to_dict(self):
         """Returns the raw form of the url data object as the api
         expects them"""
-        dict_result = {}
-        dict_result["target_languages"] = [tl.to_dict() for tl in self.target_languages]
+        dict_result = {"target_languages": [tl.to_dict() for tl in self.target_languages]}
 
         return dict_result
 
 
-"""Translation options."""
-
-
 class Translation(TranslationOptions):
+    """Translation options."""
     def __init__(
             self,
             target_languages: List[TranslationLanguageOptions],
-            completed_on: str = None,
-    ):
+            completed_on: str = None):
         super().__init__(target_languages)
         self.completed_on = completed_on
 

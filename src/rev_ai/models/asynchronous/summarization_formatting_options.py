@@ -1,7 +1,7 @@
 from enum import Enum
-"""Summarization formatting options."""
 
 
 class SummarizationFormattingOptions(str, Enum):
+    """Summarization formatting options."""
     PARAGRAPH = "paragraph"
     BULLETS = "bullets"

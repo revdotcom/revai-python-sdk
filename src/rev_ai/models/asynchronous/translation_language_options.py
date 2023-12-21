@@ -1,15 +1,13 @@
 from .summarization_job_status import SummarizationJobStatus
 from ..nlp_model import NlpModel
 
-"""Translation language request options."""
-
 
 class TranslationLanguageOptions:
+    """Translation language request options."""
     def __init__(
             self,
             language: str = None,
-            model: NlpModel = None
-    ):
+            model: NlpModel = None):
         self.language = language
         self.model = model
 
@@ -25,18 +23,14 @@ class TranslationLanguageOptions:
         return dict_result
 
 
-"""Translation language options."""
-
-
 class TranslationLanguage(TranslationLanguageOptions):
+    """Translation language options."""
     def __init__(
             self,
             language: str = None,
             model: NlpModel = None,
             status: SummarizationJobStatus = None,
-            failure: str = None
-
-    ):
+            failure: str = None):
         super().__init__(language, model)
         self.status = status
         self.failure = failure

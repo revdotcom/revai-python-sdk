@@ -10,8 +10,7 @@ class SummarizationOptions:
             self,
             prompt: str = None,
             model: NlpModel = None,
-            formatting_type: SummarizationFormattingOptions=None
-    ):
+            formatting_type: SummarizationFormattingOptions = None):
         self.prompt = prompt
         self.model = model
         self.type = formatting_type
@@ -40,8 +39,7 @@ class Summarization(SummarizationOptions):
             formatting_type: SummarizationFormattingOptions = None,
             status: SummarizationJobStatus = None,
             completed_on: str = None,
-            failure: str = None
-    ):
+            failure: str = None):
         super().__init__(prompt, model, formatting_type)
         self.status = status
         self.completed_on = completed_on

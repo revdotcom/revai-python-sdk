@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Enum for Summarization Job statuses"""
-
 from enum import Enum
 
 
 class SummarizationJobStatus(str, Enum):
+    """Enum for Summarization Job statuses"""
     IN_PROGRESS = "in_progress"
     FAILED = "failed"
     COMPLETED = "completed"
