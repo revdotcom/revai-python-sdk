@@ -62,8 +62,7 @@ class TestAsyncTranslation():
                                                        TranslationLanguageOptions("es", NlpModel.PREMIUM),
                                                        TranslationLanguageOptions("ru")
                                                    ]
-                                               )
-                                               )
+                                               ))
         mock_session.request.assert_called_once_with(
             "POST",
             JOBS_URL,

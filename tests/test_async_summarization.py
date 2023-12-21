@@ -47,9 +47,9 @@ class TestAsyncSummarization():
             job = client.submit_job_local_file('test_mp3.mp3',
                                                language="en",
                                                summarization_config=SummarizationOptions(
-                                                   "Try to summarize this transcript as good as you possibly can",
-                                                   NlpModel.PREMIUM,
-                                                   SummarizationFormattingOptions.BULLETS
+                                                   prompt="Try to summarize this transcript as good as you possibly can",
+                                                   model=NlpModel.PREMIUM,
+                                                   formatting_type=SummarizationFormattingOptions.BULLETS
 
                                                ))
         mock_session.request.assert_called_once_with(
