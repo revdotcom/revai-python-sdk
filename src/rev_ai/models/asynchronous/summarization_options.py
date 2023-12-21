@@ -2,10 +2,10 @@ from .summarization_formatting_options import SummarizationFormattingOptions
 from .summarization_job_status import SummarizationJobStatus
 from ..nlp_model import NlpModel
 
-"""Summarization request options."""
-
 
 class SummarizationOptions:
+    """Summarization request options."""
+
     def __init__(
             self,
             prompt: str = None,
@@ -30,10 +30,9 @@ class SummarizationOptions:
         return dict_result
 
 
-"""Summarization options."""
-
-
 class Summarization(SummarizationOptions):
+    """Summarization options."""
+
     def __init__(
             self,
             prompt: str = None,
