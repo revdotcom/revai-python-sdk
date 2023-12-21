@@ -217,7 +217,9 @@ class TestAsyncTranslation():
         mock_session.request.return_value = response
 
         translation = client.get_translated_transcript_json_as_stream(JOB_ID, "es")
-        assert json.loads(translation.content) == data
+        s = translation.content.decode('utf-8')
+        s = s.replace('\'', '"')
+        assert json.loads(s) == data
         mock_session.request.assert_called_once_with(
             "GET",
             url,

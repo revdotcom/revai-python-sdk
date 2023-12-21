@@ -27,6 +27,6 @@ def make_mock_response(mocker):
         if json_data:
             response.json = mocker.Mock(return_value=json_data)
             type(response).content = mocker.PropertyMock(
-                return_value=json.dumps(json_data).encode('utf-8'))
+                return_value=str(json_data).encode('utf-8'))
         return response
     return _mock_response

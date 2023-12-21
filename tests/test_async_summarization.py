@@ -174,7 +174,10 @@ class TestAsyncSummarization():
 
         summary = client.get_transcript_summary_json_as_stream(JOB_ID)
 
-        assert json.loads(summary.content) == data
+        s = summary.content.decode('utf-8')
+        s = s.replace('\'', '"')
+
+        assert json.loads(s) == data
 
         mock_session.request.assert_called_once_with(
             "GET",
