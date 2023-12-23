@@ -67,12 +67,6 @@ while True:
         break
 
     if status == JobStatus.TRANSCRIBED and summarization_status == SummarizationJobStatus.COMPLETED:
-        # Getting a list of current jobs connected with your account
-        # The optional parameters limits the length of the list.
-        # starting_after is a job id which causes the removal of
-        # all jobs from the list which were created before that job
-        list_of_jobs = client.get_list_of_jobs(limit=None, starting_after=None)
-
         # obtain transcript text as a string for the job.
         summary_text = client.get_transcript_summary_text(job.id)
         print(summary_text)
