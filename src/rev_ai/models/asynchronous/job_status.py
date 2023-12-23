@@ -15,9 +15,9 @@ class JobStatus(Enum):
         return cls[status.upper()]
 
     def __eq__(self, other):
-        if isinstance(other,JobStatus):
+        if isinstance(other, JobStatus):
             return self.value == other.value
-        elif isinstance(other,str):
+        elif isinstance(other, str):
             return self.name == other
         else:
             return False
