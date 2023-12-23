@@ -5,11 +5,19 @@ from enum import Enum
 
 
 class JobStatus(Enum):
-    IN_PROGRESS = 1
-    TRANSCRIBED = 2
-    FAILED = 3
-    COMPLETED = 4
+    IN_PROGRESS = 'in_progress'
+    TRANSCRIBED = 'transcribed'
+    FAILED = 'failed'
+    COMPLETED = 'completed'
 
     @classmethod
     def from_string(cls, status):
         return cls[status.upper()]
+
+    def __eq__(self, other):
+        if isinstance(other,JobStatus):
+            return self.value == other.value
+        elif isinstance(other,str):
+            return self.name == other
+        else:
+            return False

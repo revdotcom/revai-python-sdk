@@ -14,8 +14,7 @@ limitations under the License.
 """
 
 import time
-from rev_ai import language_identification_client
-
+from rev_ai import language_identification_client, JobStatus
 
 from rev_ai.models.customer_url_data import CustomerUrlData
 
@@ -40,7 +39,7 @@ print("Submitted Job: {}".format(job.id))
 while True:
     # Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
-    status = job_details.status.name
+    status = job_details.status
 
     print("Job Status : {}".format(status))
 
@@ -48,15 +47,15 @@ while True:
     # of getting job status in a real application. For recommended methods of getting job status
     # please see our documentation on callback_urls here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
-    if status == "IN_PROGRESS":
-        time.sleep(2)
+    if status == JobStatus.IN_PROGRESS:
+        time.sleep(5)
         continue
 
-    elif status == "FAILED":
+    elif status == JobStatus.FAILED:
         print("Job Failed : {}".format(job_details.failure_detail))
         break
 
-    if status == "COMPLETED":
+    if status == JobStatus.COMPLETED:
         # Getting a list of current language identification jobs connected with your account
         # The optional parameters limits the length of the list.
         # starting_after is a job id which causes the removal of
