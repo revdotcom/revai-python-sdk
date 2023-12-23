@@ -62,7 +62,7 @@ while True:
         time.sleep(5)
         continue
 
-    elif status == JobStatus.FAILED or summarization_status == SummarizationJobStatus.FAILED:
+    if status == JobStatus.FAILED or summarization_status == SummarizationJobStatus.FAILED:
         print("Job Failed : {}".format(job_details.failure_detail))
         break
 
