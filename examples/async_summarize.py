@@ -32,8 +32,7 @@ client = apiclient.RevAiAPIClient(access_token)
 #                                    language='en',
 #                                    summarization_config=SummarizationOptions(
 #                                        model=NlpModel.PREMIUM
-#                                    ),
-#                                    skip_postprocessing=False)
+#                                    ))
 
 
 # Submitting a job with a link to the file you want transcribed
@@ -44,8 +43,7 @@ job = client.submit_job_url(media_url=url,
                             language='en',
                             summarization_config=SummarizationOptions(
                                 model=NlpModel.PREMIUM
-                            ),
-                            skip_postprocessing=False)
+                            ))
 
 print("Submitted Job")
 
