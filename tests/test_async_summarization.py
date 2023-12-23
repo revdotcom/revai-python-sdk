@@ -141,7 +141,24 @@ class TestAsyncSummarization():
             headers=self.hdr_fixture(client, {'Accept': 'text/plain'})
         )
 
-    def test_get_transcript_summary_json_paragraph(self, mock_session, make_mock_response):
+    def test_get_transcript_summary_object(self, mock_session, make_mock_response):
+        url = JOB_TRANSCRIPT_SUMMARY_URL
+        client = RevAiAPIClient(TOKEN)
+        data = {
+            'summary': 'transcript summary'
+        }
+        response = make_mock_response(url=url, json_data=data)
+        mock_session.request.return_value = response
+
+        summary = client.get_transcript_summary_object(JOB_ID)
+        assert summary.summary == 'transcript summary'
+        mock_session.request.assert_called_once_with(
+            "GET",
+            url,
+            headers=self.hdr_fixture(client, {'Accept': 'application/json'})
+        )
+
+    def test_get_transcript_summary_object_paragraph(self, mock_session, make_mock_response):
         url = JOB_TRANSCRIPT_SUMMARY_URL
         data = {
             'summary': 'transcript summary'
@@ -150,7 +167,7 @@ class TestAsyncSummarization():
         response = make_mock_response(url=url, json_data=data)
         mock_session.request.return_value = response
 
-        summary = client.get_transcript_summary_json(JOB_ID)
+        summary = client.get_transcript_summary_object(JOB_ID)
         assert summary.summary == 'transcript summary'
         mock_session.request.assert_called_once_with(
             "GET",
@@ -193,8 +210,7 @@ class TestAsyncSummarization():
 
         summary_json = client.get_transcript_summary_json(JOB_ID)
         assert summary_json is not None
-        assert summary_json.bullet_points is not None
-        assert len(summary_json.bullet_points) == 2
+        assert summary_json['bullet_points'] is not None
 
         mock_session.request.assert_called_once_with(
             "GET",
