@@ -537,7 +537,7 @@ class RevAiAPIClient(BaseClient):
         return response.text
 
     def get_transcript_summary_object(self, id_):
-        """Get the transcript summary of a specific job as json.
+        """Get the transcript summary of a specific job as python object.
 
         :param id_: id of job to be requested
         :returns: transcript data as json
