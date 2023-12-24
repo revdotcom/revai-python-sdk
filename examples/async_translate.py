@@ -50,41 +50,51 @@ job = client.submit_job_url(media_url=url,
                             ))
 
 print("Submitted Job")
+print("Job Status : {}".format(job.status))
 
-while True:
+# Checks if the job has been transcribed and summarized. Please note that this is not the recommended way
+# of getting job status in a real application. For recommended methods of getting job status
+# please see our documentation on setting a callback url here:
+# https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
+
+while job.status == JobStatus.IN_PROGRESS:
+    time.sleep(5)
     # Obtains details of a job in json format
-    job_details = client.get_job_details(job.id)
-    status = job_details.status
-    translation_status = job_details.translation.target_languages[0].status
-    print("Job Status : {}. Translation status: {}.".format(status, translation_status))
+    job = client.get_job_details(job.id)
+    print("Job Status : {}".format(job.status))
 
-    # Checks if the job has been transcribed and translated. Please note that this is not the recommended way
+if job.status == JobStatus.FAILED:
+    print("Job Failed : {}".format(job.failure_detail))
+    exit()
+
+if job.status == JobStatus.TRANSCRIBED:
+    print("Translation Status : {}".format(job.translation.target_languages[0].status))
+    # Checks if the job has been summarized. Please note that this is not the recommended way
     # of getting job status in a real application. For recommended methods of getting job status
     # please see our documentation on setting a callback url here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
-    if status == JobStatus.IN_PROGRESS or translation_status == TranslationJobStatus.IN_PROGRESS:
+    while job.translation.target_languages[0].status == TranslationJobStatus.IN_PROGRESS:
         time.sleep(5)
-        continue
+        # Obtains details of a job in json format
+        job = client.get_job_details(job.id)
+        print("Translation Status : {}".format(job.translation.target_languages[0].status))
 
-    elif status == JobStatus.FAILED or translation_status == TranslationJobStatus.FAILED:
-        print("Job Failed : {}".format(job_details.failure_detail))
-        break
+if job.translation.target_languages[0].status == TranslationJobStatus.FAILED:
+    print("Translation Failed : {}".format(job.translation.target_languages[0].failure))
+    exit()
 
-    if status == JobStatus.TRANSCRIBED and translation_status == TranslationJobStatus.COMPLETED:
-        # obtain transcript text as a string for the job.
-        transcript_text = client.get_translated_transcript_text(job.id, 'es')
-        print(transcript_text)
+# obtain transcript translation as a string for the job.
+transcript_text = client.get_translated_transcript_text(job.id, 'es')
+print(transcript_text)
 
-        # obtain transcript text as a json object for the job.
-        transcript_json = client.get_translated_transcript_json(job.id, 'es')
+# obtain transcript translation as a json object for the job.
+transcript_json = client.get_translated_transcript_json(job.id, 'es')
 
-        # obtain transcript object for the job.
-        transcript_obj = client.get_translated_transcript_object(job.id, 'es')
+# obtain transcript translation object for the job.
+transcript_obj = client.get_translated_transcript_object(job.id, 'es')
 
-        # obtain captions for the job.
-        captions = client.get_translated_captions(job.id, 'es')
-
-        break
+# obtain translated captions for the job.
+captions = client.get_translated_captions(job.id, 'es')
 
 # Use the objects however you please
 
