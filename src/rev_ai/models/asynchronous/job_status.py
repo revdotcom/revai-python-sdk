@@ -4,7 +4,7 @@
 from enum import Enum
 
 
-class JobStatus(Enum):
+class JobStatus(str, Enum):
     IN_PROGRESS = 'in_progress'
     TRANSCRIBED = 'transcribed'
     FAILED = 'failed'

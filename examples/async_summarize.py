@@ -46,38 +46,47 @@ job = client.submit_job_url(media_url=url,
                             ))
 
 print("Submitted Job")
+print("Job Status : {}".format(job.status))
+# Checks if the job has been transcribed and summarized. Please note that this is not the recommended way
+# of getting job status in a real application. For recommended methods of getting job status
+# please see our documentation on setting a callback url here:
+# https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
 
-while True:
+while job.status == JobStatus.IN_PROGRESS:
+    time.sleep(5)
     # Obtains details of a job in json format
-    job_details = client.get_job_details(job.id)
-    status = job_details.status
-    summarization_status = job_details.summarization.status
-    print("Job Status : {}. Summarization status: {}.".format(status, summarization_status))
+    job = client.get_job_details(job.id)
+    print("Job Status : {}".format(job.status))
 
-    # Checks if the job has been transcribed and summarized. Please note that this is not the recommended way
+if job.status == JobStatus.FAILED:
+    print("Job Failed : {}".format(job.failure_detail))
+    exit()
+
+if job.status == JobStatus.TRANSCRIBED:
+    print("Summarization Status : {}".format(job.summarization.status))
+    # Checks if the job has been summarized. Please note that this is not the recommended way
     # of getting job status in a real application. For recommended methods of getting job status
     # please see our documentation on setting a callback url here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
-    if status == JobStatus.IN_PROGRESS or summarization_status == SummarizationJobStatus.IN_PROGRESS:
+    while job.summarization.status == SummarizationJobStatus.IN_PROGRESS:
         time.sleep(5)
-        continue
+        # Obtains details of a job in json format
+        job = client.get_job_details(job.id)
+        print("Summarization Status : {}".format(job.summarization.status))
 
-    if status == JobStatus.FAILED or summarization_status == SummarizationJobStatus.FAILED:
-        print("Job Failed : {}".format(job_details.failure_detail))
-        break
+if job.summarization.status == SummarizationJobStatus.FAILED:
+    print("Summarization Failed : {}".format(job.summarization.failure))
+    exit()
 
-    if status == JobStatus.TRANSCRIBED and summarization_status == SummarizationJobStatus.COMPLETED:
-        # obtain transcript text as a string for the job.
-        summary_text = client.get_transcript_summary_text(job.id)
-        print(summary_text)
+# obtain transcript text as a string for the job.
+summary_text = client.get_transcript_summary_text(job.id)
+print(summary_text)
 
-        # obtain transcript text as a json object for the job.
-        summary_json = client.get_transcript_summary_json(job.id)
+# obtain transcript text as a json object for the job.
+summary_json = client.get_transcript_summary_json(job.id)
 
-        # obtain transcript object for the job.
-        summary_obj = client.get_transcript_summary_object(job.id)
-
-        break
+# obtain transcript object for the job.
+summary_obj = client.get_transcript_summary_object(job.id)
 
 # Use the objects however you please
 
