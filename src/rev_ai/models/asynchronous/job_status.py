@@ -18,6 +18,6 @@ class JobStatus(str, Enum):
         if isinstance(other, JobStatus):
             return self.value == other.value
         elif isinstance(other, str):
-            return self.name == other
+            return self.name.upper() == other.upper()
         else:
             return False
