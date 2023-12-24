@@ -78,14 +78,14 @@ if job.summarization.status == SummarizationJobStatus.FAILED:
     print("Summarization Failed : {}".format(job.summarization.failure))
     exit()
 
-# obtain transcript text as a string for the job.
+# obtain transcript summary as a string for the job.
 summary_text = client.get_transcript_summary_text(job.id)
 print(summary_text)
 
-# obtain transcript text as a json object for the job.
+# obtain transcript summary as a json object for the job.
 summary_json = client.get_transcript_summary_json(job.id)
 
-# obtain transcript object for the job.
+# obtain transcript summary object for the job.
 summary_obj = client.get_transcript_summary_object(job.id)
 
 # Use the objects however you please
