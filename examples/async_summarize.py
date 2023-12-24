@@ -41,9 +41,7 @@ url = "https://www.rev.ai/FTC_Sample_1.mp3"
 job = client.submit_job_url(media_url=url,
                             delete_after_seconds=2592000,
                             language='en',
-                            summarization_config=SummarizationOptions(
-                                model=NlpModel.PREMIUM
-                            ))
+                            summarization_config=SummarizationOptions(model=NlpModel.PREMIUM))
 
 print("Submitted Job")
 print("Job Status : {}".format(job.status))
