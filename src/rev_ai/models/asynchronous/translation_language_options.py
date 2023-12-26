@@ -1,4 +1,4 @@
-from .summarization_job_status import SummarizationJobStatus
+from .translation_job_status import TranslationJobStatus
 from ..nlp_model import NlpModel
 
 
@@ -29,7 +29,7 @@ class TranslationLanguage(TranslationLanguageOptions):
             self,
             language: str = None,
             model: NlpModel = None,
-            status: SummarizationJobStatus = None,
+            status: TranslationJobStatus = None,
             failure: str = None):
         super().__init__(language, model)
         self.status = status

@@ -536,6 +536,24 @@ class RevAiAPIClient(BaseClient):
         )
         return response.text
 
+    def get_transcript_summary_object(self, id_):
+        """Get the transcript summary of a specific job as python object.
+
+        :param id_: id of job to be requested
+        :returns: transcript data as json
+        :raises: HTTPError
+        """
+        if not id_:
+            raise ValueError('id_ must be provided')
+
+        response = self._make_http_request(
+            "GET",
+            urljoin(self.base_url, 'jobs/{}/transcript/summary'.format(id_)),
+            headers={'Accept': 'application/json'}
+        )
+
+        return Summary.from_json(response.json())
+
     def get_transcript_summary_json(self, id_):
         """Get the transcript summary of a specific job as json.
 
@@ -552,7 +570,7 @@ class RevAiAPIClient(BaseClient):
             headers={'Accept': 'application/json'}
         )
 
-        return Summary.from_json(response.json())
+        return response.json()
 
     def get_transcript_summary_json_as_stream(self, id_):
         """Get the transcript summary of a specific job as streamed json.

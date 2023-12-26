@@ -14,7 +14,7 @@ limitations under the License.
 """
 
 import time
-from rev_ai import apiclient
+from rev_ai import apiclient, JobStatus
 from rev_ai.models import CustomVocabulary
 
 # String containing your access token
@@ -72,7 +72,7 @@ print("Submitted Job")
 while True:
     # Obtains details of a job in json format
     job_details = client.get_job_details(job.id)
-    status = job_details.status.name
+    status = job_details.status
 
     print("Job Status : {}".format(status))
 
@@ -80,7 +80,7 @@ while True:
     # of getting job status in a real application. For recommended methods of getting job status
     # please see our documentation on setting a callback url here:
     # https://docs.rev.ai/resources/tutorials/get-started-api-webhooks/
-    if status == "IN_PROGRESS":
+    if status == JobStatus.IN_PROGRESS:
         time.sleep(5)
         continue
 
@@ -88,7 +88,7 @@ while True:
         print("Job Failed : {}".format(job_details.failure_detail))
         break
 
-    if status == "TRANSCRIBED":
+    if status == JobStatus.TRANSCRIBED:
         # Getting a list of current jobs connected with your account
         # The optional parameters limits the length of the list.
         # starting_after is a job id which causes the removal of
