@@ -2,15 +2,11 @@ import json
 
 import pytest
 
-from src.rev_ai import JobStatus
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
-from src.rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
-from src.rev_ai.models.asynchronous.summarization_options import SummarizationOptions
 from src.rev_ai.models.asynchronous.translation_job_status import TranslationJobStatus
 from src.rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions
 from src.rev_ai.models.asynchronous.translation_options import TranslationOptions
-from src.rev_ai.models.nlp_model import NlpModel
+from src.rev_ai.models.asynchronous.translation_model import TranslationModel
 
 try:
     from urllib.parse import urljoin
@@ -59,7 +55,7 @@ class TestAsyncTranslation():
                                                language="en",
                                                translation_config=TranslationOptions(
                                                    target_languages=[
-                                                       TranslationLanguageOptions("es", NlpModel.PREMIUM),
+                                                       TranslationLanguageOptions("es", TranslationModel.PREMIUM),
                                                        TranslationLanguageOptions("ru")
                                                    ]
                                                ))
@@ -95,7 +91,7 @@ class TestAsyncTranslation():
         assert job.translation.completed_on is not None
         assert job.translation.target_languages[0].status == TranslationJobStatus.COMPLETED
         assert job.translation.target_languages[0].language == "es"
-        assert job.translation.target_languages[0].model == NlpModel.PREMIUM
+        assert job.translation.target_languages[0].model == TranslationModel.PREMIUM
 
         assert job.translation.target_languages[1].status, TranslationJobStatus.COMPLETED
         assert job.translation.target_languages[1].language, "ru"
@@ -140,7 +136,7 @@ class TestAsyncTranslation():
                                     language="en",
                                     translation_config=TranslationOptions(
                                         target_languages=[
-                                            TranslationLanguageOptions("es", NlpModel.PREMIUM),
+                                            TranslationLanguageOptions("es", TranslationModel.PREMIUM),
                                             TranslationLanguageOptions("ru")
                                         ]
                                     )
@@ -172,7 +168,7 @@ class TestAsyncTranslation():
         assert job.translation.completed_on is not None
         assert job.translation.target_languages[0].status == TranslationJobStatus.COMPLETED
         assert job.translation.target_languages[0].language == "es"
-        assert job.translation.target_languages[0].model == NlpModel.PREMIUM
+        assert job.translation.target_languages[0].model == TranslationModel.PREMIUM
 
         assert job.translation.target_languages[1].status, TranslationJobStatus.COMPLETED
         assert job.translation.target_languages[1].language, "ru"

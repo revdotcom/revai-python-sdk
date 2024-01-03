@@ -1,16 +1,6 @@
-import json
-
 import pytest
 
-from src.rev_ai import JobStatus
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
-from src.rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
-from src.rev_ai.models.asynchronous.summarization_options import SummarizationOptions
-from src.rev_ai.models.asynchronous.translation_job_status import TranslationJobStatus
-from src.rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions
-from src.rev_ai.models.asynchronous.translation_options import TranslationOptions
-from src.rev_ai.models.nlp_model import NlpModel
 
 try:
     from urllib.parse import urljoin

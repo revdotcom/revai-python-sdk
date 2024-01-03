@@ -75,7 +75,7 @@ job = client.submit_job_url("https://example.com/file-to-transcribe.mp3",
     language='en',
     translation_config=TranslationOptions(
         target_languages: [
-            TranslationLanguageOptions("es", NlpModel.PREMIUM),
+            TranslationLanguageOptions("es", TranslationModel.PREMIUM),
             TranslationLanguageOptions("de")
         ]
     ));

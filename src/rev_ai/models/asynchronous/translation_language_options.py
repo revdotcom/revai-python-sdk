@@ -1,5 +1,5 @@
 from .translation_job_status import TranslationJobStatus
-from ..nlp_model import NlpModel
+from .translation_model import TranslationModel
 
 
 class TranslationLanguageOptions:
@@ -7,7 +7,7 @@ class TranslationLanguageOptions:
     def __init__(
             self,
             language: str = None,
-            model: NlpModel = None):
+            model: TranslationModel = None):
         self.language = language
         self.model = model
 
@@ -28,7 +28,7 @@ class TranslationLanguage(TranslationLanguageOptions):
     def __init__(
             self,
             language: str = None,
-            model: NlpModel = None,
+            model: TranslationModel = None,
             status: TranslationJobStatus = None,
             failure: str = None):
         super().__init__(language, model)

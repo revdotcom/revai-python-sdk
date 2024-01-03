@@ -18,7 +18,7 @@ from rev_ai import apiclient, JobStatus
 from rev_ai.models.asynchronous.translation_job_status import TranslationJobStatus
 from rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions
 from rev_ai.models.asynchronous.translation_options import TranslationOptions
-from rev_ai.models.nlp_model import NlpModel
+from rev_ai.models.asynchronous.translation_model import TranslationModel
 
 # String containing your access token
 access_token = "<your_access_token>"
@@ -33,7 +33,7 @@ client = apiclient.RevAiAPIClient(access_token)
 #                             language='en',
 #                             translation_config=TranslationOptions(
 #                                 target_languages=[
-#                                     TranslationLanguageOptions("es", NlpModel.PREMIUM)
+#                                     TranslationLanguageOptions("es", TranslationModel.PREMIUM)
 #                                 ]
 #                             ))
 
@@ -45,7 +45,7 @@ job = client.submit_job_url(media_url=url,
                             language='en',
                             translation_config=TranslationOptions(
                                 target_languages=[
-                                    TranslationLanguageOptions("es", NlpModel.PREMIUM)
+                                    TranslationLanguageOptions("es", TranslationModel.PREMIUM)
                                 ]
                             ))
 

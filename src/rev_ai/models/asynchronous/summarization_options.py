@@ -1,6 +1,6 @@
 from .summarization_formatting_options import SummarizationFormattingOptions
 from .summarization_job_status import SummarizationJobStatus
-from ..nlp_model import NlpModel
+from .summarization_model import SummarizationModel
 
 
 class SummarizationOptions:
@@ -9,7 +9,7 @@ class SummarizationOptions:
     def __init__(
             self,
             prompt: str = None,
-            model: NlpModel = None,
+            model: SummarizationModel = None,
             formatting_type: SummarizationFormattingOptions = None):
         self.prompt = prompt
         self.model = model
@@ -35,7 +35,7 @@ class Summarization(SummarizationOptions):
     def __init__(
             self,
             prompt: str = None,
-            model: NlpModel = None,
+            model: SummarizationModel = None,
             formatting_type: SummarizationFormattingOptions = None,
             status: SummarizationJobStatus = None,
             completed_on: str = None,
