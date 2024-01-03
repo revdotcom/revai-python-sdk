@@ -15,7 +15,7 @@ pipeline {
                     rm -rf dist
                     python -m venv ./sdk-deploy
                     . ./sdk-deploy/bin/activate
-                    pip install wheel
+                    pip install wheel setuptools
                     python setup.py sdist bdist_wheel
                 '''
             }
