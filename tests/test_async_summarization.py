@@ -6,7 +6,7 @@ from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
 from src.rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
 from src.rev_ai.models.asynchronous.summarization_options import SummarizationOptions
-from src.rev_ai.models.nlp_model import NlpModel
+from src.rev_ai.models.asynchronous.summarization_model import SummarizationModel
 
 try:
     from urllib.parse import urljoin
@@ -48,7 +48,7 @@ class TestAsyncSummarization():
                                                language="en",
                                                summarization_config=SummarizationOptions(
                                                    prompt="Try to summarize this transcript as good as you possibly can",
-                                                   model=NlpModel.PREMIUM,
+                                                   model=SummarizationModel.PREMIUM,
                                                    formatting_type=SummarizationFormattingOptions.BULLETS
 
                                                ))
@@ -73,7 +73,7 @@ class TestAsyncSummarization():
         )
 
         assert job.summarization is not None
-        assert job.summarization.model == NlpModel.PREMIUM
+        assert job.summarization.model == SummarizationModel.PREMIUM
         assert job.summarization.type == SummarizationFormattingOptions.BULLETS
         assert job.summarization.prompt == "Try to summarize this transcript as good as you possibly can"
 
@@ -102,7 +102,7 @@ class TestAsyncSummarization():
                                     language="en",
                                     summarization_config=SummarizationOptions(
                                         "Try to summarize this transcript as good as you possibly can",
-                                        NlpModel.PREMIUM,
+                                        SummarizationModel.PREMIUM,
                                         SummarizationFormattingOptions.BULLETS
 
                                     ))
@@ -123,7 +123,7 @@ class TestAsyncSummarization():
 
         assert job.summarization is not None
         assert job.summarization.status == SummarizationJobStatus.COMPLETED
-        assert job.summarization.model == NlpModel.PREMIUM
+        assert job.summarization.model == SummarizationModel.PREMIUM
         assert job.summarization.type == SummarizationFormattingOptions.BULLETS
         assert job.summarization.prompt == "Try to summarize this transcript as good as you possibly can"
 

@@ -413,23 +413,21 @@ class RevAiAPIClient(BaseClient):
 
         return response.text
 
-    def get_translated_captions(self, id_, language, content_type=CaptionType.SRT, channel_id=None):
+    def get_translated_captions(self, id_, language, content_type=CaptionType.SRT):
         """Get the captions output of a specific job and return it as plain text
 
         :param id_: id of job to be requested
         :param content_type: caption type which should be returned. Defaults to SRT
-        :param channel_id: id of speaker channel to be captioned, only matters for multichannel jobs
         :returns: caption data as text
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        query = self._create_captions_query(channel_id)
 
         response = self._make_http_request(
             "GET",
             urljoin(self.base_url,
-                    'jobs/{0}/captions/translation/{1}{2}'.format(id_, language, query)),
+                    'jobs/{0}/captions/translation/{1}'.format(id_, language)),
             headers={'Accept': content_type.value}
         )
 

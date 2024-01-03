@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class NlpModel(str, Enum):
+class TranslationModel(str, Enum):
     STANDARD = "standard"
     PREMIUM = "premium"
