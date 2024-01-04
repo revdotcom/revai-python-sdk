@@ -17,7 +17,7 @@ import time
 from rev_ai import apiclient, JobStatus
 from rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
 from rev_ai.models.asynchronous.summarization_options import SummarizationOptions
-from rev_ai.models.nlp_model import NlpModel
+from rev_ai.models.asynchronous.summarization_model import SummarizationModel
 
 # String containing your access token
 access_token = "<your_access_token>"
