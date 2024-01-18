@@ -146,7 +146,7 @@ class RevAiStreamingClient:
             raise ValueError('generator must be provided')
 
         if hasattr(self, 'request_thread'):
-            if self.request_thread.isAlive():
+            if self.request_thread.is_alive():
                 raise RuntimeError("""Data is still being sent and will interfere
                     with the responses.""")
 
