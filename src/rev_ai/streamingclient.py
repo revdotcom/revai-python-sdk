@@ -73,7 +73,8 @@ class RevAiStreamingClient:
               start_ts=None,
               transcriber=None,
               language=None,
-              skip_postprocessing=None):
+              skip_postprocessing=None,
+              max_segment_duration_seconds=None):
         """Function to connect the websocket to the URL and start the response
             thread
         :param generator: generator object that yields binary audio data
@@ -123,6 +124,9 @@ class RevAiStreamingClient:
 
         if skip_postprocessing:
             url += '&' + urlencode({'skip_postprocessing': 'true'})
+
+        if max_segment_duration_seconds:
+            url += '&' + urlencode({'max_segment_duration_seconds': max_segment_duration_seconds})
 
         try:
             self.client.connect(url)
