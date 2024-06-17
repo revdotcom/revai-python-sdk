@@ -120,7 +120,10 @@ class TestJobEndpoints():
             'delete_after_seconds': 0,
             'language': LANGUAGE,
             'transcriber': TRANSCRIBER,
-            'skip_postprocessing': True
+            'skip_postprocessing': True,
+            'remove_atmospherics': True,
+            'speakers_count': 123,
+            'diarization_type': "premium"
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -130,7 +133,12 @@ class TestJobEndpoints():
                                     NOTIFICATION_URL, True,
                                     True, 1, CUSTOM_VOCAB, True,
                                     True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
-                                    TRANSCRIBER, skip_postprocessing=True)
+                                    TRANSCRIBER,
+                                    skip_postprocessing=True,
+                                    remove_atmospherics=True,
+                                    speakers_count=123,
+                                    diarization_type="premium"
+                                    )
 
         assert res == Job(JOB_ID,
                           CREATED_ON,
@@ -143,7 +151,11 @@ class TestJobEndpoints():
                           remove_disfluencies=True,
                           delete_after_seconds=0,
                           language=LANGUAGE,
-                          transcriber=TRANSCRIBER)
+                          transcriber=TRANSCRIBER,
+                          remove_atmospherics=True,
+                          speakers_count=123,
+                          diarization_type="premium"
+                          )
         mock_session.request.assert_called_once_with(
             "POST",
             JOBS_URL,
@@ -161,7 +173,10 @@ class TestJobEndpoints():
                 'language': LANGUAGE,
                 'custom_vocabulary_id': CUSTOM_VOCAB_ID,
                 'transcriber': TRANSCRIBER,
-                'skip_postprocessing': True
+                'skip_postprocessing': True,
+                'remove_atmospherics': True,
+                'speakers_count': 123,
+                'diarization_type': "premium"
             },
             headers=client.default_headers)
 
@@ -283,7 +298,10 @@ class TestJobEndpoints():
             'delete_after_seconds': 0,
             'language': LANGUAGE,
             'transcriber': TRANSCRIBER,
-            'skip_postprocessing': True
+            'skip_postprocessing': True,
+            'remove_atmospherics': True,
+            'speakers_count': 123,
+            'diarization_type': "premium"
         }
         response = make_mock_response(url=JOB_ID_URL, json_data=data)
         mock_session.request.return_value = response
@@ -294,7 +312,11 @@ class TestJobEndpoints():
                                                NOTIFICATION_URL, True,
                                                True, 1, CUSTOM_VOCAB, True,
                                                True, 0, LANGUAGE, CUSTOM_VOCAB_ID,
-                                               TRANSCRIBER, skip_postprocessing=True)
+                                               TRANSCRIBER, skip_postprocessing=True,
+                                               remove_atmospherics=True,
+                                               speakers_count=123,
+                                               diarization_type="premium"
+                                               )
 
             assert res == Job(JOB_ID,
                               CREATED_ON,
@@ -308,7 +330,11 @@ class TestJobEndpoints():
                               remove_disfluencies=True,
                               delete_after_seconds=0,
                               language=LANGUAGE,
-                              transcriber=TRANSCRIBER)
+                              transcriber=TRANSCRIBER,
+                              remove_atmospherics=True,
+                              speakers_count=123,
+                              diarization_type="premium"
+                              )
             mock_session.request.assert_called_once_with(
                 "POST",
                 JOBS_URL,
@@ -329,7 +355,10 @@ class TestJobEndpoints():
                             'language': LANGUAGE,
                             'custom_vocabulary_id': CUSTOM_VOCAB_ID,
                             'transcriber': TRANSCRIBER,
-                            'skip_postprocessing': True
+                            'skip_postprocessing': True,
+                            'remove_atmospherics': True,
+                            'speakers_count': 123,
+                            'diarization_type': "premium"
                         }, sort_keys=True)
                     )
                 },
