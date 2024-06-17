@@ -71,6 +71,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=False,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         """Submit media given a URL for transcription.
@@ -122,21 +123,36 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         :param summarization_config: Use to request transcript summary.
         :param translation_config: Use to request transcript translation.
         :returns: raw response data
         :raises: HTTPError
         """
-        payload = self._create_job_options_payload(media_url, metadata, callback_url,
-                                                   skip_diarization, skip_punctuation,
-                                                   speaker_channels_count,
-                                                   custom_vocabularies, filter_profanity,
-                                                   remove_disfluencies, delete_after_seconds,
-                                                   language, custom_vocabulary_id, transcriber,
-                                                   verbatim, rush, test_mode,
-                                                   segments_to_transcribe, speaker_names,
-                                                   source_config, notification_config,
-                                                   skip_postprocessing,
+        payload = self._create_job_options_payload(media_url=media_url,
+                                                   metadata=metadata,
+                                                   callback_url=callback_url,
+                                                   skip_diarization=skip_diarization,
+                                                   skip_punctuation=skip_punctuation,
+                                                   speaker_channels_count=speaker_channels_count,
+                                                   custom_vocabularies=custom_vocabularies,
+                                                   filter_profanity=filter_profanity,
+                                                   remove_disfluencies=remove_disfluencies,
+                                                   delete_after_seconds=delete_after_seconds,
+                                                   language=language,
+                                                   custom_vocabulary_id=custom_vocabulary_id,
+                                                   transcriber=transcriber,
+                                                   verbatim=verbatim,
+                                                   rush=rush,
+                                                   test_mode=test_mode,
+                                                   segments_to_transcribe=segments_to_transcribe,
+                                                   speaker_names=speaker_names,
+                                                   source_config=source_config,
+                                                   notification_config=notification_config,
+                                                   skip_postprocessing=skip_postprocessing,
+                                                   remove_atmospherics=remove_atmospherics,
+                                                   speakers_count=speakers_count,
+                                                   diarization_type=diarization_type,
                                                    summarization_config=summarization_config,
                                                    translation_config=translation_config)
 
@@ -172,6 +188,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=False,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         """Submit a local file for transcription.
@@ -220,6 +237,7 @@ class RevAiAPIClient(BaseClient):
         :param remove_atmospherics: Atmospherics such as <laugh>, <affirmative>, etc. will not
             appear in the transcript.
         :param speakers_count: Use to specify the total number of unique speakers in the audio.
+        :param diarization_type: Use to specify diarization type.
         :param summarization_config: Use to request transcript summary.
         :param translation_config: Use to request transcript translation.
         :returns: raw response data
@@ -228,15 +246,30 @@ class RevAiAPIClient(BaseClient):
         if not filename:
             raise ValueError('filename must be provided')
 
-        payload = self._create_job_options_payload(None, metadata, callback_url,
-                                                   skip_diarization, skip_punctuation,
-                                                   speaker_channels_count,
-                                                   custom_vocabularies, filter_profanity,
-                                                   remove_disfluencies, delete_after_seconds,
-                                                   language, custom_vocabulary_id, transcriber,
-                                                   verbatim, rush, test_mode,
-                                                   segments_to_transcribe, speaker_names, None,
-                                                   notification_config, skip_postprocessing,
+        payload = self._create_job_options_payload(media_url=None,
+                                                   metadata=metadata,
+                                                   callback_url=callback_url,
+                                                   skip_diarization=skip_diarization,
+                                                   skip_punctuation=skip_punctuation,
+                                                   speaker_channels_count=speaker_channels_count,
+                                                   custom_vocabularies=custom_vocabularies,
+                                                   filter_profanity=filter_profanity,
+                                                   remove_disfluencies=remove_disfluencies,
+                                                   delete_after_seconds=delete_after_seconds,
+                                                   language=language,
+                                                   custom_vocabulary_id=custom_vocabulary_id,
+                                                   transcriber=transcriber,
+                                                   verbatim=verbatim,
+                                                   rush=rush,
+                                                   test_mode=test_mode,
+                                                   segments_to_transcribe=segments_to_transcribe,
+                                                   speaker_names=speaker_names,
+                                                   source_config=None,
+                                                   notification_config=notification_config,
+                                                   skip_postprocessing=skip_postprocessing,
+                                                   remove_atmospherics=remove_atmospherics,
+                                                   speakers_count=speakers_count,
+                                                   diarization_type=diarization_type,
                                                    summarization_config=summarization_config,
                                                    translation_config=translation_config)
 
@@ -714,6 +747,7 @@ class RevAiAPIClient(BaseClient):
             skip_postprocessing=False,
             remove_atmospherics=None,
             speakers_count=None,
+            diarization_type=None,
             summarization_config: SummarizationOptions = None,
             translation_config: TranslationOptions = None):
         payload = {}
@@ -764,6 +798,8 @@ class RevAiAPIClient(BaseClient):
             payload['remove_atmospherics'] = remove_atmospherics
         if speakers_count:
             payload['speakers_count'] = speakers_count
+        if diarization_type:
+            payload['diarization_type'] = diarization_type
         if summarization_config:
             payload['summarization_config'] = summarization_config.to_dict()
         if translation_config:
