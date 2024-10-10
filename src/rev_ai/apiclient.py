@@ -73,7 +73,8 @@ class RevAiAPIClient(BaseClient):
             speakers_count=None,
             diarization_type=None,
             summarization_config: SummarizationOptions = None,
-            translation_config: TranslationOptions = None):
+            translation_config: TranslationOptions = None,
+            enable_fusion=False):
         """Submit media given a URL for transcription.
         The audio data is downloaded from the URL
         :param media_url: web location of the media file
@@ -154,7 +155,8 @@ class RevAiAPIClient(BaseClient):
                                                    speakers_count=speakers_count,
                                                    diarization_type=diarization_type,
                                                    summarization_config=summarization_config,
-                                                   translation_config=translation_config)
+                                                   translation_config=translation_config,
+                                                   enable_fusion=enable_fusion)
 
         response = self._make_http_request(
             "POST",
@@ -190,7 +192,8 @@ class RevAiAPIClient(BaseClient):
             speakers_count=None,
             diarization_type=None,
             summarization_config: SummarizationOptions = None,
-            translation_config: TranslationOptions = None):
+            translation_config: TranslationOptions = None,
+            enable_fusion=False):
         """Submit a local file for transcription.
         Note that the content type is inferred if not provided.
 
@@ -271,7 +274,8 @@ class RevAiAPIClient(BaseClient):
                                                    speakers_count=speakers_count,
                                                    diarization_type=diarization_type,
                                                    summarization_config=summarization_config,
-                                                   translation_config=translation_config)
+                                                   translation_config=translation_config,
+                                                   enable_fusion=enable_fusion)
 
         with open(filename, 'rb') as f:
             files = {
@@ -749,7 +753,8 @@ class RevAiAPIClient(BaseClient):
             speakers_count=None,
             diarization_type=None,
             summarization_config: SummarizationOptions = None,
-            translation_config: TranslationOptions = None):
+            translation_config: TranslationOptions = None,
+            enable_fusion=False):
         payload = {}
         if media_url:
             payload['media_url'] = media_url
@@ -804,6 +809,8 @@ class RevAiAPIClient(BaseClient):
             payload['summarization_config'] = summarization_config.to_dict()
         if translation_config:
             payload['translation_config'] = translation_config.to_dict()
+        if enable_fusion:
+            payload['enable_fusion'] = enable_fusion
         return payload
 
     def _create_captions_query(self, speaker_channel):
