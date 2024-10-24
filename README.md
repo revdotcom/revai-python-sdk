@@ -218,7 +218,6 @@ from rev_ai.models import MediaConfig, RevAiApiDeploymentConfigMap, RevAiApiDepl
 #on_close(code, reason)
 #on_connected(id)
 
-
 # optionally configure the Rev AI deployment to use
 config = MediaConfig()
 streaming_client = RevAiStreamingClient("ACCESS TOKEN",
