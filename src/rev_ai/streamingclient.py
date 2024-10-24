@@ -8,7 +8,6 @@ import json
 from . import __version__
 from .models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
-
 try:
     from urllib.parse import urlencode
 except ImportError:

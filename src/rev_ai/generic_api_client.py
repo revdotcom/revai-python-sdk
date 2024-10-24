@@ -4,7 +4,6 @@
 from .baseclient import BaseClient
 from .models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
-
 try:
     from urllib.parse import urljoin
 except ImportError:
