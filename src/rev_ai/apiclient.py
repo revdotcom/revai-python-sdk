@@ -49,7 +49,7 @@ class RevAiAPIClient(BaseClient):
         """
 
         # Default speech to text base url
-        self.base_url = '{0}/speechtotext/{1}/'.format(url if url else default_url, version)
+        self.base_url = '{0}/speechtotext/{1}/'.format(url if url else self.default_url, self.version)
         BaseClient.__init__(self, access_token)
 
     def submit_job_url(
