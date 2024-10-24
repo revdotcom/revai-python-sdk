@@ -26,7 +26,7 @@ class LanguageIdentificationClient(GenericApiClient):
         :param access_token: access token which authorizes all requests and links them to your
                              account. Generated on the settings page of your account dashboard
                              on Rev AI.
-        :param url: optional url of the Rev AI API deployment to use, defaults to the US
+        :param url (optional): url of the Rev AI API deployment to use, defaults to the US
                     deployement, i.e. 'https://api.rev.ai', which can be referenced as
                     RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'].
         """

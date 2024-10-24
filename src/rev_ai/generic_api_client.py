@@ -28,7 +28,7 @@ class GenericApiClient(BaseClient):
         :param api_version: version of the api to submit to
         :param parse_job_info: method to be used to parse job information
         :param parse_job_result: method to be used to parse job results
-        :param url: optional url of the Rev AI API deployment to use, defaults to the US
+        :param url (optional): url of the Rev AI API deployment to use, defaults to the US
                     deployement, i.e. 'https://api.rev.ai', which can be referenced as
                     RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'].
         """
