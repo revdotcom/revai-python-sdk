@@ -3,7 +3,7 @@
 
 import json
 from .generic_api_client import GenericApiClient
-from .models import LanguageIdentificationJob, LanguageIdentificationResult
+from .models import LanguageIdentificationJob, LanguageIdentificationResult, RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
 try:
     from urllib.parse import urljoin
@@ -20,17 +20,20 @@ class LanguageIdentificationClient(GenericApiClient):
     # Default api name of Rev AI language identification api
     api_name = 'languageid'
 
-    def __init__(self, access_token):
+    def __init__(self, access_token, url=None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
                              account. Generated on the settings page of your account dashboard
                              on Rev AI.
+        :param url: optional url of the Rev AI API deployment to use, defaults to the US
+                    deployement, i.e. 'https://api.rev.ai', which can be referenced as
+                    RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'].
         """
 
         GenericApiClient.__init__(self, access_token, self.api_name, self.api_version,
                                   LanguageIdentificationJob.from_json,
-                                  LanguageIdentificationResult.from_json)
+                                  LanguageIdentificationResult.from_json, url)
 
     def submit_job_url(
             self,

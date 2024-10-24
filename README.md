@@ -29,10 +29,11 @@ your [AccessToken Settings Page](https://www.rev.ai/access_token). Create a clie
 generated Access Token:
 
 ```python
-from rev_ai import apiclient
+from rev_ai import apiclient, RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
 # create your client
-client = apiclient.RevAiAPIClient("ACCESS TOKEN")
+# optionally configure the Rev AI deployment to use
+client = apiclient.RevAiAPIClient("ACCESS TOKEN", RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'])
 ```
 
 ### Sending a file
