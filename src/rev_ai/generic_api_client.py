@@ -2,6 +2,7 @@
 """Generic client used to interact with our newer style apis"""
 
 from .baseclient import BaseClient
+from .models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
 try:
     from urllib.parse import urljoin
@@ -13,7 +14,10 @@ class GenericApiClient(BaseClient):
     """Generic client which handles logic for making requests to almost any Rev AI Api.
     Intended to be inherited and extended by a specific client per API"""
 
-    def __init__(self, access_token, api_name, api_version, parse_job_info, parse_job_result):
+    # Default url for US Rev AI deployment
+    default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']
+    
+    def __init__(self, access_token, api_name, api_version, parse_job_info, parse_job_result, url=None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
@@ -23,10 +27,13 @@ class GenericApiClient(BaseClient):
         :param api_version: version of the api to submit to
         :param parse_job_info: method to be used to parse job information
         :param parse_job_result: method to be used to parse job results
+        :param url (optional): url of the Rev AI API deployment to use, defaults to the US
+                    deployement, i.e. 'https://api.rev.ai', which can be referenced as
+                    RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'].
         """
 
         BaseClient.__init__(self, access_token)
-        self.base_url = 'https://api.rev.ai/{0}/{1}/'.format(api_name, api_version)
+        self.base_url = '{0}/{1}/{2}/'.format(url if url else default_url, api_name, api_version)
         self.parse_job_info = parse_job_info
         self.parse_job_result = parse_job_result
 

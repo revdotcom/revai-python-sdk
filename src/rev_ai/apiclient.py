@@ -5,10 +5,11 @@ import json
 
 from . import utils
 from .baseclient import BaseClient
-from .models import Account, CaptionType, Job, Transcript
+from .models import Account, CaptionType, Job, Transcript, RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from .models.asynchronous.summarization_options import SummarizationOptions
 from .models.asynchronous.summary import Summary
 from .models.asynchronous.translation_options import TranslationOptions
+
 
 try:
     from urllib.parse import urljoin
@@ -30,20 +31,25 @@ class RevAiAPIClient(BaseClient):
     # Default version of Rev AI
     version = 'v1'
 
-    # Default base url for Rev AI
-    base_url = 'https://api.rev.ai/speechtotext/{}/'.format(version)
+    # Default url for US Rev AI deployment
+    default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']
 
     # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    def __init__(self, access_token):
+    def __init__(self, access_token, url=None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
                              account. Generated on the settings page of your account dashboard
                              on Rev AI.
+        :param url (optional): url of the Rev AI API deployment to use, defaults to the US
+                    deployement, i.e. 'https://api.rev.ai', which can be referenced as
+                    RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'].
         """
 
+        # Default speech to text base url
+        self.base_url = '{0}/speechtotext/{1}/'.format(url if url else self.default_url, self.version)
         BaseClient.__init__(self, access_token)
 
     def submit_job_url(

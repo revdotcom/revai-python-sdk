@@ -29,10 +29,11 @@ your [AccessToken Settings Page](https://www.rev.ai/access_token). Create a clie
 generated Access Token:
 
 ```python
-from rev_ai import apiclient
+from rev_ai import apiclient, RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
 # create your client
-client = apiclient.RevAiAPIClient("ACCESS TOKEN")
+# optionally configure the Rev AI deployment to use
+client = apiclient.RevAiAPIClient("ACCESS TOKEN", url=RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url'])
 ```
 
 ### Sending a file
@@ -211,18 +212,20 @@ In order to stream audio, you will need to setup a streaming client and a media 
 
 ```python
 from rev_ai.streamingclient import RevAiStreamingClient
-from rev_ai.models import MediaConfig
+from rev_ai.models import MediaConfig, RevAiApiDeploymentConfigMap, RevAiApiDeployment
 
 #on_error(error)
 #on_close(code, reason)
 #on_connected(id)
 
+# optionally configure the Rev AI deployment to use
 config = MediaConfig()
 streaming_client = RevAiStreamingClient("ACCESS TOKEN",
                                         config,
                                         on_error=ERRORFUNC,
                                         on_close=CLOSEFUNC,
-                                        on_connected=CONNECTEDFUNC)
+                                        on_connected=CONNECTEDFUNC,
+                                        url=RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_websocket_url'])
 ```
 
 `on_error`, `on_close`, and `on_connected` are optional parameters that are functions to be called when the websocket errors, closes, and connects respectively. The default `on_error` raises the error, `on_close` prints out the code and reason for closing, and `on_connected` prints out the job ID.
