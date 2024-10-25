@@ -9,3 +9,4 @@ from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informan
     SentimentAnalysisResult, SentimentValue, SentimentMessage, SentimentAnalysisJob
 from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence
 from .customer_url_data import CustomerUrlData
+from .revaiapi_deployment_config_constants import RevAiApiDeployment, RevAiApiDeploymentConfigMap

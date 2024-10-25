@@ -3,8 +3,9 @@
 
 import pytest
 import json
-from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
+from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
 
 try:
     from urllib.parse import urljoin
@@ -13,7 +14,8 @@ except ImportError:
 
 JOB_ID = '1'
 TOKEN = "token"
-URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/transcript'.format(JOB_ID))
+SPEECH_TO_TEXT_URL = f"{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/"
+URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}/transcript'.format(JOB_ID))
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')

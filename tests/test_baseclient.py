@@ -8,6 +8,7 @@ from requests.exceptions import HTTPError
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai import __version__
 from src.rev_ai.baseclient import BaseClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from tests.helpers.errors import get_error_test_cases
 
 TOKEN = "token"
@@ -34,7 +35,7 @@ class TestBaseClient:
     def test_make_http_request(self, error, method, mock_session,
                                make_mock_response):
         status = error.get('status')
-        URL = RevAiAPIClient.base_url
+        URL = f"{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/"
         response = make_mock_response(url=URL, status=status, json_data=error)
         mock_session.request.return_value = response
         client = RevAiAPIClient(TOKEN)

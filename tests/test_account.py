@@ -3,6 +3,7 @@
 
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from src.rev_ai.models.asynchronous import Account
 
 try:
@@ -10,7 +11,8 @@ try:
 except ImportError:
     from urlparse import urljoin
 
-URL = urljoin(RevAiAPIClient.base_url, 'account')
+SPEECH_TO_TEXT_URL = f"{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/"
+URL = urljoin(SPEECH_TO_TEXT_URL, 'account')
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')

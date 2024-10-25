@@ -6,6 +6,8 @@ import threading
 import six
 import json
 from . import __version__
+from .models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
+from .models.streaming import MediaConfig
 
 try:
     from urllib.parse import urlencode
@@ -26,13 +28,18 @@ def on_connected(job_id):
 
 
 class RevAiStreamingClient:
+
+    # Default url for US Rev AI deployment
+    default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_websocket_url']
+
     def __init__(self,
-                 access_token,
-                 config,
-                 version='v1',
+                 access_token: str,
+                 config: MediaConfig,
+                 version: str = 'v1',
                  on_error=on_error,
                  on_close=on_close,
-                 on_connected=on_connected):
+                 on_connected=on_connected,
+                 url: str = None):
         """Constructor for Streaming Client
         :param access_token: access token which authorizes all requests and
             links them to your account. Generated on the settings page of your
@@ -46,6 +53,9 @@ class RevAiStreamingClient:
             closes
         :param on_connected (optional): function to be called when the websocket
             and thread starts successfully
+        :param url (optional): url of the Rev AI API deployment to use, defaults to the US
+            deployement, i.e. 'wss://api.rev.ai', which can be referenced as
+            RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_websocket_url'].
         """
         if not access_token:
             raise ValueError('access_token must be provided')
@@ -55,8 +65,7 @@ class RevAiStreamingClient:
 
         self.access_token = access_token
         self.config = config
-        self.base_url = 'wss://api.rev.ai/speechtotext/{}/stream'. \
-            format(version)
+        self.base_url = f'{url if url else self.default_url}/speechtotext/{version}/stream'
         self.on_error = on_error
         self.on_close = on_close
         self.on_connected = on_connected
