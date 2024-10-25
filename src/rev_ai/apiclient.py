@@ -37,7 +37,7 @@ class RevAiAPIClient(BaseClient):
     # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    def __init__(self, access_token, url=None):
+    def __init__(self, access_token: str, url: str=None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
@@ -49,7 +49,7 @@ class RevAiAPIClient(BaseClient):
         """
 
         # Default speech to text base url
-        self.base_url = '{0}/speechtotext/{1}/'.format(url if url else self.default_url, self.version)
+        self.base_url = f'{url if url else self.default_url}/speechtotext/{self.version}/'
         BaseClient.__init__(self, access_token)
 
     def submit_job_url(

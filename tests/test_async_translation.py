@@ -3,6 +3,7 @@ import json
 import pytest
 
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from src.rev_ai.models.asynchronous.translation_job_status import TranslationJobStatus
 from src.rev_ai.models.asynchronous.translation_language_options import TranslationLanguageOptions
 from src.rev_ai.models.asynchronous.translation_options import TranslationOptions
@@ -15,8 +16,9 @@ except ImportError:
 
 TOKEN = "token"
 JOB_ID = '1'
-JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
-JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
+SPEECH_TO_TEXT_URL = f'{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/'
+JOB_ID_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}'.format(JOB_ID))
+JOBS_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs')
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')

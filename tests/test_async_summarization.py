@@ -3,6 +3,7 @@ import json
 import pytest
 
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from src.rev_ai.models.asynchronous.summarization_formatting_options import SummarizationFormattingOptions
 from src.rev_ai.models.asynchronous.summarization_job_status import SummarizationJobStatus
 from src.rev_ai.models.asynchronous.summarization_options import SummarizationOptions
@@ -15,8 +16,9 @@ except ImportError:
 
 TOKEN = "token"
 JOB_ID = '1'
-JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
-JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
+SPEECH_TO_TEXT_URL = f'{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/'
+JOB_ID_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}'.format(JOB_ID))
+JOBS_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs')
 JOB_TRANSCRIPT_SUMMARY_URL = '{}/transcript/summary'.format(JOB_ID_URL)
 
 

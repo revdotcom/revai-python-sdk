@@ -32,13 +32,13 @@ class RevAiStreamingClient:
     default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_websocket_url']
 
     def __init__(self,
-                 access_token,
-                 config,
-                 version='v1',
+                 access_token: str,
+                 config: MediaConfig,
+                 version: str='v1',
                  on_error=on_error,
                  on_close=on_close,
                  on_connected=on_connected,
-                 url=None):
+                 url: str=None):
         """Constructor for Streaming Client
         :param access_token: access token which authorizes all requests and
             links them to your account. Generated on the settings page of your
@@ -64,7 +64,7 @@ class RevAiStreamingClient:
 
         self.access_token = access_token
         self.config = config
-        self.base_url = '{0}/speechtotext/{1}/stream'.format(url if url else default_url, version)
+        self.base_url = f'{url if url else default_url}/speechtotext/{version}/stream'
         self.on_error = on_error
         self.on_close = on_close
         self.on_connected = on_connected

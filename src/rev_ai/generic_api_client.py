@@ -17,7 +17,14 @@ class GenericApiClient(BaseClient):
     # Default url for US Rev AI deployment
     default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']
     
-    def __init__(self, access_token, api_name, api_version, parse_job_info, parse_job_result, url=None):
+    def __init__(
+        self,
+        access_token: str,
+        api_name: str,
+        api_version: str,
+        parse_job_info,
+        parse_job_result,
+        url: str=None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your

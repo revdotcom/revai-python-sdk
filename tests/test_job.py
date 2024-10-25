@@ -4,9 +4,10 @@
 import json
 import pytest
 
-from src.rev_ai.models.customer_url_data import CustomerUrlData
 from src.rev_ai.apiclient import RevAiAPIClient
+from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from src.rev_ai.models.asynchronous import Job, JobStatus, SpeakerName
+from src.rev_ai.models.customer_url_data import CustomerUrlData
 
 try:
     from urllib.parse import urljoin
@@ -22,8 +23,9 @@ CREATED_ON = '2018-05-05T23:23:22.29Z'
 SOURCE_URL = 'https://example.com/test.mp3'
 SOURCE_AUTH = 'source auth headers'
 FILENAME = 'test.mp3'
-JOB_ID_URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}'.format(JOB_ID))
-JOBS_URL = urljoin(RevAiAPIClient.base_url, 'jobs')
+SPEECH_TO_TEXT_URL = f'{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/'
+JOB_ID_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}'.format(JOB_ID))
+JOBS_URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs')
 CUSTOM_VOCAB = [{"phrases": ["word one", "word two"]}]
 CUSTOM_VOCAB_ID = "vid"
 LANGUAGE = 'en'

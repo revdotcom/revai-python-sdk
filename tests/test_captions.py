@@ -2,7 +2,8 @@
 
 import pytest
 from src.rev_ai.apiclient import RevAiAPIClient
-from src.rev_ai.models import CaptionType
+from src.rev_ai.models import CaptionType, RevAiApiDeploymentConfigMap, RevAiApiDeployment
+
 
 try:
     from urllib.parse import urljoin
@@ -11,7 +12,8 @@ except ImportError:
 
 JOB_ID = '1'
 TOKEN = "token"
-URL = urljoin(RevAiAPIClient.base_url, 'jobs/{}/captions'.format(JOB_ID))
+SPEECH_TO_TEXT_URL = f'{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/'
+URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}/captions'.format(JOB_ID))
 
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
