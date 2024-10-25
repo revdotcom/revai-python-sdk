@@ -11,7 +11,6 @@ from .models.asynchronous.summarization_options import SummarizationOptions
 from .models.asynchronous.summary import Summary
 from .models.asynchronous.translation_options import TranslationOptions
 
-
 try:
     from urllib.parse import urljoin
 except ImportError:
