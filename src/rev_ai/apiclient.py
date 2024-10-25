@@ -5,7 +5,7 @@ import json
 
 from . import utils
 from .baseclient import BaseClient
-from .models import Account, CaptionType, Job, Transcript, RevAiApiDeploymentConfigMap,
+from .models import Account, CaptionType, Job, Transcript, RevAiApiDeploymentConfigMap, \
     RevAiApiDeployment
 from .models.asynchronous.summarization_options import SummarizationOptions
 from .models.asynchronous.summary import Summary

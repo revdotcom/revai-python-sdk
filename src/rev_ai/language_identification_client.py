@@ -3,7 +3,7 @@
 
 import json
 from .generic_api_client import GenericApiClient
-from .models import LanguageIdentificationJob, LanguageIdentificationResult, RevAiApiDeploymentConfigMap,
+from .models import LanguageIdentificationJob, LanguageIdentificationResult, RevAiApiDeploymentConfigMap, \
     RevAiApiDeployment
 
 try:
