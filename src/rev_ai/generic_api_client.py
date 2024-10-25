@@ -40,7 +40,7 @@ class GenericApiClient(BaseClient):
         """
 
         BaseClient.__init__(self, access_token)
-        self.base_url = '{0}/{1}/{2}/'.format(url if url else default_url, api_name, api_version)
+        self.base_url = '{0}/{1}/{2}/'.format(url if url else self.default_url, api_name, api_version)
         self.parse_job_info = parse_job_info
         self.parse_job_result = parse_job_result
 
