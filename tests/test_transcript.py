@@ -14,7 +14,7 @@ except ImportError:
 
 JOB_ID = '1'
 TOKEN = "token"
-SPEECH_TO_TEXT_URL = f'{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/'
+SPEECH_TO_TEXT_URL = f"{RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']}/speechtotext/v1/"
 URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}/transcript'.format(JOB_ID))
 
 
