@@ -65,7 +65,7 @@ class RevAiStreamingClient:
 
         self.access_token = access_token
         self.config = config
-        self.base_url = f'{url if url else default_url}/speechtotext/{version}/stream'
+        self.base_url = f'{url if url else self.default_url}/speechtotext/{version}/stream'
         self.on_error = on_error
         self.on_close = on_close
         self.on_connected = on_connected
