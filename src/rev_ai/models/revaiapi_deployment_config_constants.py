@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Dict, TypedDict
 
+
 class RevAiApiDeployment(Enum):
     """
     Enum representing the deployment regions for Rev AI API.
@@ -12,6 +13,7 @@ class RevAiApiDeployment(Enum):
     US = 'US'
     EU = 'EU'
 
+
 class RevAiApiConfig(TypedDict):
     """
     TypedDict representing the configuration for a Rev AI API deployment.
@@ -22,6 +24,7 @@ class RevAiApiConfig(TypedDict):
     """
     base_url: str
     base_websocket_url: str
+
 
 # Dictionary mapping RevAiApiDeployment enum values to their respective configuration settings.
 RevAiApiDeploymentConfigMap: Dict[RevAiApiDeployment, RevAiApiConfig] = {

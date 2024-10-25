@@ -5,7 +5,8 @@ import json
 
 from . import utils
 from .baseclient import BaseClient
-from .models import Account, CaptionType, Job, Transcript, RevAiApiDeploymentConfigMap, RevAiApiDeployment
+from .models import Account, CaptionType, Job, Transcript, RevAiApiDeploymentConfigMap,
+    RevAiApiDeployment
 from .models.asynchronous.summarization_options import SummarizationOptions
 from .models.asynchronous.summary import Summary
 from .models.asynchronous.translation_options import TranslationOptions
@@ -37,7 +38,7 @@ class RevAiAPIClient(BaseClient):
     # Rev AI transcript format
     rev_json_content_type = 'application/vnd.rev.transcript.v1.0+json'
 
-    def __init__(self, access_token: str, url: str=None):
+    def __init__(self, access_token: str, url: str = None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your

@@ -3,7 +3,8 @@
 
 import json
 from .generic_api_client import GenericApiClient
-from .models import LanguageIdentificationJob, LanguageIdentificationResult, RevAiApiDeploymentConfigMap, RevAiApiDeployment
+from .models import LanguageIdentificationJob, LanguageIdentificationResult, RevAiApiDeploymentConfigMap,
+    RevAiApiDeployment
 
 try:
     from urllib.parse import urljoin

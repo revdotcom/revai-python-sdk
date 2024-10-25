@@ -16,7 +16,7 @@ class GenericApiClient(BaseClient):
 
     # Default url for US Rev AI deployment
     default_url = RevAiApiDeploymentConfigMap[RevAiApiDeployment.US]['base_url']
-    
+
     def __init__(
         self,
         access_token: str,
@@ -24,7 +24,7 @@ class GenericApiClient(BaseClient):
         api_version: str,
         parse_job_info,
         parse_job_result,
-        url: str=None):
+        url: str = None):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
@@ -40,7 +40,7 @@ class GenericApiClient(BaseClient):
         """
 
         BaseClient.__init__(self, access_token)
-        self.base_url = '{0}/{1}/{2}/'.format(url if url else self.default_url, api_name, api_version)
+        self.base_url = f'{url if url else self.default_url}/{api_name}/{api_version}/'
         self.parse_job_info = parse_job_info
         self.parse_job_result = parse_job_result
 

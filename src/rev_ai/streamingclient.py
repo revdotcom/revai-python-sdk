@@ -35,11 +35,11 @@ class RevAiStreamingClient:
     def __init__(self,
                  access_token: str,
                  config: MediaConfig,
-                 version: str='v1',
+                 version: str = 'v1',
                  on_error=on_error,
                  on_close=on_close,
                  on_connected=on_connected,
-                 url: str=None):
+                 url: str = None):
         """Constructor for Streaming Client
         :param access_token: access token which authorizes all requests and
             links them to your account. Generated on the settings page of your
