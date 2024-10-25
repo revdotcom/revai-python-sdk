@@ -7,6 +7,7 @@ import six
 import json
 from . import __version__
 from .models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
+from .models.streaming import MediaConfig
 
 try:
     from urllib.parse import urlencode
