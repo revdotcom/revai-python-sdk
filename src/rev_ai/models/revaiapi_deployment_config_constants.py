@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import TypedDict
+from typing import Dict, TypedDict
 
 class RevAiApiDeployment(Enum):
     """
@@ -24,7 +24,7 @@ class RevAiApiConfig(TypedDict):
     base_websocket_url: str
 
 # Dictionary mapping RevAiApiDeployment enum values to their respective configuration settings.
-RevAiApiDeploymentConfigMap: dict[RevAiApiDeployment, RevAiApiConfig] = {
+RevAiApiDeploymentConfigMap: Dict[RevAiApiDeployment, RevAiApiConfig] = {
     RevAiApiDeployment.US: {
         'base_url': 'https://api.rev.ai',
         'base_websocket_url': 'wss://api.rev.ai'
