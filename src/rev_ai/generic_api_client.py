@@ -24,7 +24,8 @@ class GenericApiClient(BaseClient):
         api_version: str,
         parse_job_info,
         parse_job_result,
-        url: str = None):
+        url: str = None
+    ):
         """Constructor
 
         :param access_token: access token which authorizes all requests and links them to your
