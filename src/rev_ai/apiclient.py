@@ -363,12 +363,15 @@ class RevAiAPIClient(BaseClient):
 
         return response.text
 
-    def get_transcript_text_as_stream(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
+    def get_transcript_text_as_stream(self,
+                                      id_,
+                                      group_channels_by=None,
+                                      group_channels_threshold_ms=None):
         """Get the transcript of a specific job as a plain text stream.
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -391,12 +394,15 @@ class RevAiAPIClient(BaseClient):
 
         return response
 
-    def get_transcript_json(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
+    def get_transcript_json(self,
+                            id_,
+                            group_channels_by=None,
+                            group_channels_threshold_ms=None):
         """Get the transcript of a specific job as json.
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -417,12 +423,15 @@ class RevAiAPIClient(BaseClient):
 
         return response.json()
 
-    def get_transcript_json_as_stream(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
+    def get_transcript_json_as_stream(self,
+                                      id_,
+                                      group_channels_by=None,
+                                      group_channels_threshold_ms=None):
         """Get the transcript of a specific job as streamed json.
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -450,7 +459,7 @@ class RevAiAPIClient(BaseClient):
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: transcript data as a python object
         :raises: HTTPError
         """
