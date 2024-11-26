@@ -342,7 +342,7 @@ class RevAiAPIClient(BaseClient):
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: transcript data as text
         :raises: HTTPError
         """
@@ -860,7 +860,7 @@ class RevAiAPIClient(BaseClient):
 
         :param id_: id of job to be requested
         :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold in milliseconds
+        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
         :returns: url for getting the transcript
         """
         params = []
