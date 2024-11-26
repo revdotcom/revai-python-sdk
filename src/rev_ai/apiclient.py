@@ -350,7 +350,6 @@ class RevAiAPIClient(BaseClient):
             raise ValueError('id_ must be provided')
         
         url = self._build_transcript_url(
-            self,
             id_,
             group_channels_by=group_channels_by,
             group_channels_threshold_ms=group_channels_threshold_ms
@@ -378,7 +377,6 @@ class RevAiAPIClient(BaseClient):
             raise ValueError('id_ must be provided')
 
         url = self._build_transcript_url(
-            self,
             id_,
             group_channels_by=group_channels_by,
             group_channels_threshold_ms=group_channels_threshold_ms
@@ -406,7 +404,6 @@ class RevAiAPIClient(BaseClient):
             raise ValueError('id_ must be provided')
 
         url = self._build_transcript_url(
-            self,
             id_,
             group_channels_by=group_channels_by,
             group_channels_threshold_ms=group_channels_threshold_ms
@@ -434,7 +431,6 @@ class RevAiAPIClient(BaseClient):
             raise ValueError('id_ must be provided')
 
         url = self._build_transcript_url(
-            self,
             id_,
             group_channels_by=group_channels_by,
             group_channels_threshold_ms=group_channels_threshold_ms
@@ -462,7 +458,6 @@ class RevAiAPIClient(BaseClient):
             raise ValueError('id_ must be provided')
 
         url = self._build_transcript_url(
-            self,
             id_,
             group_channels_by=group_channels_by,
             group_channels_threshold_ms=group_channels_threshold_ms
