@@ -348,7 +348,7 @@ class RevAiAPIClient(BaseClient):
         """
         if not id_:
             raise ValueError('id_ must be provided')
-        
+
         url = self._build_transcript_url(
             id_,
             group_channels_by=group_channels_by,
@@ -863,7 +863,7 @@ class RevAiAPIClient(BaseClient):
 
     def _create_captions_query(self, speaker_channel):
         return '' if speaker_channel is None else '?speaker_channel={}'.format(speaker_channel)
-    
+
     def _build_transcript_url(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
         """Build the get transcript url.
 
