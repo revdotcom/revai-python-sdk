@@ -349,9 +349,12 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
         
-        url = self._build_transcript_url(self, id_,
-                                         group_channels_by=group_channels_by,
-                                         group_channels_threshold_ms=group_channels_threshold_ms)
+        url = self._build_transcript_url(
+            self,
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
 
         response = self._make_http_request(
             "GET",
@@ -374,9 +377,12 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = self._build_transcript_url(self, id_,
-                                         group_channels_by=group_channels_by,
-                                         group_channels_threshold_ms=group_channels_threshold_ms)
+        url = self._build_transcript_url(
+            self,
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
 
         response = self._make_http_request(
             "GET",
@@ -399,9 +405,12 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = self._build_transcript_url(self, id_,
-                                         group_channels_by=group_channels_by,
-                                         group_channels_threshold_ms=group_channels_threshold_ms)
+        url = self._build_transcript_url(
+            self,
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
 
         response = self._make_http_request(
             "GET",
@@ -424,9 +433,12 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = self._build_transcript_url(self, id_,
-                                         group_channels_by=group_channels_by,
-                                         group_channels_threshold_ms=group_channels_threshold_ms)
+        url = self._build_transcript_url(
+            self,
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
 
         response = self._make_http_request(
             "GET",
@@ -449,9 +461,12 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
-        url = self._build_transcript_url(self, id_,
-                                         group_channels_by=group_channels_by,
-                                         group_channels_threshold_ms=group_channels_threshold_ms)
+        url = self._build_transcript_url(
+            self,
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
 
         response = self._make_http_request(
             "GET",
