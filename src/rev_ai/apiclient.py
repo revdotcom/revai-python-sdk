@@ -878,8 +878,10 @@ class RevAiAPIClient(BaseClient):
         """Build the get transcript url.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, None for default, multichannel transcript grouping strategy
-        :param group_channels_threshold_ms: optional, None for default, grouping threshold, milliseconds
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: url for getting the transcript
         """
         params = []
