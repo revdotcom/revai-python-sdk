@@ -6,6 +6,7 @@ import json
 from src.rev_ai.apiclient import RevAiAPIClient
 from src.rev_ai.models import RevAiApiDeploymentConfigMap, RevAiApiDeployment
 from src.rev_ai.models.asynchronous import Transcript, Monologue, Element
+from src.rev_ai.models.asynchronous.group_channels_type import GroupChannelsType
 
 try:
     from urllib.parse import urljoin
@@ -20,8 +21,17 @@ URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}/transcript'.format(JOB_ID))
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
 class TestTranscriptEndpoints():
-    @pytest.mark.parametrize('group_channels_by, group_channels_threshold_ms', [(None, None), ('sentence', 5000), ('word', 2000)])
-    def test_get_transcript_text(self, mock_session, make_mock_response, group_channels_by, group_channels_threshold_ms):
+    @pytest.mark.parametrize(
+        'group_channels_by, group_channels_threshold_ms',
+        [(None, None), (GroupChannelsType.SENTENCE, 5000), (GroupChannelsType.WORD, 2000)]
+    )
+    def test_get_transcript_text(
+        self,
+        mock_session,
+        make_mock_response,
+        group_channels_by,
+        group_channels_threshold_ms
+    ):
         data = 'Test'
         client = RevAiAPIClient(TOKEN)
         expected_headers = {'Accept': 'text/plain'}
@@ -46,7 +56,7 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize(
         'group_channels_by, group_channels_threshold_ms',
-        [(None, None), ('sentence', 5000), ('word', 2000)]
+        [(None, None), (GroupChannelsType.SENTENCE, 5000), (GroupChannelsType.WORD, 2000)]
     )
     def test_get_transcript_text_as_stream(
         self,
@@ -80,7 +90,7 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize(
         'group_channels_by, group_channels_threshold_ms',
-        [(None, None), ('sentence', 5000), ('word', 2000)]
+        [(None, None), (GroupChannelsType.SENTENCE, 5000), (GroupChannelsType.WORD, 2000)]
     )
     def test_get_transcript_json(
         self,
@@ -124,7 +134,7 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize(
         'group_channels_by, group_channels_threshold_ms',
-        [(None, None), ('sentence', 5000), ('word', 2000)]
+        [(None, None), (GroupChannelsType.SENTENCE, 5000), (GroupChannelsType.WORD, 2000)]
     )
     def test_get_transcript_json_as_stream(
         self,
@@ -168,7 +178,7 @@ class TestTranscriptEndpoints():
 
     @pytest.mark.parametrize(
         'group_channels_by, group_channels_threshold_ms',
-        [(None, None), ('sentence', 5000), ('word', 2000)]
+        [(None, None), (GroupChannelsType.SENTENCE, 5000), (GroupChannelsType.WORD, 2000)]
     )
     def test_get_transcript_object_with_success(
         self,
