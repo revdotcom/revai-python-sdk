@@ -4,7 +4,7 @@
 __version__ = '2.21.0'
 
 from .models import Job, JobStatus, Account, Transcript, Monologue, Element, MediaConfig, \
-    CaptionType, CustomVocabulary, TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
+    CaptionType, GroupChannelsType, CustomVocabulary, TopicExtractionJob, TopicExtractionResult, Topic, Informant, \
     SpeakerName, LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence, \
     SentimentAnalysisResult, SentimentValue, SentimentMessage, SentimentAnalysisJob, \
     CustomerUrlData, RevAiApiDeploymentConfigMap, RevAiApiDeployment

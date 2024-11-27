@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Enum for caption content types"""
+"""Enum for group_channels_by types"""
 
 from enum import Enum
 
