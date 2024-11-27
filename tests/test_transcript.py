@@ -20,21 +20,6 @@ URL = urljoin(SPEECH_TO_TEXT_URL, 'jobs/{}/transcript'.format(JOB_ID))
 
 @pytest.mark.usefixtures('mock_session', 'make_mock_response')
 class TestTranscriptEndpoints():
-    def test_get_transcript_text(self, mock_session, make_mock_response):
-        data = 'Test'
-        client = RevAiAPIClient(TOKEN)
-        expected_headers = {'Accept': 'text/plain'}
-        expected_headers.update(client.default_headers)
-        response = make_mock_response(url=URL, text=data)
-        mock_session.request.return_value = response
-
-        res = client.get_transcript_text(JOB_ID)
-
-        assert res == data
-        mock_session.request.assert_called_once_with("GET",
-                                                     URL,
-                                                     headers=expected_headers)
-        
     @pytest.mark.parametrize('group_channels_by, group_channels_threshold_ms', [(None, None), ('sentence', 5000), ('word', 2000)])
     def test_get_transcript_text(self, mock_session, make_mock_response, group_channels_by, group_channels_threshold_ms):
         data = 'Test'
