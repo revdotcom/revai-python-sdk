@@ -337,12 +337,14 @@ class RevAiAPIClient(BaseClient):
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
+    def get_transcript_text(self, id_, group_channels_by=None, group_channels_threshold_ms=1000):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as text
         :raises: HTTPError
         """
@@ -370,8 +372,10 @@ class RevAiAPIClient(BaseClient):
         """Get the transcript of a specific job as a plain text stream.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -401,8 +405,10 @@ class RevAiAPIClient(BaseClient):
         """Get the transcript of a specific job as json.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as json
         :raises: HTTPError
         """
@@ -430,8 +436,10 @@ class RevAiAPIClient(BaseClient):
         """Get the transcript of a specific job as streamed json.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -458,8 +466,10 @@ class RevAiAPIClient(BaseClient):
         """Get the transcript of a specific job as a python object`.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as a python object
         :raises: HTTPError
         """
@@ -868,8 +878,8 @@ class RevAiAPIClient(BaseClient):
         """Build the get transcript url.
 
         :param id_: id of job to be requested
-        :param group_channels_by: optional, group channels by speaker or time
-        :param group_channels_threshold_ms: optional, group channels by time threshold, ms
+        :param group_channels_by: optional, None for default, multichannel transcript grouping strategy
+        :param group_channels_threshold_ms: optional, None for default, grouping threshold, milliseconds
         :returns: url for getting the transcript
         """
         params = []
