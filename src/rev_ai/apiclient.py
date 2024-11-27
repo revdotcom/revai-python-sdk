@@ -337,7 +337,11 @@ class RevAiAPIClient(BaseClient):
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_, group_channels_by=None, group_channels_threshold_ms=1000):
+    def get_transcript_text(
+            self,
+            id_,
+            group_channels_by=None,
+            group_channels_threshold_ms=None):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
