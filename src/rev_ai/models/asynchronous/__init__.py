@@ -7,3 +7,4 @@ from .job_status import JobStatus
 from .account import Account
 from .transcript import Transcript, Monologue, Element
 from .speaker_name import SpeakerName
+from .group_channels_type import GroupChannelsType

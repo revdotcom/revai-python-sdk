@@ -4,7 +4,7 @@
 from enum import Enum
 
 
-class GroupChannelsType(Enum):
+class GroupChannelsType(str, Enum):
     SPEAKER = 'speaker'
     SENTENCE = 'sentence'
     WORD = 'word'
