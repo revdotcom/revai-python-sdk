@@ -337,28 +337,45 @@ class RevAiAPIClient(BaseClient):
 
         return [Job.from_json(job) for job in response.json()]
 
-    def get_transcript_text(self, id_):
+    def get_transcript_text(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
         """Get the transcript of a specific job as plain text.
 
         :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as text
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
 
+        url = self._build_transcript_url(
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            url,
             headers={'Accept': 'text/plain'}
         )
 
         return response.text
 
-    def get_transcript_text_as_stream(self, id_):
+    def get_transcript_text_as_stream(self,
+                                      id_,
+                                      group_channels_by=None,
+                                      group_channels_threshold_ms=None):
         """Get the transcript of a specific job as a plain text stream.
 
         :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -366,37 +383,63 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
+        url = self._build_transcript_url(
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            url,
             headers={'Accept': 'text/plain'},
             stream=True
         )
 
         return response
 
-    def get_transcript_json(self, id_):
+    def get_transcript_json(self,
+                            id_,
+                            group_channels_by=None,
+                            group_channels_threshold_ms=None):
         """Get the transcript of a specific job as json.
 
         :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as json
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
 
+        url = self._build_transcript_url(
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            url,
             headers={'Accept': self.rev_json_content_type}
         )
 
         return response.json()
 
-    def get_transcript_json_as_stream(self, id_):
+    def get_transcript_json_as_stream(self,
+                                      id_,
+                                      group_channels_by=None,
+                                      group_channels_threshold_ms=None):
         """Get the transcript of a specific job as streamed json.
 
         :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: requests.models.Response HTTP response which can be used to stream
             the payload of the response
         :raises: HTTPError
@@ -404,28 +447,44 @@ class RevAiAPIClient(BaseClient):
         if not id_:
             raise ValueError('id_ must be provided')
 
+        url = self._build_transcript_url(
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            url,
             headers={'Accept': self.rev_json_content_type},
             stream=True
         )
 
         return response
 
-    def get_transcript_object(self, id_):
+    def get_transcript_object(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
         """Get the transcript of a specific job as a python object`.
 
         :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
         :returns: transcript data as a python object
         :raises: HTTPError
         """
         if not id_:
             raise ValueError('id_ must be provided')
 
+        url = self._build_transcript_url(
+            id_,
+            group_channels_by=group_channels_by,
+            group_channels_threshold_ms=group_channels_threshold_ms
+        )
+
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{}/transcript'.format(id_)),
+            url,
             headers={'Accept': self.rev_json_content_type}
         )
 
@@ -814,3 +873,22 @@ class RevAiAPIClient(BaseClient):
 
     def _create_captions_query(self, speaker_channel):
         return '' if speaker_channel is None else '?speaker_channel={}'.format(speaker_channel)
+
+    def _build_transcript_url(self, id_, group_channels_by=None, group_channels_threshold_ms=None):
+        """Build the get transcript url.
+
+        :param id_: id of job to be requested
+        :param group_channels_by: optional, GroupChannelsType grouping strategy for
+            multichannel transcripts. None for default.
+        :param group_channels_threshold_ms: optional, grouping threshold in milliseconds.
+            None for default.
+        :returns: url for getting the transcript
+        """
+        params = []
+        if group_channels_by is not None:
+            params.append('group_channels_by={}'.format(group_channels_by))
+        if group_channels_threshold_ms is not None:
+            params.append('group_channels_threshold_ms={}'.format(group_channels_threshold_ms))
+
+        query = '?{}'.format('&'.join(params))
+        return urljoin(self.base_url, 'jobs/{}/transcript{}'.format(id_, query))
