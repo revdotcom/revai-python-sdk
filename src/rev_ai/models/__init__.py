@@ -10,3 +10,4 @@ from .insights import TopicExtractionJob, TopicExtractionResult, Topic, Informan
 from .language_id import LanguageIdentificationJob, LanguageIdentificationResult, LanguageConfidence
 from .customer_url_data import CustomerUrlData
 from .revaiapi_deployment_config_constants import RevAiApiDeployment, RevAiApiDeploymentConfigMap
+from .forced_alignment import ForcedAlignmentJob, ForcedAlignmentResult, Monologue, ElementAlignment
