@@ -289,7 +289,7 @@ Remember in your development to follow the PEP8 style guide. Your code editor li
 
 # Local testing instructions
 
-Prequisites: virtualenv, tox
+Prerequisites: virtualenv, tox
 
 To test locally use the following commands from the repo root
 
