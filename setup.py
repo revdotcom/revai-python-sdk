@@ -68,8 +68,5 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
     ],
-    setup_requires=['pytest-runner==4.2'],
-    test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/revdotcom/revai-python-sdk',
 )
