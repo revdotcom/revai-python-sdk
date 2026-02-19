@@ -162,7 +162,7 @@ class TestJobEndpoints():
             "POST",
             JOBS_URL,
             json={
-                'media_url': SOURCE_URL,
+                'source_config': {'url': SOURCE_URL},
                 'callback_url': NOTIFICATION_URL,
                 'metadata': METADATA,
                 'skip_diarization': True,
@@ -276,13 +276,84 @@ class TestJobEndpoints():
             'POST',
             JOBS_URL,
             json={
-                'media_url': SOURCE_URL,
+                'source_config': {'url': SOURCE_URL},
                 'transcriber': 'human',
                 'verbatim': True,
                 'segments_to_transcribe': segments,
                 'speaker_names': [{'display_name': 'Kyle Bridburg'}]
             },
             headers=client.default_headers)
+
+    def test_submit_job_url_with_media_url_and_source_config_conflict(self, mock_session):
+        """Passing both media_url and source_config should raise ValueError."""
+        client = RevAiAPIClient(TOKEN)
+
+        with pytest.raises(ValueError, match='media_url is not compatible with source_config'):
+            client.submit_job_url(
+                media_url=SOURCE_URL,
+                source_config=SOURCE_CONFIG
+            )
+
+    def test_submit_job_url_verbatim_false(self, mock_session, make_mock_response):
+        """verbatim=False should be included in payload."""
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        client.submit_job_url(SOURCE_URL, verbatim=False)
+
+        mock_session.request.assert_called_once_with(
+            'POST',
+            JOBS_URL,
+            json={
+                'source_config': {'url': SOURCE_URL},
+                'verbatim': False,
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_url_verbatim_true(self, mock_session, make_mock_response):
+        """verbatim=True should be included in payload."""
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        client.submit_job_url(SOURCE_URL, verbatim=True)
+
+        mock_session.request.assert_called_once_with(
+            'POST',
+            JOBS_URL,
+            json={
+                'source_config': {'url': SOURCE_URL},
+                'verbatim': True,
+            },
+            headers=client.default_headers)
+
+    def test_submit_job_url_verbatim_none(self, mock_session, make_mock_response):
+        """verbatim=None (default) should NOT be included in payload."""
+        data = {
+            'id': JOB_ID,
+            'status': 'in_progress',
+            'created_on': CREATED_ON,
+        }
+        response = make_mock_response(url=JOB_ID_URL, json_data=data)
+        mock_session.request.return_value = response
+        client = RevAiAPIClient(TOKEN)
+
+        client.submit_job_url(SOURCE_URL)
+
+        call_kwargs = mock_session.request.call_args
+        payload = call_kwargs[1]['json'] if 'json' in call_kwargs[1] else call_kwargs[0][2]
+        assert 'verbatim' not in payload
 
     def test_submit_job_local_file_with_success(self, mocker, mock_session, make_mock_response):
         created_on = '2018-05-05T23:23:22.29Z'
