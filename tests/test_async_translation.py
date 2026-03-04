@@ -147,7 +147,7 @@ class TestAsyncTranslation():
             "POST",
             JOBS_URL,
             json={
-                'media_url': 'https://example.com/test.mp3',
+                'source_config': {'url': 'https://example.com/test.mp3'},
                 'language': 'en',
                 'translation_config': {
                     'target_languages': [

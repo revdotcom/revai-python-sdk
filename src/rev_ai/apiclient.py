@@ -817,7 +817,11 @@ class RevAiAPIClient(BaseClient):
             translation_config: TranslationOptions = None):
         payload = {}
         if media_url:
-            payload['media_url'] = media_url
+            if source_config:
+                raise ValueError(
+                    'media_url is not compatible with source_config. '
+                    'Use source_config for all URL-based submissions.')
+            payload['source_config'] = {'url': media_url}
         if skip_diarization:
             payload['skip_diarization'] = skip_diarization
         if skip_punctuation:
@@ -842,7 +846,7 @@ class RevAiAPIClient(BaseClient):
             payload['custom_vocabulary_id'] = custom_vocabulary_id
         if transcriber:
             payload['transcriber'] = transcriber
-        if verbatim:
+        if verbatim is not None:
             payload['verbatim'] = verbatim
         if rush:
             payload['rush'] = rush
