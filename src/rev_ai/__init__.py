@@ -7,4 +7,5 @@ from .models import Job, JobStatus, Account, Transcript, Monologue, Element, Med
     CaptionType, GroupChannelsType, CustomVocabulary, TopicExtractionJob, TopicExtractionResult, \
     Topic, Informant, SpeakerName, LanguageIdentificationJob, LanguageIdentificationResult, \
     LanguageConfidence, SentimentAnalysisResult, SentimentValue, SentimentMessage, \
-    SentimentAnalysisJob, CustomerUrlData, RevAiApiDeploymentConfigMap, RevAiApiDeployment
+    SentimentAnalysisJob, CustomerUrlData, RevAiApiDeploymentConfigMap, RevAiApiDeployment, \
+    ForcedAlignmentJob, ForcedAlignmentResult, Monologue, ElementAlignment

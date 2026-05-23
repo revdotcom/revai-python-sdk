@@ -105,7 +105,7 @@ class GenericApiClient(BaseClient):
 
         return [self.parse_job_info(job) for job in response.json()]
 
-    def _get_result_json(self, id_, params):
+    def _get_result_json(self, id_, params, route='result'):
         """Get the result of a job. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
@@ -124,12 +124,12 @@ class GenericApiClient(BaseClient):
 
         response = self._make_http_request(
             "GET",
-            urljoin(self.base_url, 'jobs/{0}/result?{1}'.format(id_, '&'.join(query_params)))
+            urljoin(self.base_url, 'jobs/{0}/{1}?{2}'.format(id_, route, '&'.join(query_params)))
         )
 
         return response.json()
 
-    def _get_result_object(self, id_, params):
+    def _get_result_object(self, id_, params, route='result'):
         """Get the result of a job. This method is special in that it is intended to be hidden by
         the implementation this is done because python standard is to pass options individually
         instead of as an object and our true clients should match this standard
@@ -138,7 +138,7 @@ class GenericApiClient(BaseClient):
         :returns: job result data as object
         :raises: HTTPError
         """
-        return self.parse_job_result(self._get_result_json(id_, params))
+        return self.parse_job_result(self._get_result_json(id_, params, route))
 
     def delete_job(self, id_):
         """Delete a specific job
